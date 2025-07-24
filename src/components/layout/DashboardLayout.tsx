@@ -3,6 +3,7 @@ import { Sidebar } from './Sidebar'
 import { Header } from './Header'
 import { Dashboard } from '../Dashboard'
 import { ContentGenerator } from '../ContentGenerator'
+import { SocialMediaGenerator } from '../SocialMediaGenerator'
 import { CampaignBuilder } from '../CampaignBuilder'
 import { Analytics } from '../Analytics'
 import { Credits } from '../Credits'
@@ -13,9 +14,11 @@ export function DashboardLayout() {
   const renderModule = () => {
     switch (activeModule) {
       case 'dashboard':
-        return <Dashboard />
+        return <Dashboard onModuleChange={setActiveModule} />
       case 'content':
         return <ContentGenerator />
+      case 'social-media':
+        return <SocialMediaGenerator />
       case 'campaigns':
         return <CampaignBuilder />
       case 'analytics':

@@ -6,7 +6,8 @@ import {
   Target, 
   BarChart3, 
   CurrencyCircleDollar,
-  Zap
+  Zap,
+  Hash
 } from '@phosphor-icons/react'
 
 interface SidebarProps {
@@ -20,6 +21,7 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
   const modules = [
     { id: 'dashboard', label: 'Dashboard', icon: House },
     { id: 'content', label: 'Content Generator', icon: PenNib },
+    { id: 'social-media', label: 'Social Media AI', icon: Hash },
     { id: 'campaigns', label: 'Campaigns', icon: Target },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'credits', label: 'Credits', icon: CurrencyCircleDollar },

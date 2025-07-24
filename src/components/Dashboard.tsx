@@ -9,13 +9,19 @@ import {
   Users,
   Eye,
   CheckCircle,
-  Clock
+  Clock,
+  Hash
 } from '@phosphor-icons/react'
 
-export function Dashboard() {
+interface DashboardProps {
+  onModuleChange?: (module: string) => void
+}
+
+export function Dashboard({ onModuleChange }: DashboardProps) {
   const [user] = useKV('user-profile', null)
   const [campaigns] = useKV('campaigns', [])
   const [generatedContent] = useKV('generated-content', [])
+  const [socialContent] = useKV('social-media-content', [])
 
   const stats = [
     {
@@ -26,18 +32,18 @@ export function Dashboard() {
       trend: '+12%'
     },
     {
+      title: 'Social Media Posts',
+      value: socialContent.length,
+      description: 'AI-generated social content',
+      icon: Hash,
+      trend: '+35%'
+    },
+    {
       title: 'Content Generated',
       value: generatedContent.length,
       description: 'AI-generated content pieces',
       icon: PenNib,
       trend: '+25%'
-    },
-    {
-      title: 'Total Views',
-      value: '12.4K',
-      description: 'Across all campaigns',
-      icon: Eye,
-      trend: '+8%'
     },
     {
       title: 'Conversion Rate',
@@ -49,6 +55,13 @@ export function Dashboard() {
   ]
 
   const recentActivities = [
+    {
+      title: 'Social media campaign generated',
+      description: 'AI created multi-platform content for Summer Sale',
+      time: '1 hour ago',
+      icon: Hash,
+      status: 'success'
+    },
     {
       title: 'Campaign "Summer Sale" launched',
       description: 'Email campaign sent to 1,250 subscribers',
@@ -62,37 +75,37 @@ export function Dashboard() {
       time: '4 hours ago',
       icon: PenNib,
       status: 'success'
-    },
-    {
-      title: 'Analytics report generated',
-      description: 'Monthly performance summary ready',
-      time: '1 day ago',
-      icon: BarChart3,
-      status: 'info'
     }
   ]
 
   const quickActions = [
     {
+      title: 'Social Media AI',
+      description: 'Generate multi-platform social content',
+      icon: Hash,
+      action: 'social-media',
+      color: 'accent'
+    },
+    {
       title: 'Generate Content',
       description: 'Create marketing copy with AI',
       icon: PenNib,
       action: 'content',
-      color: 'accent'
+      color: 'primary'
     },
     {
       title: 'New Campaign',
       description: 'Start a new marketing campaign',
       icon: Target,
       action: 'campaigns',
-      color: 'primary'
+      color: 'secondary'
     },
     {
       title: 'View Analytics',
       description: 'Check your performance metrics',
       icon: BarChart3,
       action: 'analytics',
-      color: 'secondary'
+      color: 'muted'
     }
   ]
 
@@ -177,6 +190,7 @@ export function Dashboard() {
                   key={action.action}
                   variant="outline"
                   className="w-full justify-start text-left h-auto p-4"
+                  onClick={() => onModuleChange?.(action.action)}
                 >
                   <div className="flex items-start space-x-3">
                     <div className="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center">
