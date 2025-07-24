@@ -7,7 +7,11 @@ import {
   BarChart3, 
   CurrencyCircleDollar,
   Zap,
-  Hash
+  Hash,
+  BookOpen,
+  Shield,
+  ShoppingCart,
+  FileText
 } from '@phosphor-icons/react'
 
 interface SidebarProps {
@@ -25,6 +29,10 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
     { id: 'campaigns', label: 'Campaigns', icon: Target },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'credits', label: 'Credits', icon: CurrencyCircleDollar },
+    { id: 'sales-page', label: 'Sales Page', icon: ShoppingCart },
+    { id: 'documentation', label: 'Documentation', icon: BookOpen },
+    { id: 'privacy', label: 'Privacy Policy', icon: Shield },
+    { id: 'status', label: 'Status Report', icon: FileText },
   ]
 
   return (

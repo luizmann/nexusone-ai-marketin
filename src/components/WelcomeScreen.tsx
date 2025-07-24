@@ -4,14 +4,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useKV } from '@github/spark/hooks'
-import { Zap, Target, BarChart3, Users } from '@phosphor-icons/react'
+import { SalesPage } from './SalesPage'
+import { Zap } from '@phosphor-icons/react'
 
 export function WelcomeScreen() {
   const [, setUser] = useKV('user-profile', null)
+  const [showLogin, setShowLogin] = useState(false)
   const [name, setName] = useState('')
   const [company, setCompany] = useState('')
   
   const handleGetStarted = () => {
+    setShowLogin(true)
+  }
+
+  const handleLogin = () => {
     if (name.trim()) {
       setUser({
         name: name.trim(),
@@ -62,100 +68,66 @@ export function WelcomeScreen() {
     }
   }
 
+  // Show sales page by default
+  if (!showLogin) {
+    return <SalesPage onGetStarted={handleGetStarted} />
+  }
+
+  // Show login form when user clicks get started
+
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-6xl">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-6">
-            <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mr-3">
-              <Zap className="w-6 h-6 text-primary-foreground" weight="fill" />
-            </div>
-            <h1 className="text-3xl font-bold text-foreground">NexusOne</h1>
-          </div>
-          <h2 className="text-4xl font-bold text-foreground mb-4">
-            Marketing Automation Platform
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Streamline your marketing with AI-powered content generation, campaign management, and analytics tools.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <Target className="w-8 h-8 text-accent mx-auto mb-3" weight="fill" />
-                  <h3 className="font-semibold mb-2">AI Content Generation</h3>
-                  <p className="text-sm text-muted-foreground">Create compelling marketing copy in seconds</p>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <BarChart3 className="w-8 h-8 text-accent mx-auto mb-3" weight="fill" />
-                  <h3 className="font-semibold mb-2">Campaign Analytics</h3>
-                  <p className="text-sm text-muted-foreground">Track performance with detailed insights</p>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <Users className="w-8 h-8 text-accent mx-auto mb-3" weight="fill" />
-                  <h3 className="font-semibold mb-2">Lead Management</h3>
-                  <p className="text-sm text-muted-foreground">Organize and nurture your prospects</p>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <Zap className="w-8 h-8 text-accent mx-auto mb-3" weight="fill" />
-                  <h3 className="font-semibold mb-2">Automation</h3>
-                  <p className="text-sm text-muted-foreground">Set up workflows that run themselves</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          <Card className="w-full max-w-md mx-auto">
-            <CardHeader className="text-center">
-              <CardTitle>Get Started Free</CardTitle>
-              <CardDescription>
-                Start with 50 free credits. No credit card required.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Your Name</Label>
-                <Input
-                  id="name"
-                  placeholder="Enter your name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
+      <div className="w-full max-w-md">
+        <Card>
+          <CardHeader className="text-center">
+            <div className="flex items-center justify-center mb-4">
+              <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mr-3">
+                <Zap className="w-6 h-6 text-primary-foreground" weight="fill" />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="company">Company (Optional)</Label>
-                <Input
-                  id="company"
-                  placeholder="Your company name"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                />
-              </div>
-              <Button 
-                onClick={handleGetStarted} 
-                className="w-full"
-                disabled={!name.trim()}
-              >
-                Start Marketing Automation
-              </Button>
-              <p className="text-xs text-muted-foreground text-center">
-                By continuing, you agree to our terms of service and privacy policy.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
+              <CardTitle className="text-2xl">NexusOne</CardTitle>
+            </div>
+            <CardDescription>
+              Complete seu cadastro para acessar a plataforma
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Seu Nome</Label>
+              <Input
+                id="name"
+                placeholder="Digite seu nome"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="company">Empresa (Opcional)</Label>
+              <Input
+                id="company"
+                placeholder="Nome da sua empresa"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+              />
+            </div>
+            <Button 
+              onClick={handleLogin} 
+              className="w-full"
+              disabled={!name.trim()}
+            >
+              Entrar na Plataforma
+            </Button>
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={() => setShowLogin(false)}
+            >
+              ← Voltar para Sales Page
+            </Button>
+            <p className="text-xs text-muted-foreground text-center">
+              Ao continuar, você concorda com nossos termos de serviço e política de privacidade.
+            </p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

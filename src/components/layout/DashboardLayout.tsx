@@ -7,6 +7,10 @@ import { SocialMediaGenerator } from '../SocialMediaGenerator'
 import { CampaignBuilder } from '../CampaignBuilder'
 import { Analytics } from '../Analytics'
 import { Credits } from '../Credits'
+import { SalesPage } from '../SalesPage'
+import { Documentation } from '../Documentation'
+import { PrivacyPolicy } from '../PrivacyPolicy'
+import { StatusReport } from '../StatusReport'
 
 export function DashboardLayout() {
   const [activeModule, setActiveModule] = useState('dashboard')
@@ -25,8 +29,16 @@ export function DashboardLayout() {
         return <Analytics />
       case 'credits':
         return <Credits />
+      case 'sales-page':
+        return <SalesPage />
+      case 'documentation':
+        return <Documentation />
+      case 'privacy':
+        return <PrivacyPolicy />
+      case 'status':
+        return <StatusReport />
       default:
-        return <Dashboard />
+        return <Dashboard onModuleChange={setActiveModule} />
     }
   }
 
