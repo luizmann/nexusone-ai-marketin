@@ -11,9 +11,11 @@ import { SalesPage } from '../SalesPage'
 import { Documentation } from '../Documentation'
 import { PrivacyPolicy } from '../PrivacyPolicy'
 import { StatusReport } from '../StatusReport'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 export function DashboardLayout() {
   const [activeModule, setActiveModule] = useState('dashboard')
+  const { isRTL } = useLanguage()
 
   const renderModule = () => {
     switch (activeModule) {
@@ -43,7 +45,7 @@ export function DashboardLayout() {
   }
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className={`flex h-screen bg-background ${isRTL ? 'flex-row-reverse' : ''}`}>
       <Sidebar activeModule={activeModule} onModuleChange={setActiveModule} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header />

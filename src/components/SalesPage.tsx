@@ -20,6 +20,8 @@ import {
   Shield,
   Globe
 } from '@phosphor-icons/react'
+import { useLanguage } from '../contexts/LanguageContext'
+import { LanguageSelector } from './LanguageSelector'
 
 interface PricingTier {
   name: string
@@ -181,6 +183,7 @@ interface SalesPageProps {
 
 export function SalesPage({ onGetStarted }: SalesPageProps = {}) {
   const [selectedPlan, setSelectedPlan] = useState<string>('PRO')
+  const { t, isRTL } = useLanguage()
 
   const handleGetStarted = (planName: string) => {
     if (onGetStarted) {
@@ -192,34 +195,36 @@ export function SalesPage({ onGetStarted }: SalesPageProps = {}) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary">
+    <div className={`min-h-screen bg-gradient-to-br from-background via-background to-secondary ${isRTL ? 'rtl' : 'ltr'}`}>
+      {/* Language Selector */}
+      <div className="absolute top-4 right-4 z-50">
+        <LanguageSelector />
+      </div>
+      
       {/* Hero Section */}
       <section className="relative px-4 py-20 text-center">
         <div className="mx-auto max-w-6xl">
           <Badge variant="secondary" className="mb-6 text-sm font-medium">
             <Sparkles className="mr-2 h-4 w-4" />
-            Mais de 10.000 empresas já confiam em nós
+            {t('sales_page.hero.subtitle')}
           </Badge>
           
           <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
-            Automatize Todo Seu
-            <span className="bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent"> Marketing </span>
-            com IA
+            {t('sales_page.hero.title')}
           </h1>
           
           <p className="mx-auto mb-8 max-w-3xl text-lg text-muted-foreground md:text-xl">
-            A única plataforma que você precisa para automatizar marketing, vendas, e-commerce e atendimento. 
-            <strong> Mais de 10 ferramentas profissionais integradas em uma só solução.</strong>
+            {t('welcome.description')}
           </p>
           
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
             <Button size="lg" className="text-lg" onClick={() => handleGetStarted('PRO')}>
-              Começar Teste Grátis de 7 Dias
-              <ArrowRight className="ml-2 h-5 w-5" />
+              {t('sales_page.hero.cta')}
+              <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
             </Button>
             <Button size="lg" variant="outline" className="text-lg">
-              Ver Demonstração
-              <Video className="ml-2 h-5 w-5" />
+              {t('welcome.watch_demo')}
+              <Video className={`h-5 w-5 ${isRTL ? 'mr-2' : 'ml-2'}`} />
             </Button>
           </div>
           

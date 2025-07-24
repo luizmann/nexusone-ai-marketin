@@ -6,12 +6,15 @@ import { Label } from '@/components/ui/label'
 import { useKV } from '@github/spark/hooks'
 import { SalesPage } from './SalesPage'
 import { Zap } from '@phosphor-icons/react'
+import { useLanguage } from '../contexts/LanguageContext'
+import { LanguageSelector } from './LanguageSelector'
 
 export function WelcomeScreen() {
   const [, setUser] = useKV('user-profile', null)
   const [showLogin, setShowLogin] = useState(false)
   const [name, setName] = useState('')
   const [company, setCompany] = useState('')
+  const { t, isRTL } = useLanguage()
   
   const handleGetStarted = () => {
     setShowLogin(true)
@@ -76,7 +79,10 @@ export function WelcomeScreen() {
   // Show login form when user clicks get started
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className={`min-h-screen bg-background flex items-center justify-center p-4 ${isRTL ? 'rtl' : 'ltr'}`}>
+      <div className="absolute top-4 right-4">
+        <LanguageSelector />
+      </div>
       <div className="w-full max-w-md">
         <Card>
           <CardHeader className="text-center">
@@ -84,29 +90,31 @@ export function WelcomeScreen() {
               <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mr-3">
                 <Zap className="w-6 h-6 text-primary-foreground" weight="fill" />
               </div>
-              <CardTitle className="text-2xl">NexusOne</CardTitle>
+              <CardTitle className="text-2xl">{t('common.nexusone')}</CardTitle>
             </div>
             <CardDescription>
-              Complete seu cadastro para acessar a plataforma
+              {t('welcome.description')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Seu Nome</Label>
+              <Label htmlFor="name">{t('common.name')}</Label>
               <Input
                 id="name"
-                placeholder="Digite seu nome"
+                placeholder={t('common.name')}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="company">Empresa (Opcional)</Label>
+              <Label htmlFor="company">{t('common.company')}</Label>
               <Input
                 id="company"
-                placeholder="Nome da sua empresa"
+                placeholder={t('common.company')}
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
+                dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
             <Button 
@@ -114,17 +122,17 @@ export function WelcomeScreen() {
               className="w-full"
               disabled={!name.trim()}
             >
-              Entrar na Plataforma
+              {t('welcome.get_started')}
             </Button>
             <Button 
               variant="outline" 
               className="w-full"
               onClick={() => setShowLogin(false)}
             >
-              ← Voltar para Sales Page
+              {isRTL ? '→' : '←'} {t('common.back')}
             </Button>
             <p className="text-xs text-muted-foreground text-center">
-              Ao continuar, você concorda com nossos termos de serviço e política de privacidade.
+              {t('footer.terms')} & {t('footer.privacy')}
             </p>
           </CardContent>
         </Card>

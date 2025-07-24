@@ -1,0 +1,374 @@
+{
+  "common": {
+    "nexusone": "NexusOne",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "continue": "Continue",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "close": "Close",
+    "open": "Open",
+    "view": "View",
+    "download": "Download",
+    "upload": "Upload",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "company": "Company",
+    "phone": "Phone",
+    "address": "Address",
+    "city": "City",
+    "country": "Country",
+    "language": "Language",
+    "currency": "Currency",
+    "date": "Date",
+    "time": "Time",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Information"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "modules": "Modules",
+    "credits": "Credits",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "help": "Help",
+    "documentation": "Documentation"
+  },
+  "dashboard": {
+    "title": "Marketing Automation Dashboard",
+    "subtitle": "Manage your AI-powered marketing campaigns",
+    "overview": "Overview",
+    "stats": {
+      "total_campaigns": "Total Campaigns",
+      "active_modules": "Active Modules",
+      "credits_used": "Credits Used",
+      "conversion_rate": "Conversion Rate"
+    },
+    "recent_activity": "Recent Activity",
+    "quick_actions": "Quick Actions",
+    "performance": "Performance",
+    "insights": "AI Insights"
+  },
+  "modules": {
+    "title": "Available Modules",
+    "subtitle": "Choose from our AI-powered marketing tools",
+    "magic_pages": {
+      "title": "Magic Pages",
+      "description": "Create high-converting landing pages with AI",
+      "cost": "10 credits per page"
+    },
+    "video_creator": {
+      "title": "Video Creator",
+      "description": "Generate promotional videos automatically",
+      "cost": "25 credits per video"
+    },
+    "facebook_ads": {
+      "title": "Facebook Ads",
+      "description": "Create and optimize Facebook ad campaigns",
+      "cost": "15 credits per campaign"
+    },
+    "whatsapp_bot": {
+      "title": "WhatsApp Bot",
+      "description": "Automate customer conversations",
+      "cost": "5 credits per message"
+    },
+    "ai_agents": {
+      "title": "AI Agents",
+      "description": "Create custom AI assistants",
+      "cost": "20 credits per agent"
+    },
+    "product_scraper": {
+      "title": "Product Scraper",
+      "description": "Import products for dropshipping",
+      "cost": "3 credits per product"
+    },
+    "crm": {
+      "title": "CRM System",
+      "description": "Manage leads and customers",
+      "cost": "5 credits per lead"
+    },
+    "income_generator": {
+      "title": "Income Generator",
+      "description": "AI-powered business ideas",
+      "cost": "8 credits per idea"
+    },
+    "social_media": {
+      "title": "Social Media Manager",
+      "description": "Automate social media posts",
+      "cost": "12 credits per campaign"
+    },
+    "email_marketing": {
+      "title": "Email Marketing",
+      "description": "Create and send email campaigns",
+      "cost": "7 credits per campaign"
+    }
+  },
+  "credits": {
+    "title": "Credit Management",
+    "subtitle": "Monitor and purchase credits for your campaigns",
+    "balance": "Credit Balance",
+    "usage": "Credit Usage",
+    "history": "Transaction History",
+    "buy_credits": "Buy Credits",
+    "packages": {
+      "basic": "Basic Package",
+      "premium": "Premium Package",
+      "enterprise": "Enterprise Package"
+    }
+  },
+  "pricing": {
+    "title": "Choose Your Plan",
+    "subtitle": "Scale your marketing automation with the right plan",
+    "monthly": "Monthly",
+    "annually": "Annually",
+    "save": "Save 20%",
+    "plans": {
+      "free": {
+        "name": "Free",
+        "price": "$0",
+        "description": "Perfect for getting started",
+        "features": [
+          "50 credits per month",
+          "2 videos per month",
+          "2 landing pages",
+          "1 WhatsApp number",
+          "Basic modules (5)",
+          "Email support"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "$97",
+        "description": "Ideal for growing businesses",
+        "features": [
+          "500 credits per month",
+          "20 videos per month",
+          "20 landing pages",
+          "5 WhatsApp numbers",
+          "Advanced modules (8)",
+          "Priority support",
+          "Analytics dashboard",
+          "API access"
+        ]
+      },
+      "premium": {
+        "name": "Premium",
+        "price": "$297",
+        "description": "For enterprise-level marketing",
+        "features": [
+          "2000 credits per month",
+          "100 videos per month",
+          "Unlimited landing pages",
+          "20 WhatsApp numbers",
+          "All modules (10)",
+          "24/7 phone support",
+          "Advanced analytics",
+          "White-label options",
+          "Custom integrations"
+        ]
+      }
+    },
+    "cta": {
+      "start_free": "Start Free Trial",
+      "upgrade": "Upgrade Now",
+      "contact": "Contact Sales"
+    }
+  },
+  "social_media": {
+    "title": "Social Media Campaign Generator",
+    "subtitle": "Create engaging content for all platforms",
+    "platform": "Platform",
+    "content_type": "Content Type",
+    "target_audience": "Target Audience",
+    "campaign_goal": "Campaign Goal",
+    "tone": "Tone of Voice",
+    "generate": "Generate Campaign",
+    "preview": "Preview",
+    "publish": "Publish",
+    "schedule": "Schedule",
+    "platforms": {
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "linkedin": "LinkedIn",
+      "tiktok": "TikTok",
+      "youtube": "YouTube"
+    },
+    "content_types": {
+      "post": "Regular Post",
+      "story": "Story",
+      "reel": "Reel/Video",
+      "carousel": "Carousel",
+      "poll": "Poll",
+      "live": "Live Stream"
+    },
+    "tones": {
+      "professional": "Professional",
+      "casual": "Casual",
+      "humorous": "Humorous",
+      "inspirational": "Inspirational",
+      "educational": "Educational",
+      "promotional": "Promotional"
+    }
+  },
+  "campaign_builder": {
+    "title": "Campaign Builder",
+    "subtitle": "Build multi-channel marketing campaigns",
+    "campaign_name": "Campaign Name",
+    "campaign_type": "Campaign Type",
+    "budget": "Budget",
+    "duration": "Duration",
+    "target_audience": "Target Audience",
+    "creative_assets": "Creative Assets",
+    "launch_campaign": "Launch Campaign",
+    "draft": "Save as Draft",
+    "templates": "Campaign Templates",
+    "performance_tracking": "Performance Tracking"
+  },
+  "analytics": {
+    "title": "Analytics Dashboard",
+    "subtitle": "Track your marketing performance",
+    "overview": "Overview",
+    "campaigns": "Campaigns",
+    "conversions": "Conversions",
+    "roi": "Return on Investment",
+    "engagement": "Engagement",
+    "traffic": "Traffic Sources",
+    "demographics": "Demographics",
+    "time_range": "Time Range",
+    "export_report": "Export Report",
+    "last_7_days": "Last 7 Days",
+    "last_30_days": "Last 30 Days",
+    "last_3_months": "Last 3 Months",
+    "custom_range": "Custom Range"
+  },
+  "welcome": {
+    "title": "Welcome to NexusOne",
+    "subtitle": "The Ultimate AI-Powered Marketing Automation Platform",
+    "description": "Transform your marketing strategy with our comprehensive suite of AI tools. From content creation to campaign management, we've got everything you need to scale your business.",
+    "get_started": "Get Started",
+    "watch_demo": "Watch Demo",
+    "features": {
+      "ai_powered": "AI-Powered",
+      "all_in_one": "All-in-One Platform",
+      "global_reach": "Global Reach",
+      "easy_to_use": "Easy to Use"
+    }
+  },
+  "footer": {
+    "company": "Company",
+    "about": "About Us",
+    "careers": "Careers",
+    "contact": "Contact",
+    "blog": "Blog",
+    "product": "Product",
+    "features": "Features",
+    "pricing": "Pricing",
+    "integrations": "Integrations",
+    "api": "API",
+    "support": "Support",
+    "help_center": "Help Center",
+    "documentation": "Documentation",
+    "community": "Community",
+    "status": "System Status",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookies": "Cookie Policy",
+    "security": "Security",
+    "copyright": "© 2025 NexusOne. All rights reserved."
+  },
+  "sales_page": {
+    "hero": {
+      "title": "Transform Your Marketing with AI",
+      "subtitle": "The Only Platform You Need to Automate, Optimize, and Scale Your Digital Marketing",
+      "cta": "Start Your Free Trial",
+      "guarantee": "14-Day Money-Back Guarantee"
+    },
+    "problem": {
+      "title": "Stop Struggling with Fragmented Marketing Tools",
+      "pain_points": [
+        "Managing multiple platforms and tools",
+        "High costs for separate marketing solutions",
+        "Time-consuming manual campaign creation",
+        "Lack of integrated analytics and insights",
+        "Difficulty scaling marketing efforts"
+      ]
+    },
+    "solution": {
+      "title": "Introducing NexusOne: Your All-in-One Marketing Command Center",
+      "benefits": [
+        "10+ Integrated Marketing Modules",
+        "AI-Powered Content Generation",
+        "Automated Campaign Management",
+        "Real-Time Analytics & Insights",
+        "Global Multi-Language Support"
+      ]
+    },
+    "features": {
+      "title": "Everything You Need to Dominate Digital Marketing",
+      "magic_pages": "Create High-Converting Landing Pages in Minutes",
+      "video_creator": "Generate Professional Marketing Videos with AI",
+      "social_automation": "Automate Your Social Media Presence",
+      "whatsapp_marketing": "Build Powerful WhatsApp Marketing Funnels",
+      "facebook_ads": "Create & Optimize Facebook Ad Campaigns",
+      "dropshipping": "Complete E-commerce & Dropshipping Solution"
+    },
+    "testimonials": {
+      "title": "Join Thousands of Successful Marketers",
+      "testimonial_1": "NexusOne increased our conversion rate by 340% in just 3 months!",
+      "testimonial_2": "The AI content generation saved us 20+ hours per week.",
+      "testimonial_3": "Finally, a platform that actually delivers on its promises."
+    },
+    "pricing_section": {
+      "title": "Choose the Perfect Plan for Your Business",
+      "subtitle": "Start free, scale as you grow"
+    },
+    "guarantee": {
+      "title": "Risk-Free 14-Day Money-Back Guarantee",
+      "description": "Try NexusOne completely risk-free. If you're not satisfied within 14 days, get a full refund."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": "How does the credit system work?",
+      "a1": "Credits are consumed when you use AI features. Each plan includes monthly credits that reset every billing cycle.",
+      "q2": "Can I upgrade or downgrade my plan?",
+      "a2": "Yes, you can change your plan at any time. Changes take effect immediately.",
+      "q3": "Is there a setup fee?",
+      "a3": "No setup fees. You only pay the monthly subscription for your chosen plan.",
+      "q4": "Do you offer customer support?",
+      "a4": "Yes, we provide email support for all plans, with priority support for Pro and Premium users."
+    },
+    "cta_final": {
+      "title": "Ready to Transform Your Marketing?",
+      "subtitle": "Join thousands of businesses already using NexusOne to scale their marketing efforts",
+      "button": "Start Your Free Trial Now"
+    }
+  }
+}

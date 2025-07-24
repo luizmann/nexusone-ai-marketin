@@ -12,6 +12,7 @@ import {
   Clock,
   Hash
 } from '@phosphor-icons/react'
+import { useLanguage } from '../contexts/LanguageContext'
 
 interface DashboardProps {
   onModuleChange?: (module: string) => void
@@ -22,31 +23,32 @@ export function Dashboard({ onModuleChange }: DashboardProps) {
   const [campaigns] = useKV('campaigns', [])
   const [generatedContent] = useKV('generated-content', [])
   const [socialContent] = useKV('social-media-content', [])
+  const { t, isRTL } = useLanguage()
 
   const stats = [
     {
-      title: 'Total Campaigns',
+      title: t('dashboard.stats.total_campaigns'),
       value: campaigns.length,
-      description: 'Active marketing campaigns',
+      description: t('dashboard.stats.total_campaigns'),
       icon: Target,
       trend: '+12%'
     },
     {
-      title: 'Social Media Posts',
+      title: t('modules.social_media.title'),
       value: socialContent.length,
-      description: 'AI-generated social content',
+      description: t('modules.social_media.description'),
       icon: Hash,
       trend: '+35%'
     },
     {
-      title: 'Content Generated',
+      title: t('dashboard.stats.credits_used'),
       value: generatedContent.length,
-      description: 'AI-generated content pieces',
+      description: t('modules.ai_agents.description'),
       icon: PenNib,
       trend: '+25%'
     },
     {
-      title: 'Conversion Rate',
+      title: t('dashboard.stats.conversion_rate'),
       value: '3.2%',
       description: 'Average across campaigns',
       icon: TrendUp,

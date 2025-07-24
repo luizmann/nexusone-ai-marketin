@@ -9,10 +9,28 @@
   body {
     font-family: 'Inter', sans-serif;
   }
+  
+  /* RTL Support */
+  [dir="rtl"] {
+    direction: rtl;
+  }
+  
+  [dir="rtl"] .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+  }
+  
+  [dir="rtl"] .flex-row-reverse {
+    flex-direction: row-reverse;
+  }
+  
+  /* Arabic and Hebrew font optimization */
+  [lang="ar"], [lang="he"] {
+    font-family: 'Inter', 'Noto Sans Arabic', 'Noto Sans Hebrew', sans-serif;
+  }
 }
 
 :root {
-  /* NexusOne Marketing Platform Theme */
+  /* NexusOne Global Marketing Platform Theme */
   --background: oklch(0.97 0.02 250);
   --foreground: oklch(0.25 0.08 250);
   

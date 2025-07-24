@@ -1,0 +1,374 @@
+{
+  "common": {
+    "nexusone": "NexusOne",
+    "loading": "Carregando...",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "create": "Criar",
+    "update": "Atualizar",
+    "search": "Pesquisar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "import": "Importar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "continue": "Continuar",
+    "yes": "Sim",
+    "no": "Não",
+    "ok": "OK",
+    "close": "Fechar",
+    "open": "Abrir",
+    "view": "Ver",
+    "download": "Baixar",
+    "upload": "Enviar",
+    "settings": "Configurações",
+    "profile": "Perfil",
+    "logout": "Sair",
+    "login": "Entrar",
+    "register": "Registrar",
+    "email": "E-mail",
+    "password": "Senha",
+    "name": "Nome",
+    "company": "Empresa",
+    "phone": "Telefone",
+    "address": "Endereço",
+    "city": "Cidade",
+    "country": "País",
+    "language": "Idioma",
+    "currency": "Moeda",
+    "date": "Data",
+    "time": "Hora",
+    "status": "Status",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "enabled": "Habilitado",
+    "disabled": "Desabilitado",
+    "success": "Sucesso",
+    "error": "Erro",
+    "warning": "Aviso",
+    "info": "Informação"
+  },
+  "navigation": {
+    "dashboard": "Painel",
+    "modules": "Módulos",
+    "credits": "Créditos",
+    "analytics": "Analytics",
+    "settings": "Configurações",
+    "help": "Ajuda",
+    "documentation": "Documentação"
+  },
+  "dashboard": {
+    "title": "Painel de Automação de Marketing",
+    "subtitle": "Gerencie suas campanhas de marketing impulsionadas por IA",
+    "overview": "Visão Geral",
+    "stats": {
+      "total_campaigns": "Total de Campanhas",
+      "active_modules": "Módulos Ativos",
+      "credits_used": "Créditos Utilizados",
+      "conversion_rate": "Taxa de Conversão"
+    },
+    "recent_activity": "Atividade Recente",
+    "quick_actions": "Ações Rápidas",
+    "performance": "Performance",
+    "insights": "Insights de IA"
+  },
+  "modules": {
+    "title": "Módulos Disponíveis",
+    "subtitle": "Escolha entre nossas ferramentas de marketing impulsionadas por IA",
+    "magic_pages": {
+      "title": "Páginas Mágicas",
+      "description": "Crie landing pages de alta conversão com IA",
+      "cost": "10 créditos por página"
+    },
+    "video_creator": {
+      "title": "Criador de Vídeos",
+      "description": "Gere vídeos promocionais automaticamente",
+      "cost": "25 créditos por vídeo"
+    },
+    "facebook_ads": {
+      "title": "Anúncios Facebook",
+      "description": "Crie e otimize campanhas de anúncios do Facebook",
+      "cost": "15 créditos por campanha"
+    },
+    "whatsapp_bot": {
+      "title": "Bot WhatsApp",
+      "description": "Automatize conversas com clientes",
+      "cost": "5 créditos por mensagem"
+    },
+    "ai_agents": {
+      "title": "Agentes de IA",
+      "description": "Crie assistentes de IA personalizados",
+      "cost": "20 créditos por agente"
+    },
+    "product_scraper": {
+      "title": "Extrator de Produtos",
+      "description": "Importe produtos para dropshipping",
+      "cost": "3 créditos por produto"
+    },
+    "crm": {
+      "title": "Sistema CRM",
+      "description": "Gerencie leads e clientes",
+      "cost": "5 créditos por lead"
+    },
+    "income_generator": {
+      "title": "Gerador de Renda",
+      "description": "Ideias de negócio impulsionadas por IA",
+      "cost": "8 créditos por ideia"
+    },
+    "social_media": {
+      "title": "Gerenciador de Redes Sociais",
+      "description": "Automatize posts em redes sociais",
+      "cost": "12 créditos por campanha"
+    },
+    "email_marketing": {
+      "title": "Email Marketing",
+      "description": "Crie e envie campanhas de email",
+      "cost": "7 créditos por campanha"
+    }
+  },
+  "credits": {
+    "title": "Gerenciamento de Créditos",
+    "subtitle": "Monitore e compre créditos para suas campanhas",
+    "balance": "Saldo de Créditos",
+    "usage": "Uso de Créditos",
+    "history": "Histórico de Transações",
+    "buy_credits": "Comprar Créditos",
+    "packages": {
+      "basic": "Pacote Básico",
+      "premium": "Pacote Premium",
+      "enterprise": "Pacote Empresarial"
+    }
+  },
+  "pricing": {
+    "title": "Escolha Seu Plano",
+    "subtitle": "Escale sua automação de marketing com o plano certo",
+    "monthly": "Mensal",
+    "annually": "Anual",
+    "save": "Economize 20%",
+    "plans": {
+      "free": {
+        "name": "Grátis",
+        "price": "R$ 0",
+        "description": "Perfeito para começar",
+        "features": [
+          "50 créditos por mês",
+          "2 vídeos por mês",
+          "2 landing pages",
+          "1 número WhatsApp",
+          "Módulos básicos (5)",
+          "Suporte por email"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "R$ 97",
+        "description": "Ideal para empresas em crescimento",
+        "features": [
+          "500 créditos por mês",
+          "20 vídeos por mês",
+          "20 landing pages",
+          "5 números WhatsApp",
+          "Módulos avançados (8)",
+          "Suporte prioritário",
+          "Painel de analytics",
+          "Acesso à API"
+        ]
+      },
+      "premium": {
+        "name": "Premium",
+        "price": "R$ 297",
+        "description": "Para marketing de nível empresarial",
+        "features": [
+          "2000 créditos por mês",
+          "100 vídeos por mês",
+          "Landing pages ilimitadas",
+          "20 números WhatsApp",
+          "Todos os módulos (10)",
+          "Suporte 24/7 por telefone",
+          "Analytics avançados",
+          "Opções white-label",
+          "Integrações personalizadas"
+        ]
+      }
+    },
+    "cta": {
+      "start_free": "Iniciar Teste Grátis",
+      "upgrade": "Fazer Upgrade",
+      "contact": "Contatar Vendas"
+    }
+  },
+  "social_media": {
+    "title": "Gerador de Campanhas de Redes Sociais",
+    "subtitle": "Crie conteúdo envolvente para todas as plataformas",
+    "platform": "Plataforma",
+    "content_type": "Tipo de Conteúdo",
+    "target_audience": "Público-Alvo",
+    "campaign_goal": "Objetivo da Campanha",
+    "tone": "Tom de Voz",
+    "generate": "Gerar Campanha",
+    "preview": "Visualizar",
+    "publish": "Publicar",
+    "schedule": "Agendar",
+    "platforms": {
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "linkedin": "LinkedIn",
+      "tiktok": "TikTok",
+      "youtube": "YouTube"
+    },
+    "content_types": {
+      "post": "Post Regular",
+      "story": "Story",
+      "reel": "Reel/Vídeo",
+      "carousel": "Carrossel",
+      "poll": "Enquete",
+      "live": "Transmissão ao Vivo"
+    },
+    "tones": {
+      "professional": "Profissional",
+      "casual": "Casual",
+      "humorous": "Humorístico",
+      "inspirational": "Inspiracional",
+      "educational": "Educativo",
+      "promotional": "Promocional"
+    }
+  },
+  "campaign_builder": {
+    "title": "Construtor de Campanhas",
+    "subtitle": "Construa campanhas de marketing multicanal",
+    "campaign_name": "Nome da Campanha",
+    "campaign_type": "Tipo de Campanha",
+    "budget": "Orçamento",
+    "duration": "Duração",
+    "target_audience": "Público-Alvo",
+    "creative_assets": "Recursos Criativos",
+    "launch_campaign": "Lançar Campanha",
+    "draft": "Salvar como Rascunho",
+    "templates": "Templates de Campanha",
+    "performance_tracking": "Acompanhamento de Performance"
+  },
+  "analytics": {
+    "title": "Painel de Analytics",
+    "subtitle": "Acompanhe a performance do seu marketing",
+    "overview": "Visão Geral",
+    "campaigns": "Campanhas",
+    "conversions": "Conversões",
+    "roi": "Retorno do Investimento",
+    "engagement": "Engajamento",
+    "traffic": "Fontes de Tráfego",
+    "demographics": "Demografia",
+    "time_range": "Período",
+    "export_report": "Exportar Relatório",
+    "last_7_days": "Últimos 7 Dias",
+    "last_30_days": "Últimos 30 Dias",
+    "last_3_months": "Últimos 3 Meses",
+    "custom_range": "Período Personalizado"
+  },
+  "welcome": {
+    "title": "Bem-vindo ao NexusOne",
+    "subtitle": "A Plataforma Definitiva de Automação de Marketing Impulsionada por IA",
+    "description": "Transforme sua estratégia de marketing com nossa suíte completa de ferramentas de IA. Da criação de conteúdo ao gerenciamento de campanhas, temos tudo que você precisa para escalar seu negócio.",
+    "get_started": "Começar",
+    "watch_demo": "Assistir Demo",
+    "features": {
+      "ai_powered": "Impulsionado por IA",
+      "all_in_one": "Plataforma Tudo-em-Um",
+      "global_reach": "Alcance Global",
+      "easy_to_use": "Fácil de Usar"
+    }
+  },
+  "footer": {
+    "company": "Empresa",
+    "about": "Sobre",
+    "careers": "Carreiras",
+    "contact": "Contato",
+    "blog": "Blog",
+    "product": "Produto",
+    "features": "Recursos",
+    "pricing": "Preços",
+    "integrations": "Integrações",
+    "api": "API",
+    "support": "Suporte",
+    "help_center": "Central de Ajuda",
+    "documentation": "Documentação",
+    "community": "Comunidade",
+    "status": "Status do Sistema",
+    "legal": "Legal",
+    "privacy": "Política de Privacidade",
+    "terms": "Termos de Serviço",
+    "cookies": "Política de Cookies",
+    "security": "Segurança",
+    "copyright": "© 2025 NexusOne. Todos os direitos reservados."
+  },
+  "sales_page": {
+    "hero": {
+      "title": "Transforme Seu Marketing com IA",
+      "subtitle": "A Única Plataforma Que Você Precisa para Automatizar, Otimizar e Escalar Seu Marketing Digital",
+      "cta": "Comece Seu Teste Grátis",
+      "guarantee": "Garantia de 14 Dias"
+    },
+    "problem": {
+      "title": "Pare de Lutar com Ferramentas de Marketing Fragmentadas",
+      "pain_points": [
+        "Gerenciar múltiplas plataformas e ferramentas",
+        "Altos custos para soluções de marketing separadas",
+        "Criação manual de campanhas demorada",
+        "Falta de analytics e insights integrados",
+        "Dificuldade para escalar esforços de marketing"
+      ]
+    },
+    "solution": {
+      "title": "Apresentamos o NexusOne: Seu Centro de Comando de Marketing Tudo-em-Um",
+      "benefits": [
+        "10+ Módulos de Marketing Integrados",
+        "Geração de Conteúdo Impulsionada por IA",
+        "Gerenciamento Automatizado de Campanhas",
+        "Analytics e Insights em Tempo Real",
+        "Suporte Multi-idioma Global"
+      ]
+    },
+    "features": {
+      "title": "Tudo Que Você Precisa Para Dominar o Marketing Digital",
+      "magic_pages": "Crie Landing Pages de Alta Conversão em Minutos",
+      "video_creator": "Gere Vídeos de Marketing Profissionais com IA",
+      "social_automation": "Automatize Sua Presença nas Redes Sociais",
+      "whatsapp_marketing": "Construa Funis Poderosos de Marketing no WhatsApp",
+      "facebook_ads": "Crie e Otimize Campanhas de Anúncios do Facebook",
+      "dropshipping": "Solução Completa de E-commerce e Dropshipping"
+    },
+    "testimonials": {
+      "title": "Junte-se a Milhares de Profissionais de Marketing Bem-Sucedidos",
+      "testimonial_1": "O NexusOne aumentou nossa taxa de conversão em 340% em apenas 3 meses!",
+      "testimonial_2": "A geração de conteúdo com IA nos economizou mais de 20 horas por semana.",
+      "testimonial_3": "Finalmente, uma plataforma que realmente cumpre suas promessas."
+    },
+    "pricing_section": {
+      "title": "Escolha o Plano Perfeito para Seu Negócio",
+      "subtitle": "Comece grátis, escale conforme cresce"
+    },
+    "guarantee": {
+      "title": "Garantia de Reembolso Sem Risco de 14 Dias",
+      "description": "Experimente o NexusOne completamente sem risco. Se não estiver satisfeito em 14 dias, receba um reembolso total."
+    },
+    "faq": {
+      "title": "Perguntas Frequentes",
+      "q1": "Como funciona o sistema de créditos?",
+      "a1": "Créditos são consumidos quando você usa recursos de IA. Cada plano inclui créditos mensais que são renovados a cada ciclo de cobrança.",
+      "q2": "Posso fazer upgrade ou downgrade do meu plano?",
+      "a2": "Sim, você pode alterar seu plano a qualquer momento. As mudanças têm efeito imediatamente.",
+      "q3": "Há taxa de configuração?",
+      "a3": "Não há taxas de configuração. Você paga apenas a assinatura mensal do seu plano escolhido.",
+      "q4": "Vocês oferecem suporte ao cliente?",
+      "a4": "Sim, fornecemos suporte por email para todos os planos, com suporte prioritário para usuários Pro e Premium."
+    },
+    "cta_final": {
+      "title": "Pronto para Transformar Seu Marketing?",
+      "subtitle": "Junte-se a milhares de empresas que já usam o NexusOne para escalar seus esforços de marketing",
+      "button": "Comece Seu Teste Grátis Agora"
+    }
+  }
+}
