@@ -6,6 +6,7 @@ import { ContentGenerator } from '../ContentGenerator'
 import { SocialMediaGenerator } from '../SocialMediaGenerator'
 import { CampaignBuilder } from '../CampaignBuilder'
 import { Analytics } from '../Analytics'
+import { MonitoringDashboard } from '../MonitoringDashboard'
 import { Credits } from '../Credits'
 import { SalesPage } from '../SalesPage'
 import { Documentation } from '../Documentation'
@@ -29,6 +30,8 @@ export function DashboardLayout() {
         return <CampaignBuilder />
       case 'analytics':
         return <Analytics />
+      case 'monitoring':
+        return <MonitoringDashboard />
       case 'credits':
         return <Credits />
       case 'sales-page':

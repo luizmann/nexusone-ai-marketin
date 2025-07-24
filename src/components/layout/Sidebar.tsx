@@ -11,7 +11,8 @@ import {
   BookOpen,
   Shield,
   ShoppingCart,
-  FileText
+  FileText,
+  Activity
 } from '@phosphor-icons/react'
 import { useLanguage } from '../../contexts/LanguageContext'
 
@@ -30,6 +31,7 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
     { id: 'social-media', label: t('modules.social_media.title'), icon: Hash },
     { id: 'campaigns', label: t('campaign_builder.title'), icon: Target },
     { id: 'analytics', label: t('navigation.analytics'), icon: BarChart3 },
+    { id: 'monitoring', label: t('monitoring.title', 'Monitoring'), icon: Activity },
     { id: 'credits', label: t('navigation.credits'), icon: CurrencyCircleDollar },
     { id: 'sales-page', label: t('sales_page.hero.title'), icon: ShoppingCart },
     { id: 'documentation', label: t('navigation.documentation'), icon: BookOpen },
