@@ -663,7 +663,6 @@ Return a JSON object with this structure:
               </div>
             </CardContent>
           </Card>
-            </div>
           </div>
         </TabsContent>
 
