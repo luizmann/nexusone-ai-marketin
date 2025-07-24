@@ -309,42 +309,62 @@
       "title": "Transforma Tu Marketing con IA",
       "subtitle": "La Única Plataforma Que Necesitas para Automatizar, Optimizar y Escalar Tu Marketing Digital",
       "cta": "Comienza Tu Prueba Gratuita",
-      "guarantee": "Garantía de Devolución de 14 Días"
+      "guarantee": "Garantía de Devolución de 14 Días",
+      "badge": "Lanzamiento Global 2025",
+      "watch_demo": "Ver Demo",
+      "global_support": "5 Idiomas Soportados"
     },
     "problem": {
       "title": "Deja de Luchar con Herramientas de Marketing Fragmentadas",
+      "subtitle": "La mayoría de las empresas usan 6-10 herramientas diferentes para marketing. Esto es caro, complejo e ineficiente.",
       "pain_points": [
-        "Gestionar múltiples plataformas y herramientas",
-        "Altos costos por soluciones de marketing separadas",
-        "Creación manual de campañas que consume tiempo",
-        "Falta de análisis e insights integrados",
-        "Dificultad para escalar esfuerzos de marketing"
+        "Múltiples herramientas caras ($500+/mes)",
+        "Datos dispersos y desconectados",
+        "Configuración manual que consume tiempo",
+        "Falta de automatización inteligente",
+        "Soporte multiidioma limitado",
+        "Dificultad para escalar operaciones"
       ]
     },
     "solution": {
-      "title": "Presentamos NexusOne: Tu Centro de Comando de Marketing Todo-en-Uno",
+      "title": "Conoce NexusOne: Tu Centro de Comando de Marketing",
+      "subtitle": "Una plataforma que reemplaza 10+ herramientas y automatiza todo tu marketing digital con IA.",
       "benefits": [
-        "10+ Módulos de Marketing Integrados",
-        "Generación de Contenido Impulsada por IA",
-        "Gestión Automatizada de Campañas",
-        "Análisis e Insights en Tiempo Real",
-        "Soporte Multiidioma Global"
+        "10 Módulos de Marketing Integrados",
+        "Generación de Contenido con IA",
+        "Automatización de Campañas",
+        "Análisis en Tiempo Real",
+        "Soporte Global Multiidioma",
+        "Sistema de Créditos Flexible"
       ]
     },
     "features": {
       "title": "Todo Lo Que Necesitas Para Dominar el Marketing Digital",
-      "magic_pages": "Crea Páginas de Destino de Alta Conversión en Minutos",
-      "video_creator": "Genera Videos de Marketing Profesionales con IA",
-      "social_automation": "Automatiza Tu Presencia en Redes Sociales",
-      "whatsapp_marketing": "Construye Poderosos Embudos de Marketing de WhatsApp",
-      "facebook_ads": "Crea y Optimiza Campañas de Anuncios de Facebook",
-      "dropshipping": "Solución Completa de E-commerce y Dropshipping"
+      "subtitle": "10 módulos poderosos que trabajan juntos para automatizar y escalar tu marketing.",
+      "magic_pages": "Magic Pages",
+      "magic_pages_desc": "Crea páginas de destino de alta conversión en minutos con IA",
+      "video_creator": "Video Creator",
+      "video_creator_desc": "Genera videos de marketing profesionales con avatares IA",
+      "whatsapp_marketing": "WhatsApp Marketing",
+      "whatsapp_marketing_desc": "Construye embudos poderosos de WhatsApp con chatbots inteligentes",
+      "facebook_ads": "Facebook Ads",
+      "facebook_ads_desc": "Crea y optimiza campañas de Facebook automáticamente",
+      "ai_agents": "AI Agents",
+      "ai_agents_desc": "Asistentes virtuales personalizados para tu negocio",
+      "dropshipping": "Dropshipping",
+      "dropshipping_desc": "Solución completa de e-commerce y dropshipping",
+      "crm_system": "Sistema CRM",
+      "crm_system_desc": "Gestiona leads y clientes en un lugar",
+      "generate_income": "Generate Income",
+      "generate_income_desc": "Descubre oportunidades de ingresos con IA",
+      "social_media": "Social Media",
+      "social_media_desc": "Crea contenido para todas las redes sociales",
+      "analytics_hub": "Analytics Hub",
+      "analytics_hub_desc": "Dashboards completos de rendimiento"
     },
     "testimonials": {
-      "title": "Únete a Miles de Marketers Exitosos",
-      "testimonial_1": "¡NexusOne aumentó nuestra tasa de conversión en 340% en solo 3 meses!",
-      "testimonial_2": "La generación de contenido con IA nos ahorró más de 20 horas por semana.",
-      "testimonial_3": "Finalmente, una plataforma que realmente cumple sus promesas."
+      "title": "Únete a Miles de Emprendedores Exitosos",
+      "subtitle": "Empresas de todo el mundo ya están usando NexusOne para escalar sus negocios"
     },
     "pricing_section": {
       "title": "Elige el Plan Perfecto para Tu Negocio",
@@ -352,7 +372,9 @@
     },
     "guarantee": {
       "title": "Garantía de Devolución Sin Riesgo de 14 Días",
-      "description": "Prueba NexusOne completamente sin riesgo. Si no estás satisfecho en 14 días, obtén un reembolso completo."
+      "description": "Prueba NexusOne completamente sin riesgo. Si no estás satisfecho en 14 días, obtén un reembolso completo.",
+      "short": "Garantía de 14 días",
+      "cta": "Comenzar Prueba Sin Riesgo"
     },
     "faq": {
       "title": "Preguntas Frecuentes",
@@ -363,13 +385,98 @@
       "q3": "¿Hay una tarifa de configuración?",
       "a3": "No hay tarifas de configuración. Solo pagas la suscripción mensual de tu plan elegido.",
       "q4": "¿Ofrecen soporte al cliente?",
-      "a4": "Sí, proporcionamos soporte por email para todos los planes, con soporte prioritario para usuarios Pro y Premium."
+      "a4": "Sí, proporcionamos soporte por email para todos los planes, con soporte prioritario para usuarios Pro y Premium.",
+      "q5": "¿NexusOne funciona en otros idiomas?",
+      "a5": "¡Sí! Soportamos 5 idiomas: Inglés, Español, Portugués, Árabe y Hebreo con soporte RTL completo.",
+      "q6": "¿Mis datos están seguros?",
+      "a6": "Sí, usamos encriptación de nivel bancario y seguimos las mejores prácticas de seguridad. Cumplimos con GDPR."
     },
     "cta_final": {
       "title": "¿Listo para Transformar Tu Marketing?",
       "subtitle": "Únete a miles de empresas que ya usan NexusOne para escalar sus esfuerzos de marketing",
       "button": "Comienza Tu Prueba Gratuita Ahora"
+    },
+    "global_support": "Soporte Global 24/7",
+    "setup_time": "Configuración de 5 minutos"
+  },
+  "pricing": {
+    "period": "mes",
+    "most_popular": "MÁS POPULAR",
+    "free": {
+      "name": "GRATIS",
+      "description": "Perfecto para comenzar y probar nuestra plataforma",
+      "feature_1": "50 créditos mensuales",
+      "feature_2": "2 videos IA por mes",
+      "feature_3": "2 páginas de destino por mes",
+      "feature_4": "1 número WhatsApp",
+      "feature_5": "5 módulos básicos",
+      "feature_6": "Soporte por email",
+      "credits": "50/mes",
+      "videos": "2/mes",
+      "whatsapp": "1 número",
+      "modules": "5 módulos",
+      "button": "Comenzar Gratis"
+    },
+    "pro": {
+      "name": "PRO",
+      "description": "Para empresas que quieren automatizar y escalar",
+      "feature_1": "500 créditos mensuales",
+      "feature_2": "20 videos IA por mes",
+      "feature_3": "20 páginas de destino por mes",
+      "feature_4": "5 números WhatsApp",
+      "feature_5": "8 módulos avanzados",
+      "feature_6": "Soporte prioritario",
+      "feature_7": "Reportes avanzados",
+      "feature_8": "Integraciones ilimitadas",
+      "credits": "500/mes",
+      "videos": "20/mes",
+      "whatsapp": "5 números",
+      "modules": "8 módulos",
+      "button": "Comenzar Prueba de 7 Días"
+    },
+    "premium": {
+      "name": "PREMIUM",
+      "description": "Para agencias y empresas que necesitan todo",
+      "feature_1": "2000 créditos mensuales",
+      "feature_2": "100 videos IA por mes",
+      "feature_3": "Páginas de destino ilimitadas",
+      "feature_4": "20 números WhatsApp",
+      "feature_5": "Todos los 10 módulos",
+      "feature_6": "Soporte dedicado 24/7",
+      "feature_7": "White-label disponible",
+      "feature_8": "Entrenamiento personalizado",
+      "feature_9": "API personalizada",
+      "credits": "2000/mes",
+      "videos": "100/mes",
+      "whatsapp": "20 números",
+      "modules": "10 módulos",
+      "button": "Comenzar Prueba de 14 Días"
     }
+  },
+  "testimonials": {
+    "role_1": "Fundadora",
+    "content_1": "NexusOne aumentó nuestra tasa de conversión en 340% en solo 3 meses. La automatización de WhatsApp sola pagó toda la suscripción.",
+    "role_2": "Propietario E-commerce",
+    "content_2": "La integración de dropshipping es perfecta. Importo productos y creo campañas en minutos. Hemos facturado $50k en el primer mes.",
+    "role_3": "Director de Marketing",
+    "content_3": "Finalmente una plataforma que cumple sus promesas. El soporte multiidioma fue clave para nuestro crecimiento global."
+  },
+  "footer": {
+    "description": "La plataforma de marketing con IA más completa del mundo. Automatiza, optimiza y escala tu negocio.",
+    "product": "Producto",
+    "features": "Características",
+    "pricing": "Precios",
+    "demo": "Demo",
+    "support": "Soporte",
+    "help_center": "Centro de Ayuda",
+    "contact": "Contacto",
+    "status": "Estado",
+    "legal": "Legal",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "security": "Seguridad",
+    "copyright": "© 2025 NexusOne. Todos los derechos reservados.",
+    "available_in": "Disponible en"
   },
   "monitoring": {
     "title": "Monitoreo del Sistema",

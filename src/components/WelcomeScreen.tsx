@@ -3,15 +3,19 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useKV } from '@github/spark/hooks'
 import { SalesPage } from './SalesPage'
-import { Zap } from '@phosphor-icons/react'
+import { ComprehensiveDocumentation } from './ComprehensiveDocumentation'
+import { ComprehensivePrivacyPolicy } from './ComprehensivePrivacyPolicy'
+import { Zap, BookOpen, Shield, Sparkles } from '@phosphor-icons/react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { LanguageSelector } from './LanguageSelector'
 
 export function WelcomeScreen() {
   const [, setUser] = useKV('user-profile', null)
   const [showLogin, setShowLogin] = useState(false)
+  const [activeTab, setActiveTab] = useState('sales')
   const [name, setName] = useState('')
   const [company, setCompany] = useState('')
   const { t, isRTL } = useLanguage()
@@ -73,7 +77,61 @@ export function WelcomeScreen() {
 
   // Show sales page by default
   if (!showLogin) {
-    return <SalesPage onGetStarted={handleGetStarted} />
+    return (
+      <div className={`min-h-screen ${isRTL ? 'rtl' : 'ltr'}`}>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          {/* Navigation Header */}
+          <div className="bg-white/80 backdrop-blur-sm border-b sticky top-0 z-50">
+            <div className="container mx-auto px-4 py-4">
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg p-2">
+                    <Sparkles size={24} className="text-white" />
+                  </div>
+                  <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                    NexusOne
+                  </span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <LanguageSelector />
+                  <Button onClick={handleGetStarted} className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                    {t('welcome.get_started')}
+                  </Button>
+                </div>
+              </div>
+              
+              <TabsList className="grid w-full grid-cols-3 max-w-md mx-auto">
+                <TabsTrigger value="sales" className="flex items-center gap-2">
+                  <Zap size={16} />
+                  {t('nav.sales')}
+                </TabsTrigger>
+                <TabsTrigger value="docs" className="flex items-center gap-2">
+                  <BookOpen size={16} />
+                  {t('nav.docs')}
+                </TabsTrigger>
+                <TabsTrigger value="privacy" className="flex items-center gap-2">
+                  <Shield size={16} />
+                  {t('nav.privacy')}
+                </TabsTrigger>
+              </TabsList>
+            </div>
+          </div>
+
+          {/* Tab Contents */}
+          <TabsContent value="sales" className="mt-0">
+            <SalesPage onGetStarted={handleGetStarted} />
+          </TabsContent>
+          
+          <TabsContent value="docs" className="mt-0">
+            <ComprehensiveDocumentation />
+          </TabsContent>
+          
+          <TabsContent value="privacy" className="mt-0">
+            <ComprehensivePrivacyPolicy />
+          </TabsContent>
+        </Tabs>
+      </div>
+    )
   }
 
   // Show login form when user clicks get started

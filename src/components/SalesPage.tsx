@@ -18,7 +18,13 @@ import {
   Brain,
   Rocket,
   Shield,
-  Globe
+  Globe,
+  Play,
+  TrendUp,
+  Clock,
+  Lightbulb,
+  CurrencyDollar,
+  Magic
 } from '@phosphor-icons/react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { LanguageSelector } from './LanguageSelector'
@@ -36,6 +42,21 @@ interface PricingTier {
   modules: string
   highlighted?: boolean
   buttonText: string
+}
+
+interface Feature {
+  icon: React.ReactNode
+  title: string
+  description: string
+  credits: number
+}
+
+interface Testimonial {
+  name: string
+  role: string
+  company: string
+  content: string
+  rating: number
 }
 
 const pricingTiers: PricingTier[] = [
