@@ -663,8 +663,8 @@ Return a JSON object with this structure:
               </div>
             </CardContent>
           </Card>
-          </div>
-        </TabsContent>
+        </div>
+      </TabsContent>
 
         <TabsContent value="campaigns" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
