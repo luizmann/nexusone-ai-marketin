@@ -1,0 +1,78 @@
+# NexusOne AI Platform Supabase Configuration
+
+project_id = "nexusone-ai-platform"
+organization_id = "nexusone-org"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[auth]
+enabled = true
+port = 54324
+site_url = "https://nexusone.ai"
+additional_redirect_urls = ["https://app.nexusone.ai", "http://localhost:3000"]
+jwt_expiry = 3600
+enable_signup = true
+enable_email_confirmations = true
+enable_sms_confirmations = false
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+
+[auth.sms]
+enable_signup = false
+enable_confirmations = false
+
+[auth.external.google]
+enabled = true
+client_id = "env(GOOGLE_CLIENT_ID)"
+secret = "env(GOOGLE_CLIENT_SECRET)"
+redirect_uri = "https://app.nexusone.ai/auth/callback"
+
+[auth.external.facebook]
+enabled = true
+client_id = "env(FACEBOOK_CLIENT_ID)"
+secret = "env(FACEBOOK_CLIENT_SECRET)"
+redirect_uri = "https://app.nexusone.ai/auth/callback"
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[realtime]
+enabled = true
+port = 54323
+max_connections = 100
+max_channels_per_client = 100
+max_joins_per_second = 100
+max_events_per_second = 100
+
+[storage]
+enabled = true
+port = 54325
+file_size_limit = "50MiB"
+buckets = [
+  { name = "avatars", public = true },
+  { name = "landing-pages", public = true },
+  { name = "generated-content", public = true },
+  { name = "user-uploads", public = false },
+  { name = "video-assets", public = true },
+  { name = "ai-generated", public = false }
+]
+
+[edge_functions]
+enabled = true
+port = 54326
+
+[analytics]
+enabled = true
+port = 54327
+vector_port = 54328
+backend = "postgres"
