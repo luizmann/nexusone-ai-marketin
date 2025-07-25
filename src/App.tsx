@@ -4,6 +4,8 @@ import { WelcomeScreen } from './components/WelcomeScreen'
 import { CJComprehensiveTest } from './pages/CJComprehensiveTest'
 import InventoryFulfillmentDashboard from './pages/InventoryFulfillmentDashboard'
 import { ComprehensiveTestSuite } from './pages/ComprehensiveTestSuite'
+import { AIContentGenerationPipeline } from './pages/AIContentGenerationPipeline'
+import { ComprehensiveTestingDashboard } from './pages/ComprehensiveTestingDashboard'
 import { Toaster } from '@/components/ui/sonner'
 import { LanguageProvider } from './contexts/LanguageContext'
 
@@ -11,7 +13,28 @@ function App() {
   const [user] = useKV('user-profile', null)
   const [showCJTest] = useKV('show-cj-comprehensive-test', false) // Disabled by default
   const [showInventoryDashboard] = useKV('show-inventory-dashboard', false) // Disabled
-  const [showTestSuite] = useKV('show-comprehensive-test-suite', true) // Show test suite
+  const [showTestSuite] = useKV('show-comprehensive-test-suite', false) // Disabled
+  const [showAIPipeline] = useKV('show-ai-content-pipeline', false) // Disabled
+  const [showTestingDashboard] = useKV('show-testing-dashboard', true) // Show testing dashboard
+  
+  
+  if (showTestingDashboard) {
+    return (
+      <LanguageProvider>
+        <ComprehensiveTestingDashboard />
+        <Toaster />
+      </LanguageProvider>
+    )
+  }
+  
+  if (showAIPipeline) {
+    return (
+      <LanguageProvider>
+        <AIContentGenerationPipeline />
+        <Toaster />
+      </LanguageProvider>
+    )
+  }
   
   if (showCJTest) {
     return (
