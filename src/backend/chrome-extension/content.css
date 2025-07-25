@@ -1,0 +1,223 @@
+/* NexusOne CJ Extension Styles */
+
+/* Import Button */
+.nexusone-import-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.nexusone-import-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+.nexusone-import-btn:active {
+  transform: translateY(0);
+}
+
+/* Bulk Import Panel */
+.nexusone-bulk-panel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  z-index: 10000;
+  min-width: 280px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.nexusone-panel-header {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  padding: 16px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nexusone-toggle-bulk {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nexusone-toggle-bulk:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.nexusone-panel-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nexusone-selected-count {
+  font-weight: 600;
+  color: #6366f1;
+  text-align: center;
+}
+
+.nexusone-import-selected,
+.nexusone-clear-selected {
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.nexusone-import-selected {
+  background: #6366f1;
+  color: white;
+}
+
+.nexusone-import-selected:hover {
+  background: #5748d6;
+}
+
+.nexusone-clear-selected {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.nexusone-clear-selected:hover {
+  background: #e5e7eb;
+}
+
+/* Product Selection Buttons */
+.nexusone-select-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #6366f1;
+  background: white;
+  color: #6366f1;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.nexusone-select-btn:hover {
+  background: #6366f1;
+  color: white;
+  transform: scale(1.1);
+}
+
+.nexusone-select-btn.selected {
+  background: #10b981;
+  border-color: #10b981;
+  color: white;
+}
+
+.nexusone-select-btn.selected:hover {
+  background: #059669;
+  border-color: #059669;
+}
+
+/* Notifications */
+.nexusone-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  z-index: 10001;
+  animation: slideDown 0.3s ease;
+  max-width: 400px;
+  text-align: center;
+}
+
+.nexusone-success {
+  background: #10b981;
+  color: white;
+}
+
+.nexusone-error {
+  background: #ef4444;
+  color: white;
+}
+
+.nexusone-warning {
+  background: #f59e0b;
+  color: white;
+}
+
+.nexusone-info {
+  background: #3b82f6;
+  color: white;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Product hover effects when bulk mode is active */
+[class*="product-item"]:hover .nexusone-select-btn,
+[class*="product-card"]:hover .nexusone-select-btn,
+.product:hover .nexusone-select-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Hide elements on small screens */
+@media (max-width: 768px) {
+  .nexusone-bulk-panel {
+    position: fixed;
+    bottom: 20px;
+    top: auto;
+    right: 20px;
+    left: 20px;
+    min-width: auto;
+  }
+  
+  .nexusone-panel-header {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+  
+  .nexusone-toggle-bulk {
+    width: 100%;
+  }
+}
