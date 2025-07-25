@@ -1,0 +1,161 @@
+# Production Deployment Configuration for NexusOne AI Platform
+
+project_id = "hbfgtdxvlbkvkrjqxnac"
+organization_id = "nexusone"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage", "graphql_public", "nexusone"]
+extra_search_path = ["public", "extensions", "nexusone"]
+max_rows = 10000
+
+[auth]
+enabled = true
+port = 54324
+site_url = "https://nexusone.ai"
+additional_redirect_urls = [
+  "https://app.nexusone.ai",
+  "https://nexusone.ai/auth/callback",
+  "https://app.nexusone.ai/auth/callback",
+  "http://localhost:3000",
+  "http://localhost:5173"
+]
+jwt_expiry = 86400  # 24 hours
+enable_signup = true
+enable_email_confirmations = true
+enable_sms_confirmations = false
+enable_phone_confirmations = false
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+secure_email_change_enabled = true
+secure_password_change_enabled = true
+template = {
+  invite = "templates/invite.html",
+  confirmation = "templates/confirmation.html",
+  recovery = "templates/recovery.html",
+  magic_link = "templates/magic_link.html",
+  email_change = "templates/email_change.html"
+}
+
+[auth.sms]
+enable_signup = false
+enable_confirmations = false
+
+# Social Auth Providers
+[auth.external.google]
+enabled = true
+client_id = "env(GOOGLE_CLIENT_ID)"
+secret = "env(GOOGLE_CLIENT_SECRET)"
+redirect_uri = "https://app.nexusone.ai/auth/callback"
+
+[auth.external.facebook]
+enabled = true
+client_id = "env(FACEBOOK_CLIENT_ID)"
+secret = "env(FACEBOOK_CLIENT_SECRET)"
+redirect_uri = "https://app.nexusone.ai/auth/callback"
+
+[auth.external.github]
+enabled = true
+client_id = "env(GITHUB_CLIENT_ID)"
+secret = "env(GITHUB_CLIENT_SECRET)"
+redirect_uri = "https://app.nexusone.ai/auth/callback"
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+# Database Connection Pool
+[db.pooler]
+enabled = true
+port = 6543
+pool_mode = "transaction"
+default_pool_size = 20
+max_client_conn = 100
+
+[realtime]
+enabled = true
+port = 54323
+max_connections = 200
+max_channels_per_client = 100
+max_joins_per_second = 500
+max_events_per_second = 1000
+
+[storage]
+enabled = true
+port = 54325
+file_size_limit = "100MiB"
+buckets = [
+  { name = "avatars", public = true, file_size_limit = "5MiB", allowed_mime_types = ["image/jpeg", "image/png", "image/webp"] },
+  { name = "landing-pages", public = true, file_size_limit = "10MiB" },
+  { name = "generated-content", public = true, file_size_limit = "50MiB" },
+  { name = "user-uploads", public = false, file_size_limit = "20MiB" },
+  { name = "video-assets", public = true, file_size_limit = "100MiB", allowed_mime_types = ["video/mp4", "video/webm", "video/avi"] },
+  { name = "ai-generated", public = false, file_size_limit = "50MiB" },
+  { name = "documents", public = false, file_size_limit = "10MiB", allowed_mime_types = ["application/pdf", "application/msword", "text/plain"] },
+  { name = "audio-files", public = true, file_size_limit = "20MiB", allowed_mime_types = ["audio/mpeg", "audio/wav", "audio/ogg"] },
+  { name = "templates", public = true, file_size_limit = "5MiB" },
+  { name = "campaigns", public = false, file_size_limit = "30MiB" }
+]
+
+[edge_functions]
+enabled = true
+port = 54326
+import_map = "./functions/_shared/import_map.json"
+
+[analytics]
+enabled = true
+port = 54327
+vector_port = 54328
+backend = "postgres"
+
+# Custom schemas for NexusOne
+[experimental]
+webhooks = true
+
+# CORS Configuration
+[api.cors]
+enabled = true
+origins = [
+  "https://nexusone.ai",
+  "https://app.nexusone.ai",
+  "https://www.nexusone.ai",
+  "http://localhost:3000",
+  "http://localhost:5173"
+]
+methods = ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
+headers = ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"]
+
+# Rate Limiting
+[api.rate_limit]
+enabled = true
+anonymous_limit = 100  # requests per hour
+authenticated_limit = 1000  # requests per hour
+
+# Security Headers
+[api.security]
+hsts_enabled = true
+csp_enabled = true
+referrer_policy = "strict-origin-when-cross-origin"
+
+# Logging Configuration
+[logging]
+level = "info"
+enabled = true
+
+# Backups
+[backups]
+enabled = true
+schedule = "0 2 * * *"  # Daily at 2 AM
+retention_days = 30
+
+# Monitoring
+[monitoring]
+enabled = true
+log_queries = true
+log_slow_queries = true
+slow_query_threshold = "1s"
