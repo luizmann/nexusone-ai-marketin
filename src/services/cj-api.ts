@@ -460,6 +460,3 @@ export class CJDropshippingAPI {
 
 // Export singleton instance with your API key
 export const cjAPI = new CJDropshippingAPI('5e0e680914c6462ebcf39059b21e70a9')
-
-// Export for testing
-export { CJDropshippingAPI }
