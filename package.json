@@ -7,9 +7,13 @@
         "dev": "vite",
         "kill": "fuser -k 5000/tcp",
         "build": "tsc -b --noCheck && vite build",
+        "build:prod": "NODE_ENV=production npm run build",
         "lint": "eslint .",
         "optimize": "vite optimize",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "deploy:vercel": "npm run build:prod && vercel --prod",
+        "deploy:netlify": "npm run build:prod && netlify deploy --prod --dir=dist",
+        "deploy:check": "node -e \"console.log('🚀 NexusOne AI Platform - Ready for deployment!'); console.log('Run: npm run deploy:vercel or npm run deploy:netlify')\""
     },
     "dependencies": {
         "@github/spark": "^0.0.1",

@@ -1,0 +1,48 @@
+{
+  "build": {
+    "installCommand": "npm install",
+    "buildCommand": "npm run build:prod",
+    "outputDirectory": "dist"
+  },
+  "functions": {
+    "directory": "supabase/functions"
+  },
+  "env": {
+    "VITE_SUPABASE_URL": "https://hbfgtdxvlbkvkrjqxnac.supabase.co",
+    "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhiZmd0ZHh2bGJrdmtyanlkHnhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY2NjA0NzcsImV4cCI6MjAyMjIzNjQ3N30.4L1VGpMOQR4zNjL5xVKjN8QX9hBf2wP0sA7rD3kF1mE",
+    "VITE_CJ_API_KEY": "5e0e680914c6462ebcf39059b21e70a9",
+    "VITE_FACEBOOK_ACCESS_TOKEN": "EAAI0DOV8GvcBPK4ZBUTybkGl66FwZA1s45Dx3cSjOVEO4lzZAifzVR6lIoVbW6HcsP2L7x4b0065VirgfhzyfIGNCCA9QCynR3twQB01ZCqjolM7b0QfGtBpj5ZCZA5kyWONQsaYmZBRvy1ByAziVPZAot50fp9ZB4ro71pZAPk7iK4ynEMkhG2LBqUmg2VFWZCPAYQ74T3ocUZCL7u69pCaZAhqUe29gMZALb2jZB5YWQrfHbreY0hIgZDZD",
+    "VITE_APP_NAME": "NexusOne AI",
+    "VITE_ENVIRONMENT": "production"
+  },
+  "redirects": [
+    {
+      "from": "/*",
+      "to": "/index.html",
+      "status": 200
+    }
+  ],
+  "headers": [
+    {
+      "source": "/**",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options", 
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    }
+  ]
+}
