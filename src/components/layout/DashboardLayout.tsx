@@ -18,6 +18,9 @@ import { PrivacyPolicy } from '../PrivacyPolicy'
 import { StatusReport } from '../StatusReport'
 import { DropshippingDashboard } from '../dropshipping/DropshippingDashboard'
 import { DragDropPageEditor } from '../DragDropPageEditor'
+import { DropMagic } from '../../pages/DropMagic'
+import { SmartAppointments } from '../../pages/SmartAppointments'
+import { DragDropEditor } from '../../pages/DragDropEditor'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export function DashboardLayout() {
@@ -58,8 +61,14 @@ export function DashboardLayout() {
         return <StatusReport />
       case 'dropshipping':
         return <DropshippingDashboard />
+      case 'drop-magic':
+        return <DropMagic />
+      case 'smart-appointments':
+        return <SmartAppointments />
       case 'page-editor':
         return <DragDropPageEditor />
+      case 'drag-drop-editor':
+        return <DragDropEditor />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }

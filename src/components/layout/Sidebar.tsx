@@ -35,8 +35,11 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
 
   const modules = [
     { id: 'dashboard', label: t('navigation.dashboard'), icon: House },
+    { id: 'drop-magic', label: 'Drop Magic - Marketplace', icon: Zap },
+    { id: 'smart-appointments', label: 'Smart Appointments', icon: Bot },
+    { id: 'drag-drop-editor', label: 'Drag & Drop Editor', icon: Layout },
     { id: 'dropshipping', label: 'Marketplace Dropshipping', icon: Storefront },
-    { id: 'page-editor', label: t('modules.page_editor.title'), icon: Layout },
+    { id: 'page-editor', label: t('modules.page_editor.title'), icon: FileText },
     { id: 'content', label: t('modules.content_generator'), icon: PenNib },
     { id: 'social-media', label: t('modules.social_media.title'), icon: Hash },
     { id: 'campaigns', label: t('campaign_builder.title'), icon: Target },
