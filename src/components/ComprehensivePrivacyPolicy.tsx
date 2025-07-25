@@ -496,3 +496,6 @@ export function PrivacyPolicy() {
     </div>
   )
 }
+
+// Export with the expected name
+export { PrivacyPolicy as ComprehensivePrivacyPolicy }
