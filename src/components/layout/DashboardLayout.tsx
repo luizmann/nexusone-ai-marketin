@@ -6,6 +6,7 @@ import { ContentGenerator } from '../ContentGenerator'
 import { SocialMediaGenerator } from '../SocialMediaGenerator'
 import { CampaignBuilder } from '../CampaignBuilder'
 import { AppointmentScheduler } from '../AppointmentScheduler'
+import { WhatsAppBookingSystem } from '../WhatsAppBookingSystem'
 import { Analytics } from '../Analytics'
 import { MonitoringDashboard } from '../MonitoringDashboard'
 import { AffiliateProgram } from '../AffiliateProgram'
@@ -33,6 +34,8 @@ export function DashboardLayout() {
         return <CampaignBuilder />
       case 'appointment':
         return <AppointmentScheduler />
+      case 'whatsapp-booking':
+        return <WhatsAppBookingSystem />
       case 'analytics':
         return <Analytics />
       case 'monitoring':

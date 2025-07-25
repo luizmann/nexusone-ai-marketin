@@ -16,7 +16,8 @@ import {
   Handshake,
   Users,
   Calendar,
-  Bot
+  Bot,
+  MessageCircle
 } from '@phosphor-icons/react'
 import { useLanguage } from '../../contexts/LanguageContext'
 
@@ -34,7 +35,8 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
     { id: 'content', label: t('modules.content_generator'), icon: PenNib },
     { id: 'social-media', label: t('modules.social_media.title'), icon: Hash },
     { id: 'campaigns', label: t('campaign_builder.title'), icon: Target },
-    { id: 'appointment', label: t('appointment.title', 'Agendamento WhatsApp'), icon: Calendar },
+    { id: 'whatsapp-booking', label: 'Sistema WhatsApp Agendamento', icon: MessageCircle },
+    { id: 'appointment', label: t('appointment.title', 'Agendamento Simples'), icon: Calendar },
     { id: 'analytics', label: t('navigation.analytics'), icon: BarChart3 },
     { id: 'monitoring', label: t('monitoring.title', 'Monitoring'), icon: Activity },
     { id: 'affiliate', label: t('affiliate.title'), icon: Users },
