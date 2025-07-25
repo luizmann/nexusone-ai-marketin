@@ -35,6 +35,7 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
 
   const modules = [
     { id: 'dashboard', label: t('navigation.dashboard'), icon: House },
+    { id: 'dropshipping-marketplace', label: 'CJ Dropshipping', icon: Package },
     { id: 'drop-magic', label: 'Drop Magic - Marketplace', icon: Zap },
     { id: 'smart-appointments', label: 'Smart Appointments', icon: Bot },
     { id: 'drag-drop-editor', label: 'Drag & Drop Editor', icon: Layout },

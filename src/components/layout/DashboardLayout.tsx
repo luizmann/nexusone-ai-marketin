@@ -21,6 +21,7 @@ import { DragDropPageEditor } from '../DragDropPageEditor'
 import { DropMagic } from '../../pages/DropMagic'
 import { SmartAppointments } from '../../pages/SmartAppointments'
 import { DragDropEditor } from '../../pages/DragDropEditor'
+import DropshippingMarketplacePage from '../../pages/DropshippingMarketplacePage'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export function DashboardLayout() {
@@ -61,6 +62,8 @@ export function DashboardLayout() {
         return <StatusReport />
       case 'dropshipping':
         return <DropshippingDashboard />
+      case 'dropshipping-marketplace':
+        return <DropshippingMarketplacePage />
       case 'drop-magic':
         return <DropMagic />
       case 'smart-appointments':
