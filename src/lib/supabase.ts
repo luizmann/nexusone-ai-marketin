@@ -1,9 +1,13 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = 'https://your-project.supabase.co'
-const supabaseAnonKey = 'your-anon-key'
+// Mock Supabase configuration for development
+const supabaseUrl = 'https://mock-project.supabase.co'
+const supabaseAnonKey = 'mock-anon-key'
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Use mock client for development
+export const supabase = process.env.NODE_ENV === 'development' 
+  ? mockSupabase 
+  : createClient(supabaseUrl, supabaseAnonKey)
 
 // Mock implementation for testing
 export const mockSupabase = {
