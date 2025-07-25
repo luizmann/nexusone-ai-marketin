@@ -17,6 +17,7 @@ import { Documentation } from '../Documentation'
 import { PrivacyPolicy } from '../PrivacyPolicy'
 import { StatusReport } from '../StatusReport'
 import { DropshippingDashboard } from '../dropshipping/DropshippingDashboard'
+import { DragDropPageEditor } from '../DragDropPageEditor'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export function DashboardLayout() {
@@ -57,6 +58,8 @@ export function DashboardLayout() {
         return <StatusReport />
       case 'dropshipping':
         return <DropshippingDashboard />
+      case 'page-editor':
+        return <DragDropPageEditor />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }

@@ -10,7 +10,8 @@ import {
   Eye,
   CheckCircle,
   Clock,
-  Hash
+  Hash,
+  Layout
 } from '@phosphor-icons/react'
 import { useLanguage } from '../contexts/LanguageContext'
 
@@ -81,6 +82,13 @@ export function Dashboard({ onModuleChange }: DashboardProps) {
   ]
 
   const quickActions = [
+    {
+      title: 'Visual Page Editor',
+      description: 'Build pages with drag & drop editor',
+      icon: Layout,
+      action: 'page-editor',
+      color: 'accent'
+    },
     {
       title: 'Social Media AI',
       description: 'Generate multi-platform social content',

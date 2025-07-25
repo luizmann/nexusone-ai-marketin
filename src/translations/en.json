@@ -93,6 +93,11 @@
       "description": "Create and optimize Facebook ad campaigns",
       "cost": "15 credits per campaign"
     },
+    "page_editor": {
+      "title": "Visual Page Editor",
+      "description": "Drag & drop page builder with real-time preview",
+      "cost": "5 credits per page save"
+    },
     "whatsapp_bot": {
       "title": "WhatsApp Bot",
       "description": "Automate customer conversations",

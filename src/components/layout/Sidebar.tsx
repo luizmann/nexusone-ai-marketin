@@ -19,7 +19,8 @@ import {
   Bot,
   MessageCircle,
   Package,
-  Storefront
+  Storefront,
+  Layout
 } from '@phosphor-icons/react'
 import { useLanguage } from '../../contexts/LanguageContext'
 
@@ -35,6 +36,7 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
   const modules = [
     { id: 'dashboard', label: t('navigation.dashboard'), icon: House },
     { id: 'dropshipping', label: 'Marketplace Dropshipping', icon: Storefront },
+    { id: 'page-editor', label: t('modules.page_editor.title'), icon: Layout },
     { id: 'content', label: t('modules.content_generator'), icon: PenNib },
     { id: 'social-media', label: t('modules.social_media.title'), icon: Hash },
     { id: 'campaigns', label: t('campaign_builder.title'), icon: Target },

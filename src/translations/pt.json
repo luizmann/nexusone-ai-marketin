@@ -93,6 +93,11 @@
       "description": "Crie e otimize campanhas de anúncios do Facebook",
       "cost": "15 créditos por campanha"
     },
+    "page_editor": {
+      "title": "Editor Visual de Páginas",
+      "description": "Construtor de páginas arrastar e soltar com preview em tempo real",
+      "cost": "5 créditos por salvamento de página"
+    },
     "whatsapp_bot": {
       "title": "Bot WhatsApp",
       "description": "Automatize conversas com clientes",
