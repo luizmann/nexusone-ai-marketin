@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useKV } from '@github/spark/hooks'
 import { SalesPage } from './SalesPage'
-import { ComprehensiveDocumentation } from './ComprehensiveDocumentation'
+import { Documentation } from './ComprehensiveDocumentation'
 import { ComprehensivePrivacyPolicy } from './ComprehensivePrivacyPolicy'
 import { Zap, BookOpen, Shield, Sparkles } from '@phosphor-icons/react'
 import { useLanguage } from '../contexts/LanguageContext'
@@ -123,7 +123,7 @@ export function WelcomeScreen() {
           </TabsContent>
           
           <TabsContent value="docs" className="mt-0">
-            <ComprehensiveDocumentation />
+            <Documentation />
           </TabsContent>
           
           <TabsContent value="privacy" className="mt-0">
