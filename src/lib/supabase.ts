@@ -405,6 +405,63 @@ export const getSystemHealth = async () => {
   }
 }
 
+// Mock Supabase client for testing (prevents real API calls during development)
+export const mockSupabase = {
+  functions: {
+    invoke: async (functionName: string, options?: any) => {
+      console.log(`Mock: Invoking function ${functionName} with options:`, options)
+      
+      // Mock responses for different functions
+      if (functionName === 'ai-content-generation') {
+        return {
+          data: {
+            success: true,
+            stepId: options?.body?.stepId || 'unknown',
+            content: `Mock generated content for step: ${options?.body?.stepId}`,
+            metadata: { 
+              creditsUsed: 5,
+              generatedAt: new Date().toISOString(),
+              language: options?.body?.language || 'en'
+            }
+          },
+          error: null
+        }
+      }
+      
+      if (functionName === 'cj-dropshipping-catalog') {
+        return {
+          data: {
+            success: true,
+            products: [],
+            totalCount: 0,
+            message: 'Mock CJ API response'
+          },
+          error: null
+        }
+      }
+      
+      return {
+        data: { success: true, message: `Mock response for ${functionName}` },
+        error: null
+      }
+    }
+  },
+  from: (table: string) => ({
+    select: () => ({
+      eq: () => ({ data: [], error: null }),
+      order: () => ({ data: [], error: null }),
+      limit: () => ({ data: [], error: null })
+    }),
+    insert: () => ({ data: null, error: null }),
+    update: () => ({ data: null, error: null }),
+    delete: () => ({ data: null, error: null })
+  }),
+  rpc: async (functionName: string, params?: any) => {
+    console.log(`Mock RPC: ${functionName}`, params)
+    return { data: null, error: null }
+  }
+}
+
 // Export configuration for use in components
 export { config as productionConfig }
 export type { Database }
