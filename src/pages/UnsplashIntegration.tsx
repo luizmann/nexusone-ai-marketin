@@ -674,6 +674,7 @@ export function UnsplashIntegration() {
                       {suggestion}
                     </Button>
                   ))}
+                </div>
               </CardContent>
             </Card>
 
