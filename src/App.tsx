@@ -1,18 +1,18 @@
 import { useKV } from '@github/spark/hooks'
 import { DashboardLayout } from './components/layout/DashboardLayout'
 import { WelcomeScreen } from './components/WelcomeScreen'
-import { FacebookTokenAnalysisPage } from './pages/FacebookTokenAnalysis'
+import { CJComprehensiveTest } from './pages/CJComprehensiveTest'
 import { Toaster } from '@/components/ui/sonner'
 import { LanguageProvider } from './contexts/LanguageContext'
 
 function App() {
   const [user] = useKV('user-profile', null)
-  const [showFacebookAnalysis] = useKV('show-facebook-analysis', true) // For demo purposes
+  const [showCJTest] = useKV('show-cj-comprehensive-test', true) // Show CJ comprehensive test
   
-  if (showFacebookAnalysis) {
+  if (showCJTest) {
     return (
       <LanguageProvider>
-        <FacebookTokenAnalysisPage />
+        <CJComprehensiveTest />
         <Toaster />
       </LanguageProvider>
     )
