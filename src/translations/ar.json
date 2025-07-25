@@ -411,5 +411,41 @@
     "warning": "تحذير",
     "error": "خطأ",
     "last_updated": "آخر تحديث"
+  },
+  "appointment": {
+    "title": "جدولة ذكية واتساب",
+    "description": "قم بتكوين بوتات ذكية للحجز التلقائي عبر واتساب",
+    "bot_created": "تم إنشاء بوت الجدولة بنجاح!",
+    "bot_deleted": "تم حذف البوت بنجاح",
+    "status_updated": "تم تحديث حالة البوت",
+    "errors": {
+      "required_fields": "يرجى ملء جميع الحقول المطلوبة",
+      "creation_failed": "خطأ في إنشاء بوت الجدولة"
+    }
+  },
+  "business_types": {
+    "restaurant": "مطعم",
+    "beauty_salon": "صالون تجميل",
+    "barbershop": "صالون حلاقة",
+    "nail_salon": "صالون أظافر",
+    "locksmith": "قفال",
+    "auto_repair": "ورشة سيارات",
+    "dental_clinic": "عيادة أسنان",
+    "veterinary": "طبيب بيطري",
+    "cleaning_service": "خدمة تنظيف",
+    "massage_therapy": "علاج بالتدليك",
+    "personal_trainer": "مدرب شخصي",
+    "tutoring": "دروس خصوصية",
+    "photography": "تصوير",
+    "other": "أخرى"
+  },
+  "days": {
+    "monday": "الاثنين",
+    "tuesday": "الثلاثاء",
+    "wednesday": "الأربعاء",
+    "thursday": "الخميس",
+    "friday": "الجمعة",
+    "saturday": "السبت",
+    "sunday": "الأحد"
   }
 }

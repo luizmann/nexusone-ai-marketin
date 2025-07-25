@@ -411,5 +411,41 @@
     "warning": "Aviso",
     "error": "Erro",
     "last_updated": "Última atualização"
+  },
+  "appointment": {
+    "title": "Agendamento Inteligente WhatsApp",
+    "description": "Configure bots inteligentes para agendamento automático via WhatsApp",
+    "bot_created": "Bot de agendamento criado com sucesso!",
+    "bot_deleted": "Bot excluído com sucesso",
+    "status_updated": "Status do bot atualizado",
+    "errors": {
+      "required_fields": "Preencha todos os campos obrigatórios",
+      "creation_failed": "Erro ao criar bot de agendamento"
+    }
+  },
+  "business_types": {
+    "restaurant": "Restaurante",
+    "beauty_salon": "Salão de Beleza",
+    "barbershop": "Barbearia",
+    "nail_salon": "Esmalteria",
+    "locksmith": "Chaveiro",
+    "auto_repair": "Oficina Mecânica",
+    "dental_clinic": "Clínica Odontológica",
+    "veterinary": "Veterinário",
+    "cleaning_service": "Serviço de Limpeza",
+    "massage_therapy": "Massoterapia",
+    "personal_trainer": "Personal Trainer",
+    "tutoring": "Aulas Particulares",
+    "photography": "Fotografia",
+    "other": "Outro"
+  },
+  "days": {
+    "monday": "Segunda-feira",
+    "tuesday": "Terça-feira",
+    "wednesday": "Quarta-feira",
+    "thursday": "Quinta-feira",
+    "friday": "Sexta-feira",
+    "saturday": "Sábado",
+    "sunday": "Domingo"
   }
 }

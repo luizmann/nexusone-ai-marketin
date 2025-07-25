@@ -411,5 +411,41 @@
     "warning": "אזהרה",
     "error": "שגיאה",
     "last_updated": "עדכון אחרון"
+  },
+  "appointment": {
+    "title": "תזמון חכם וואטסאפ",
+    "description": "הגדר בוטים חכמים לקביעת תורים אוטומטית דרך וואטסאפ",
+    "bot_created": "בוט התזמון נוצר בהצלחה!",
+    "bot_deleted": "הבוט נמחק בהצלחה",
+    "status_updated": "סטטוס הבוט עודכן",
+    "errors": {
+      "required_fields": "אנא מלא את כל השדות הנדרשים",
+      "creation_failed": "שגיאה ביצירת בוט התזמון"
+    }
+  },
+  "business_types": {
+    "restaurant": "מסעדה",
+    "beauty_salon": "מכון יופי",
+    "barbershop": "מספרה",
+    "nail_salon": "מכון ציפורניים",
+    "locksmith": "מנעולן",
+    "auto_repair": "מוסך",
+    "dental_clinic": "מרפאת שיניים",
+    "veterinary": "וטרינר",
+    "cleaning_service": "שירות ניקיון",
+    "massage_therapy": "עיסוי",
+    "personal_trainer": "מאמן אישי",
+    "tutoring": "שיעורים פרטיים",
+    "photography": "צילום",
+    "other": "אחר"
+  },
+  "days": {
+    "monday": "שני",
+    "tuesday": "שלישי",
+    "wednesday": "רביעי",
+    "thursday": "חמישי",
+    "friday": "שישי",
+    "saturday": "שבת",
+    "sunday": "ראשון"
   }
 }

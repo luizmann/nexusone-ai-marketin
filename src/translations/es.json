@@ -518,5 +518,41 @@
     "warning": "Advertencia",
     "error": "Error",
     "last_updated": "Última actualización"
+  },
+  "appointment": {
+    "title": "Programación Inteligente WhatsApp",
+    "description": "Configure bots inteligentes para reservas automáticas via WhatsApp",
+    "bot_created": "¡Bot de programación creado exitosamente!",
+    "bot_deleted": "Bot eliminado exitosamente",
+    "status_updated": "Estado del bot actualizado",
+    "errors": {
+      "required_fields": "Por favor complete todos los campos requeridos",
+      "creation_failed": "Error al crear bot de programación"
+    }
+  },
+  "business_types": {
+    "restaurant": "Restaurante",
+    "beauty_salon": "Salón de Belleza",
+    "barbershop": "Barbería",
+    "nail_salon": "Salón de Uñas",
+    "locksmith": "Cerrajero",
+    "auto_repair": "Taller Mecánico",
+    "dental_clinic": "Clínica Dental",
+    "veterinary": "Veterinario",
+    "cleaning_service": "Servicio de Limpieza",
+    "massage_therapy": "Masoterapia",
+    "personal_trainer": "Entrenador Personal",
+    "tutoring": "Tutorías",
+    "photography": "Fotografía",
+    "other": "Otro"
+  },
+  "days": {
+    "monday": "Lunes",
+    "tuesday": "Martes",
+    "wednesday": "Miércoles",
+    "thursday": "Jueves",
+    "friday": "Viernes",
+    "saturday": "Sábado",
+    "sunday": "Domingo"
   }
 }

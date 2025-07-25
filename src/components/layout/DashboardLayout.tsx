@@ -5,6 +5,7 @@ import { Dashboard } from '../Dashboard'
 import { ContentGenerator } from '../ContentGenerator'
 import { SocialMediaGenerator } from '../SocialMediaGenerator'
 import { CampaignBuilder } from '../CampaignBuilder'
+import { AppointmentScheduler } from '../AppointmentScheduler'
 import { Analytics } from '../Analytics'
 import { MonitoringDashboard } from '../MonitoringDashboard'
 import { AffiliateProgram } from '../AffiliateProgram'
@@ -30,6 +31,8 @@ export function DashboardLayout() {
         return <SocialMediaGenerator />
       case 'campaigns':
         return <CampaignBuilder />
+      case 'appointment':
+        return <AppointmentScheduler />
       case 'analytics':
         return <Analytics />
       case 'monitoring':

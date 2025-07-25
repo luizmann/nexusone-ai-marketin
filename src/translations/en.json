@@ -813,5 +813,41 @@
     "integrationAlertsDesc": "Alert on integration issues",
     "performanceReports": "Performance reports",
     "performanceReportsDesc": "Receive weekly performance summaries"
+  },
+  "appointment": {
+    "title": "Smart WhatsApp Scheduling",
+    "description": "Configure intelligent bots for automatic WhatsApp appointment booking",
+    "bot_created": "Appointment bot created successfully!",
+    "bot_deleted": "Bot deleted successfully",
+    "status_updated": "Bot status updated",
+    "errors": {
+      "required_fields": "Please fill in all required fields",
+      "creation_failed": "Error creating appointment bot"
+    }
+  },
+  "business_types": {
+    "restaurant": "Restaurant",
+    "beauty_salon": "Beauty Salon",
+    "barbershop": "Barbershop",
+    "nail_salon": "Nail Salon",
+    "locksmith": "Locksmith",
+    "auto_repair": "Auto Repair",
+    "dental_clinic": "Dental Clinic",
+    "veterinary": "Veterinary",
+    "cleaning_service": "Cleaning Service",
+    "massage_therapy": "Massage Therapy",
+    "personal_trainer": "Personal Trainer",
+    "tutoring": "Tutoring",
+    "photography": "Photography",
+    "other": "Other"
+  },
+  "days": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
   }
 }
