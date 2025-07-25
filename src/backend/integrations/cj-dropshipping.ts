@@ -8,6 +8,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js'
+import { API_KEYS } from '../config/api-keys'
 
 // CJ Dropshipping API Configuration
 const CJ_API_BASE_URL = 'https://api.cjdropshipping.com'
@@ -537,6 +538,17 @@ export class CJDropshippingService {
 
 // Export factory function
 export function createCJDropshippingService(config: CJConfig): CJDropshippingService {
+  return new CJDropshippingService(config)
+}
+
+// Export factory function with default configuration
+export function createCJDropshippingServiceWithDefaults(): CJDropshippingService {
+  const config: CJConfig = {
+    accessToken: API_KEYS.CJ_DROPSHIPPING.ACCESS_TOKEN,
+    email: API_KEYS.CJ_DROPSHIPPING.EMAIL,
+    password: API_KEYS.CJ_DROPSHIPPING.PASSWORD,
+    warehouseCode: API_KEYS.CJ_DROPSHIPPING.WAREHOUSE_CODE
+  }
   return new CJDropshippingService(config)
 }
 
