@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { PRODUCTION_CONFIG } from './production'
+import { PRODUCTION_CONFIG } from '../config/production'
 
 // Get configuration based on environment
 const config = PRODUCTION_CONFIG
