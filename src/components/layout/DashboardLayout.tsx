@@ -7,6 +7,8 @@ import { SocialMediaGenerator } from '../SocialMediaGenerator'
 import { CampaignBuilder } from '../CampaignBuilder'
 import { Analytics } from '../Analytics'
 import { MonitoringDashboard } from '../MonitoringDashboard'
+import { AffiliateProgram } from '../AffiliateProgram'
+import { PartnerIntegrations } from '../PartnerIntegrations'
 import { Credits } from '../Credits'
 import { SalesPage } from '../SalesPage'
 import { Documentation } from '../Documentation'
@@ -32,6 +34,10 @@ export function DashboardLayout() {
         return <Analytics />
       case 'monitoring':
         return <MonitoringDashboard />
+      case 'affiliate':
+        return <AffiliateProgram />
+      case 'partners':
+        return <PartnerIntegrations />
       case 'credits':
         return <Credits />
       case 'sales-page':

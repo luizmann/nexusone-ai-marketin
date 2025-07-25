@@ -12,7 +12,9 @@ import {
   Shield,
   ShoppingCart,
   FileText,
-  Activity
+  Activity,
+  Handshake,
+  Users
 } from '@phosphor-icons/react'
 import { useLanguage } from '../../contexts/LanguageContext'
 
@@ -32,6 +34,8 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
     { id: 'campaigns', label: t('campaign_builder.title'), icon: Target },
     { id: 'analytics', label: t('navigation.analytics'), icon: BarChart3 },
     { id: 'monitoring', label: t('monitoring.title', 'Monitoring'), icon: Activity },
+    { id: 'affiliate', label: t('affiliate.title'), icon: Users },
+    { id: 'partners', label: t('partners.title'), icon: Handshake },
     { id: 'credits', label: t('navigation.credits'), icon: CurrencyCircleDollar },
     { id: 'sales-page', label: t('sales_page.hero.title'), icon: ShoppingCart },
     { id: 'documentation', label: t('navigation.documentation'), icon: BookOpen },
