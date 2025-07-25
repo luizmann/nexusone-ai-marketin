@@ -16,6 +16,7 @@ import { SalesPage } from '../SalesPage'
 import { Documentation } from '../Documentation'
 import { PrivacyPolicy } from '../PrivacyPolicy'
 import { StatusReport } from '../StatusReport'
+import { DropshippingDashboard } from '../dropshipping/DropshippingDashboard'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export function DashboardLayout() {
@@ -54,6 +55,8 @@ export function DashboardLayout() {
         return <PrivacyPolicy />
       case 'status':
         return <StatusReport />
+      case 'dropshipping':
+        return <DropshippingDashboard />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }
