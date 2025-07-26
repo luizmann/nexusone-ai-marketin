@@ -25,6 +25,7 @@ import { DragDropEditor } from '../../pages/DragDropEditor'
 import DropshippingMarketplacePage from '../../pages/DropshippingMarketplacePage'
 import { LaunchCampaignManager } from '../../pages/LaunchCampaignManager'
 import { ApiTestingPage } from '../../pages/ApiTestingPage'
+import { LumaVideoPage } from '../../pages/LumaVideoPage'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export function DashboardLayout() {
@@ -81,6 +82,8 @@ export function DashboardLayout() {
         return <LaunchCampaignManager />
       case 'api-testing':
         return <ApiTestingPage />
+      case 'luma-video':
+        return <LumaVideoPage />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }

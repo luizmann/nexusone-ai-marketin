@@ -22,7 +22,8 @@ import {
   Storefront,
   Layout,
   Rocket,
-  FlaskIcon
+  FlaskIcon,
+  Video
 } from '@phosphor-icons/react'
 import { useLanguage } from '../../contexts/LanguageContext'
 
@@ -45,6 +46,7 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
     { id: 'dropshipping', label: 'Marketplace Dropshipping', icon: Storefront },
     { id: 'page-editor', label: t('modules.page_editor.title'), icon: FileText },
     { id: 'content', label: t('modules.content_generator'), icon: PenNib },
+    { id: 'luma-video', label: 'Luma AI Video Creator', icon: Video },
     { id: 'social-media', label: t('modules.social_media.title'), icon: Hash },
     { id: 'campaigns', label: t('campaign_builder.title'), icon: Target },
     { id: 'whatsapp-booking', label: 'Sistema WhatsApp Agendamento', icon: MessageCircle },
