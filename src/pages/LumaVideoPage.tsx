@@ -1,5 +1,13 @@
+import React from 'react'
 import { LumaVideoCreator } from '../components/LumaVideoCreator'
+import { useLanguage } from '../contexts/LanguageContext'
 
 export function LumaVideoPage() {
-  return <LumaVideoCreator />
+  const { t } = useLanguage()
+
+  return (
+    <div className="min-h-screen bg-background">
+      <LumaVideoCreator />
+    </div>
+  )
 }

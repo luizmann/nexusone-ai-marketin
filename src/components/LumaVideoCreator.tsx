@@ -29,11 +29,12 @@ import {
   Trash2
 } from '@phosphor-icons/react'
 import { useLanguage } from '../contexts/LanguageContext'
+import { RealTimeVideoPreview } from './RealTimeVideoPreview'
 
 interface LumaVideo {
   id: string
   prompt: string
-  status: 'generating' | 'completed' | 'failed'
+  status: 'queued' | 'processing' | 'generating' | 'rendering' | 'completed' | 'failed'
   url?: string
   thumbnail?: string
   duration?: number
@@ -41,6 +42,10 @@ interface LumaVideo {
   style: 'cinematic' | 'commercial' | 'realistic' | 'artistic'
   createdAt: Date
   credits_used: number
+  progress?: number
+  estimated_time?: number
+  preview_frames?: string[]
+  current_frame?: string
 }
 
 interface LumaTemplate {
@@ -167,6 +172,7 @@ export function LumaVideoCreator() {
   const [selectedStyle, setSelectedStyle] = useState<'cinematic' | 'commercial' | 'realistic' | 'artistic'>('cinematic')
   const [generationProgress, setGenerationProgress] = useState(0)
   const [selectedTemplate, setSelectedTemplate] = useState<LumaTemplate | null>(null)
+  const [currentGeneration, setCurrentGeneration] = useState<LumaVideo | null>(null)
   const { callLumaAPI } = useLumaAPI()
 
   // Calculate credits needed based on quality and style
@@ -195,59 +201,86 @@ export function LumaVideoCreator() {
     setIsGenerating(true)
     setGenerationProgress(0)
 
+    // Create new video generation object
+    const newVideo: LumaVideo = {
+      id: `luma_${Date.now()}`,
+      prompt: currentPrompt,
+      status: 'queued',
+      quality: selectedQuality,
+      style: selectedStyle,
+      createdAt: new Date(),
+      credits_used: creditsNeeded,
+      progress: 0,
+      estimated_time: 120 // 2 minutes estimate
+    }
+
+    setCurrentGeneration(newVideo)
+    setVideos(prev => [newVideo, ...prev])
+
     try {
-      // Simulate progress updates
-      const progressInterval = setInterval(() => {
-        setGenerationProgress(prev => {
-          if (prev >= 90) {
-            clearInterval(progressInterval)
-            return 90
+      // Simulate realistic video generation progress
+      const progressSteps = [
+        { status: 'queued' as const, progress: 0, time: 5, message: 'Queuing generation...' },
+        { status: 'processing' as const, progress: 10, time: 15, message: 'Processing prompt...' },
+        { status: 'generating' as const, progress: 30, time: 60, message: 'Generating video frames...' },
+        { status: 'rendering' as const, progress: 80, time: 30, message: 'Rendering final video...' },
+        { status: 'completed' as const, progress: 100, time: 0, message: 'Video completed!' }
+      ]
+
+      for (const step of progressSteps) {
+        await new Promise(resolve => setTimeout(resolve, step.time * 100)) // Accelerated for demo
+        
+        const updatedVideo = {
+          ...newVideo,
+          status: step.status,
+          progress: step.progress,
+          estimated_time: step.time
+        }
+
+        setCurrentGeneration(updatedVideo)
+        setGenerationProgress(step.progress)
+        
+        // Update in videos array
+        setVideos(prev => prev.map(v => v.id === newVideo.id ? updatedVideo : v))
+        
+        if (step.status === 'completed') {
+          // Add final video URL and thumbnail
+          const finalVideo = {
+            ...updatedVideo,
+            url: `https://example-video-${newVideo.id}.mp4`,
+            thumbnail: `https://picsum.photos/640/360?random=${newVideo.id}`,
+            duration: 15 // 15 seconds
           }
-          return prev + Math.random() * 10
-        })
-      }, 1000)
-
-      // Call Luma API for video generation
-      const response = await callLumaAPI('generate', {
-        prompt: currentPrompt,
-        quality: selectedQuality,
-        style: selectedStyle,
-        credits: creditsNeeded
-      })
-      
-      // Simulate video generation time (5-15 seconds)
-      await new Promise(resolve => setTimeout(resolve, Math.random() * 10000 + 5000))
-
-      const newVideo: LumaVideo = {
-        id: response.generation.id,
-        prompt: currentPrompt,
-        status: 'completed',
-        url: `https://luma-demo-video-${Date.now()}.mp4`,
-        thumbnail: `https://luma-demo-thumbnail-${Date.now()}.jpg`,
-        duration: Math.floor(Math.random() * 5) + 5,
-        quality: selectedQuality,
-        style: selectedStyle,
-        createdAt: new Date(),
-        credits_used: creditsNeeded
+          
+          setCurrentGeneration(finalVideo)
+          setVideos(prev => prev.map(v => v.id === newVideo.id ? finalVideo : v))
+        }
+        
+        toast.success(step.message)
       }
 
-      setVideos(prev => [newVideo, ...prev])
-      
       // Deduct credits
-      setCredits(credits - creditsNeeded)
+      setCredits(prev => Math.max(0, prev - creditsNeeded))
+      toast.success('Video generated successfully!')
 
-      clearInterval(progressInterval)
-      setGenerationProgress(100)
-      
-      toast.success(`Video generated successfully! ${creditsNeeded} credits used.`)
-      setCurrentPrompt('')
-      
     } catch (error) {
+      console.error('Video generation error:', error)
+      
+      const failedVideo = {
+        ...newVideo,
+        status: 'failed' as const,
+        progress: 0
+      }
+      
+      setCurrentGeneration(failedVideo)
+      setVideos(prev => prev.map(v => v.id === newVideo.id ? failedVideo : v))
       toast.error('Failed to generate video')
-      console.error('Luma video generation error:', error)
     } finally {
       setIsGenerating(false)
-      setGenerationProgress(0)
+      // Clear current generation after a delay
+      setTimeout(() => {
+        setCurrentGeneration(null)
+      }, 10000)
     }
   }
 
@@ -314,97 +347,107 @@ export function LumaVideoCreator() {
 
         {/* Create Tab */}
         <TabsContent value="create" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Video className="h-5 w-5" />
-                Video Generator
-              </CardTitle>
-              <CardDescription>
-                Describe your vision and let Luma AI create a professional video
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Prompt Input */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Video Description</label>
-                <Textarea
-                  placeholder="Describe the video you want to create... e.g., 'A luxury car driving through a neon-lit city at night'"
-                  value={currentPrompt}
-                  onChange={(e) => setCurrentPrompt(e.target.value)}
-                  rows={4}
-                  className="resize-none"
-                />
-              </div>
-
-              {/* Settings */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left Column - Video Configuration */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Video className="h-5 w-5" />
+                  Video Generator
+                </CardTitle>
+                <CardDescription>
+                  Describe your vision and let Luma AI create a professional video
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Prompt Input */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Quality</label>
-                  <Select value={selectedQuality} onValueChange={setSelectedQuality}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="720p">720p HD (+20 credits)</SelectItem>
-                      <SelectItem value="1080p">1080p Full HD (+30 credits)</SelectItem>
-                      <SelectItem value="4K">4K Ultra HD (+50 credits)</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <label className="text-sm font-medium">Video Description</label>
+                  <Textarea
+                    placeholder="Describe the video you want to create... e.g., 'A luxury car driving through a neon-lit city at night'"
+                    value={currentPrompt}
+                    onChange={(e) => setCurrentPrompt(e.target.value)}
+                    rows={4}
+                    className="resize-none"
+                  />
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Style</label>
-                  <Select value={selectedStyle} onValueChange={setSelectedStyle}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="realistic">Realistic</SelectItem>
-                      <SelectItem value="cinematic">Cinematic (+10 credits)</SelectItem>
-                      <SelectItem value="commercial">Commercial</SelectItem>
-                      <SelectItem value="artistic">Artistic (+5 credits)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {/* Generation Progress */}
-              {isGenerating && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span>Generating video...</span>
-                    <span>{Math.round(generationProgress)}%</span>
+                {/* Settings */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Quality</label>
+                    <Select value={selectedQuality} onValueChange={setSelectedQuality}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="720p">720p HD (+20 credits)</SelectItem>
+                        <SelectItem value="1080p">1080p Full HD (+30 credits)</SelectItem>
+                        <SelectItem value="4K">4K Ultra HD (+50 credits)</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
-                  <Progress value={generationProgress} className="h-2" />
-                </div>
-              )}
 
-              {/* Generate Button */}
-              <div className="flex items-center justify-between">
-                <div className="text-sm text-muted-foreground">
-                  Credits needed: <span className="font-medium">{calculateCredits()}</span>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Style</label>
+                    <Select value={selectedStyle} onValueChange={setSelectedStyle}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="realistic">Realistic</SelectItem>
+                        <SelectItem value="cinematic">Cinematic (+10 credits)</SelectItem>
+                        <SelectItem value="commercial">Commercial</SelectItem>
+                        <SelectItem value="artistic">Artistic (+5 credits)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-                <Button 
-                  onClick={generateVideo}
-                  disabled={isGenerating || !currentPrompt.trim() || credits < calculateCredits()}
-                  className="px-6"
-                >
-                  {isGenerating ? (
-                    <>
-                      <Clock className="h-4 w-4 mr-2 animate-spin" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      <Wand2 className="h-4 w-4 mr-2" />
-                      Generate Video
-                    </>
-                  )}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+
+                {/* Generation Progress */}
+                {isGenerating && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Generating video...</span>
+                      <span>{Math.round(generationProgress)}%</span>
+                    </div>
+                    <Progress value={generationProgress} className="h-2" />
+                  </div>
+                )}
+
+                {/* Generate Button */}
+                <div className="flex items-center justify-between">
+                  <div className="text-sm text-muted-foreground">
+                    Credits needed: <span className="font-medium">{calculateCredits()}</span>
+                  </div>
+                  <Button 
+                    onClick={generateVideo}
+                    disabled={isGenerating || !currentPrompt.trim() || credits < calculateCredits()}
+                    className="px-6"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <Clock className="h-4 w-4 mr-2 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Wand2 className="h-4 w-4 mr-2" />
+                        Generate Video
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Right Column - Real-time Preview */}
+            <RealTimeVideoPreview
+              onGenerate={generateVideo}
+              isGenerating={isGenerating}
+              currentGeneration={currentGeneration}
+            />
+          </div>
         </TabsContent>
 
         {/* Templates Tab */}
