@@ -26,6 +26,7 @@ import DropshippingMarketplacePage from '../../pages/DropshippingMarketplacePage
 import { LaunchCampaignManager } from '../../pages/LaunchCampaignManager'
 import { ApiTestingPage } from '../../pages/ApiTestingPage'
 import { LumaVideoPage } from '../../pages/LumaVideoPage'
+import { NexBrainAssistant } from '../features/NexBrainAssistant'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export function DashboardLayout() {
@@ -84,6 +85,8 @@ export function DashboardLayout() {
         return <ApiTestingPage />
       case 'luma-video':
         return <LumaVideoPage />
+      case 'nexbrain':
+        return <NexBrainAssistant />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }
