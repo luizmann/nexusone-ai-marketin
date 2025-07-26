@@ -48,6 +48,7 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
     { id: 'social-media', label: t('modules.social_media.title'), icon: Hash },
     { id: 'campaigns', label: t('campaign_builder.title'), icon: Target },
     { id: 'whatsapp-booking', label: 'Sistema WhatsApp Agendamento', icon: MessageCircle },
+    { id: 'whatsapp-ai', label: 'WhatsApp AI Extreme', icon: Bot },
     { id: 'appointment', label: t('appointment.title', 'Agendamento Simples'), icon: Calendar },
     { id: 'api-testing', label: 'API Testing Dashboard', icon: FlaskIcon },
     { id: 'analytics', label: t('navigation.analytics'), icon: BarChart3 },

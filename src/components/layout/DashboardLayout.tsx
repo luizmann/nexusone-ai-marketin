@@ -7,6 +7,7 @@ import { SocialMediaGenerator } from '../SocialMediaGenerator'
 import { CampaignBuilder } from '../CampaignBuilder'
 import { AppointmentScheduler } from '../AppointmentScheduler'
 import { WhatsAppBookingSystem } from '../WhatsAppBookingSystem'
+import { GupShupWhatsAppAI } from '../WhatsAppAIAutomation'
 import { Analytics } from '../Analytics'
 import { MonitoringDashboard } from '../MonitoringDashboard'
 import { AffiliateProgram } from '../AffiliateProgram'
@@ -44,6 +45,8 @@ export function DashboardLayout() {
         return <AppointmentScheduler />
       case 'whatsapp-booking':
         return <WhatsAppBookingSystem />
+      case 'whatsapp-ai':
+        return <GupShupWhatsAppAI />
       case 'analytics':
         return <Analytics />
       case 'monitoring':
