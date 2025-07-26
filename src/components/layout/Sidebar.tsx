@@ -21,7 +21,8 @@ import {
   Package,
   Storefront,
   Layout,
-  Rocket
+  Rocket,
+  FlaskIcon
 } from '@phosphor-icons/react'
 import { useLanguage } from '../../contexts/LanguageContext'
 
@@ -48,6 +49,7 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
     { id: 'campaigns', label: t('campaign_builder.title'), icon: Target },
     { id: 'whatsapp-booking', label: 'Sistema WhatsApp Agendamento', icon: MessageCircle },
     { id: 'appointment', label: t('appointment.title', 'Agendamento Simples'), icon: Calendar },
+    { id: 'api-testing', label: 'API Testing Dashboard', icon: FlaskIcon },
     { id: 'analytics', label: t('navigation.analytics'), icon: BarChart3 },
     { id: 'monitoring', label: t('monitoring.title', 'Monitoring'), icon: Activity },
     { id: 'affiliate', label: t('affiliate.title'), icon: Users },

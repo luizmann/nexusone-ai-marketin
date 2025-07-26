@@ -16,27 +16,46 @@ export const PRODUCTION_CONFIG = {
     storageUrl: "https://hbfgtdxvlbkvkrjqxnac.supabase.co/storage/v1"
   },
 
-  // API Configuration
+  // API Configuration with Keys
   apis: {
     openai: {
-      model: "gpt-4",
+      key: "sk-proj-6PL3JzE4aAkqBZ8YnNhqT3BlbkFJ5KdGvHwP3eZ7RL2mN9c4",
+      model: "gpt-4o",
       maxTokens: 4000,
       temperature: 0.7
     },
     elevenlabs: {
+      key: "sk_189b755ede03dfdf1633da77e125d682b44c1ddb54b08a07",
       voiceId: "21m00Tcm4TlvDq8ikWAM",
       model: "eleven_multilingual_v2"
     },
+    replicate: {
+      key: "r8_HbwQQ4NxMfhVPy0BS0xqOMkERd9B5JM440l66",
+      model: "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b"
+    },
     did: {
+      key: "PLACEHOLDER_DID_API_KEY",
       presenter: "amy-jCqTUX6ICJKmLLRxZBTu5",
       driver: "bank://lively/"
     },
-    replicate: {
-      model: "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b"
-    },
     cjDropshipping: {
+      key: "5e0e680914c6462ebcf39059b21e70a9",
       baseUrl: "https://developers.cjdropshipping.com/api2.0",
       version: "2.0"
+    },
+    unsplash: {
+      key: "-zZ5LsB2CAMUhbPca_UKw31ngzc1W3_hfxSPdz_aBUE",
+      baseUrl: "https://api.unsplash.com"
+    },
+    facebook: {
+      appId: "847521093029581",
+      accessToken: "EAAI0DOV8GvcBPK4ZBUTybkGl66FwZA1s45Dx3cSjOVEO4lzZAifzVR6lIoVbW6HcsP2L7x4b0065VirgfhzyfIGNCCA9QCynR3twQB01ZCqjolM7b0QfGtBpj5ZCZA5kyWONQsaYmZBRvy1ByAziVPZAot50fp9ZB4ro71pZAPk7iK4ynEMkhG2LBqUmg2VFWZCPAYQ74T3ocUZCL7u69pCaZAhqUe29gMZALb2jZB5YWQrfHbreY0hIgZDZD",
+      apiVersion: "v18.0"
+    },
+    whatsapp: {
+      phoneNumberId: "120363204529625852",
+      accessToken: "EAAI0DOV8GvcBPK4ZBUTybkGl66FwZA1s45Dx3cSjOVEO4lzZAifzVR6lIoVbW6HcsP2L7x4b0065VirgfhzyfIGNCCA9QCynR3twQB01ZCqjolM7b0QfGtBpj5ZCZA5kyWONQsaYmZBRvy1ByAziVPZAot50fp9ZB4ro71pZAPk7iK4ynEMkhG2LBqUmg2VFWZCPAYQ74T3ocUZCL7u69pCaZAhqUe29gMZALb2jZB5YWQrfHbreY0hIgZDZD",
+      apiVersion: "v18.0"
     }
   },
 
