@@ -20,7 +20,8 @@ import {
   MessageCircle,
   Package,
   Storefront,
-  Layout
+  Layout,
+  Rocket
 } from '@phosphor-icons/react'
 import { useLanguage } from '../../contexts/LanguageContext'
 
@@ -35,6 +36,7 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
 
   const modules = [
     { id: 'dashboard', label: t('navigation.dashboard'), icon: House },
+    { id: 'launch-campaigns', label: 'Launch Campaign Manager', icon: Rocket },
     { id: 'dropshipping-marketplace', label: 'CJ Dropshipping', icon: Package },
     { id: 'drop-magic', label: 'Drop Magic - Marketplace', icon: Zap },
     { id: 'smart-appointments', label: 'Smart Appointments', icon: Bot },

@@ -22,6 +22,7 @@ import { DropMagic } from '../../pages/DropMagic'
 import { SmartAppointments } from '../../pages/SmartAppointments'
 import { DragDropEditor } from '../../pages/DragDropEditor'
 import DropshippingMarketplacePage from '../../pages/DropshippingMarketplacePage'
+import { LaunchCampaignManager } from '../../pages/LaunchCampaignManager'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export function DashboardLayout() {
@@ -72,6 +73,8 @@ export function DashboardLayout() {
         return <DragDropPageEditor />
       case 'drag-drop-editor':
         return <DragDropEditor />
+      case 'launch-campaigns':
+        return <LaunchCampaignManager />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }
