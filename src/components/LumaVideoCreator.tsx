@@ -30,16 +30,19 @@ import {
 } from '@phosphor-icons/react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { RealTimeVideoPreview } from './RealTimeVideoPreview'
+import { lumaAI, LumaGenerationRequest, LumaGeneration } from '../services/luma-ai'
 
 interface LumaVideo {
   id: string
   prompt: string
-  status: 'queued' | 'processing' | 'generating' | 'rendering' | 'completed' | 'failed'
+  status: 'queued' | 'dreaming' | 'completed' | 'failed'
   url?: string
   thumbnail?: string
   duration?: number
   quality: '720p' | '1080p' | '4K'
   style: 'cinematic' | 'commercial' | 'realistic' | 'artistic'
+  aspect_ratio: '16:9' | '1:1' | '9:16' | '4:3' | '3:4' | '21:9'
+  loop: boolean
   createdAt: Date
   credits_used: number
   progress?: number
@@ -108,54 +111,12 @@ const LUMA_TEMPLATES: LumaTemplate[] = [
   }
 ]
 
-// Mock Luma API integration
+// Mock Luma API integration - remove this section and replace with real integration
 const useLumaAPI = () => {
   const callLumaAPI = async (action: string, params: any = {}) => {
-    try {
-      // In production, this would call the actual Supabase Edge Function
-      // For now, we'll simulate the API behavior
-      console.log('Calling Luma API:', action, params)
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      switch (action) {
-        case 'generate':
-          return {
-            success: true,
-            generation: {
-              id: `gen_${Date.now()}`,
-              state: 'queued',
-              created_at: new Date().toISOString()
-            },
-            credits_used: params.credits || 30
-          }
-        
-        case 'status':
-          return {
-            success: true,
-            generation: {
-              id: params.generationId,
-              state: Math.random() > 0.5 ? 'completed' : 'processing',
-              video_url: 'https://example-video.mp4',
-              thumbnail_url: 'https://example-thumbnail.jpg',
-              completed_at: new Date().toISOString()
-            }
-          }
-        
-        case 'list':
-          return {
-            success: true,
-            generations: []
-          }
-        
-        default:
-          throw new Error('Unknown action')
-      }
-    } catch (error) {
-      console.error('Luma API Error:', error)
-      throw error
-    }
+    // This is now handled by the lumaAI service
+    console.log('Legacy API call - use lumaAI service instead:', action, params)
+    return { success: false, error: 'Use lumaAI service instead' }
   }
 
   return { callLumaAPI }
@@ -170,19 +131,23 @@ export function LumaVideoCreator() {
   const [currentPrompt, setCurrentPrompt] = useState('')
   const [selectedQuality, setSelectedQuality] = useState<'720p' | '1080p' | '4K'>('1080p')
   const [selectedStyle, setSelectedStyle] = useState<'cinematic' | 'commercial' | 'realistic' | 'artistic'>('cinematic')
+  const [selectedAspectRatio, setSelectedAspectRatio] = useState<'16:9' | '1:1' | '9:16' | '4:3' | '3:4' | '21:9'>('16:9')
+  const [loopEnabled, setLoopEnabled] = useState(false)
   const [generationProgress, setGenerationProgress] = useState(0)
   const [selectedTemplate, setSelectedTemplate] = useState<LumaTemplate | null>(null)
   const [currentGeneration, setCurrentGeneration] = useState<LumaVideo | null>(null)
+  const [samplePrompts] = useState(lumaAI.getSamplePrompts())
   const { callLumaAPI } = useLumaAPI()
 
   // Calculate credits needed based on quality and style
   const calculateCredits = () => {
-    let baseCredits = 20
-    if (selectedQuality === '1080p') baseCredits = 30
-    if (selectedQuality === '4K') baseCredits = 50
-    if (selectedStyle === 'cinematic') baseCredits += 10
-    if (selectedStyle === 'artistic') baseCredits += 5
-    return baseCredits
+    return lumaAI.calculateCredits(selectedAspectRatio, loopEnabled, false)
+  }
+
+  // Get AI recommendations
+  const getRecommendations = () => {
+    if (!currentPrompt.trim()) return null
+    return lumaAI.getRecommendedSettings(currentPrompt)
   }
 
   const generateVideo = async () => {
@@ -201,83 +166,116 @@ export function LumaVideoCreator() {
     setIsGenerating(true)
     setGenerationProgress(0)
 
-    // Create new video generation object
-    const newVideo: LumaVideo = {
-      id: `luma_${Date.now()}`,
-      prompt: currentPrompt,
-      status: 'queued',
-      quality: selectedQuality,
-      style: selectedStyle,
-      createdAt: new Date(),
-      credits_used: creditsNeeded,
-      progress: 0,
-      estimated_time: 120 // 2 minutes estimate
-    }
-
-    setCurrentGeneration(newVideo)
-    setVideos(prev => [newVideo, ...prev])
-
     try {
-      // Simulate realistic video generation progress
-      const progressSteps = [
-        { status: 'queued' as const, progress: 0, time: 5, message: 'Queuing generation...' },
-        { status: 'processing' as const, progress: 10, time: 15, message: 'Processing prompt...' },
-        { status: 'generating' as const, progress: 30, time: 60, message: 'Generating video frames...' },
-        { status: 'rendering' as const, progress: 80, time: 30, message: 'Rendering final video...' },
-        { status: 'completed' as const, progress: 100, time: 0, message: 'Video completed!' }
-      ]
-
-      for (const step of progressSteps) {
-        await new Promise(resolve => setTimeout(resolve, step.time * 100)) // Accelerated for demo
-        
-        const updatedVideo = {
-          ...newVideo,
-          status: step.status,
-          progress: step.progress,
-          estimated_time: step.time
-        }
-
-        setCurrentGeneration(updatedVideo)
-        setGenerationProgress(step.progress)
-        
-        // Update in videos array
-        setVideos(prev => prev.map(v => v.id === newVideo.id ? updatedVideo : v))
-        
-        if (step.status === 'completed') {
-          // Add final video URL and thumbnail
-          const finalVideo = {
-            ...updatedVideo,
-            url: `https://example-video-${newVideo.id}.mp4`,
-            thumbnail: `https://picsum.photos/640/360?random=${newVideo.id}`,
-            duration: 15 // 15 seconds
-          }
-          
-          setCurrentGeneration(finalVideo)
-          setVideos(prev => prev.map(v => v.id === newVideo.id ? finalVideo : v))
-        }
-        
-        toast.success(step.message)
+      // Prepare generation request
+      const request: LumaGenerationRequest = {
+        prompt: currentPrompt.trim(),
+        aspect_ratio: selectedAspectRatio,
+        loop: loopEnabled,
+        credits_cost: creditsNeeded
       }
 
-      // Deduct credits
+      toast.success('Starting video generation...')
+      
+      // Start generation
+      const response = await lumaAI.generateVideo(request)
+      
+      if (!response.success || !response.generation) {
+        throw new Error('Failed to start generation')
+      }
+
+      const generation = response.generation
+      
+      // Create local video object
+      const newVideo: LumaVideo = {
+        id: generation.id,
+        prompt: currentPrompt,
+        status: 'queued',
+        quality: selectedQuality,
+        style: selectedStyle,
+        aspect_ratio: selectedAspectRatio,
+        loop: loopEnabled,
+        createdAt: new Date(),
+        credits_used: creditsNeeded,
+        progress: 0,
+        estimated_time: 120 // 2 minutes estimate
+      }
+
+      setCurrentGeneration(newVideo)
+      setVideos(prev => [newVideo, ...prev])
+
+      // Deduct credits immediately
       setCredits(prev => Math.max(0, prev - creditsNeeded))
-      toast.success('Video generated successfully!')
+
+      // Poll for completion
+      await lumaAI.pollGenerationStatus(
+        generation.id,
+        (updatedGeneration) => {
+          // Update progress based on state
+          let progress = 0
+          let status: LumaVideo['status'] = 'queued'
+          
+          switch (updatedGeneration.state) {
+            case 'queued':
+              progress = 10
+              status = 'queued'
+              break
+            case 'dreaming':
+              progress = 50
+              status = 'dreaming'
+              break
+            case 'completed':
+              progress = 100
+              status = 'completed'
+              break
+            case 'failed':
+              progress = 0
+              status = 'failed'
+              break
+          }
+
+          const updatedVideo: LumaVideo = {
+            ...newVideo,
+            status,
+            progress,
+            url: updatedGeneration.video?.url,
+            thumbnail: updatedGeneration.video?.thumbnail,
+            duration: 15 // Default duration
+          }
+
+          setCurrentGeneration(updatedVideo)
+          setGenerationProgress(progress)
+          setVideos(prev => prev.map(v => v.id === newVideo.id ? updatedVideo : v))
+
+          if (status === 'completed') {
+            toast.success('Video generated successfully!')
+          } else if (status === 'failed') {
+            toast.error('Video generation failed')
+          }
+        }
+      )
 
     } catch (error) {
       console.error('Video generation error:', error)
       
-      const failedVideo = {
-        ...newVideo,
-        status: 'failed' as const,
+      const failedVideo: LumaVideo = {
+        id: `failed_${Date.now()}`,
+        prompt: currentPrompt,
+        status: 'failed',
+        quality: selectedQuality,
+        style: selectedStyle,
+        aspect_ratio: selectedAspectRatio,
+        loop: loopEnabled,
+        createdAt: new Date(),
+        credits_used: 0,
         progress: 0
       }
       
       setCurrentGeneration(failedVideo)
-      setVideos(prev => prev.map(v => v.id === newVideo.id ? failedVideo : v))
-      toast.error('Failed to generate video')
+      setVideos(prev => prev.map(v => v.id === currentGeneration?.id ? failedVideo : v))
+      toast.error(error instanceof Error ? error.message : 'Failed to generate video')
     } finally {
       setIsGenerating(false)
-      // Clear current generation after a delay
       setTimeout(() => {
         setCurrentGeneration(null)
       }, 10000)
@@ -288,6 +286,13 @@ export function LumaVideoCreator() {
     setCurrentPrompt(template.prompt)
     setSelectedTemplate(template)
     toast.success(`Template "${template.name}" applied`)
+  }
+
+  const useSamplePrompt = (sample: any) => {
+    setCurrentPrompt(sample.prompt)
+    setSelectedAspectRatio(sample.aspect_ratio)
+    setLoopEnabled(sample.loop)
+    toast.success(`Sample prompt applied: "${sample.title}"`)
   }
 
   const downloadVideo = (video: LumaVideo) => {
@@ -375,15 +380,18 @@ export function LumaVideoCreator() {
                 {/* Settings */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Quality</label>
-                    <Select value={selectedQuality} onValueChange={setSelectedQuality}>
+                    <label className="text-sm font-medium">Aspect Ratio</label>
+                    <Select value={selectedAspectRatio} onValueChange={setSelectedAspectRatio}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="720p">720p HD (+20 credits)</SelectItem>
-                        <SelectItem value="1080p">1080p Full HD (+30 credits)</SelectItem>
-                        <SelectItem value="4K">4K Ultra HD (+50 credits)</SelectItem>
+                        <SelectItem value="16:9">16:9 Widescreen</SelectItem>
+                        <SelectItem value="1:1">1:1 Square</SelectItem>
+                        <SelectItem value="9:16">9:16 Vertical</SelectItem>
+                        <SelectItem value="4:3">4:3 Classic</SelectItem>
+                        <SelectItem value="3:4">3:4 Portrait</SelectItem>
+                        <SelectItem value="21:9">21:9 Cinematic</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -396,13 +404,48 @@ export function LumaVideoCreator() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="realistic">Realistic</SelectItem>
-                        <SelectItem value="cinematic">Cinematic (+10 credits)</SelectItem>
+                        <SelectItem value="cinematic">Cinematic</SelectItem>
                         <SelectItem value="commercial">Commercial</SelectItem>
-                        <SelectItem value="artistic">Artistic (+5 credits)</SelectItem>
+                        <SelectItem value="artistic">Artistic</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
+
+                {/* Loop Option */}
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="loop"
+                    checked={loopEnabled}
+                    onChange={(e) => setLoopEnabled(e.target.checked)}
+                    className="rounded border-gray-300"
+                  />
+                  <label htmlFor="loop" className="text-sm font-medium">
+                    Create seamless loop (+10 credits)
+                  </label>
+                </div>
+
+                {/* AI Recommendations */}
+                {currentPrompt.trim() && (
+                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <h4 className="text-sm font-medium text-blue-900 mb-2">AI Recommendations</h4>
+                    {(() => {
+                      const recommendations = getRecommendations()
+                      if (!recommendations) return null
+                      
+                      return (
+                        <div className="space-y-1 text-xs text-blue-700">
+                          <p>Suggested aspect ratio: <span className="font-medium">{recommendations.aspect_ratio}</span></p>
+                          <p>Estimated credits: <span className="font-medium">{recommendations.estimated_credits}</span></p>
+                          {recommendations.tips.map((tip, index) => (
+                            <p key={index}>💡 {tip}</p>
+                          ))}
+                        </div>
+                      )
+                    })()}
+                  </div>
+                )}
 
                 {/* Generation Progress */}
                 {isGenerating && (
@@ -452,37 +495,78 @@ export function LumaVideoCreator() {
 
         {/* Templates Tab */}
         <TabsContent value="templates" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {LUMA_TEMPLATES.map((template) => (
-              <Card key={template.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="aspect-video bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center">
-                  <Video className="h-12 w-12 text-purple-500" />
-                </div>
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h3 className="font-semibold">{template.name}</h3>
-                      <Badge variant="outline" className="text-xs">
-                        {template.category}
-                      </Badge>
+          <div className="space-y-6">
+            {/* Sample Prompts */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Sample Prompts</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {samplePrompts.map((sample, index) => (
+                  <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                        onClick={() => useSamplePrompt(sample)}>
+                    <div className="aspect-video bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center">
+                      <Video className="h-8 w-8 text-purple-500" />
                     </div>
-                    <Badge variant="secondary" className="text-xs">
-                      {template.credits} credits
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                    {template.prompt}
-                  </p>
-                  <Button 
-                    size="sm" 
-                    className="w-full"
-                    onClick={() => useTemplate(template)}
-                  >
-                    Use Template
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <h4 className="font-semibold text-sm">{sample.title}</h4>
+                          <Badge variant="outline" className="text-xs mt-1">
+                            {sample.category}
+                          </Badge>
+                        </div>
+                        <Badge variant="secondary" className="text-xs">
+                          {sample.credits} credits
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
+                        {sample.prompt}
+                      </p>
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <span>{sample.aspect_ratio}</span>
+                        {sample.loop && <span>Loop</span>}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Original Templates */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Quick Templates</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {LUMA_TEMPLATES.map((template) => (
+                  <Card key={template.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                    <div className="aspect-video bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center">
+                      <Video className="h-12 w-12 text-purple-500" />
+                    </div>
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <h3 className="font-semibold">{template.name}</h3>
+                          <Badge variant="outline" className="text-xs">
+                            {template.category}
+                          </Badge>
+                        </div>
+                        <Badge variant="secondary" className="text-xs">
+                          {template.credits} credits
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                        {template.prompt}
+                      </p>
+                      <Button 
+                        size="sm" 
+                        className="w-full"
+                        onClick={() => useTemplate(template)}
+                      >
+                        Use Template
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
           </div>
         </TabsContent>
 
@@ -514,12 +598,14 @@ export function LumaVideoCreator() {
                       />
                     ) : (
                       <div className="flex items-center justify-center h-full">
-                        {video.status === 'generating' ? (
+                        {video.status === 'dreaming' ? (
                           <Clock className="h-8 w-8 text-purple-500 animate-spin" />
                         ) : video.status === 'failed' ? (
                           <AlertCircle className="h-8 w-8 text-red-500" />
-                        ) : (
+                        ) : video.status === 'completed' ? (
                           <CheckCircle className="h-8 w-8 text-green-500" />
+                        ) : (
+                          <Clock className="h-8 w-8 text-blue-500 animate-pulse" />
                         )}
                       </div>
                     )}
@@ -539,8 +625,9 @@ export function LumaVideoCreator() {
                       <div className="flex-1">
                         <p className="text-sm line-clamp-2 mb-2">{video.prompt}</p>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <Badge variant="outline">{video.quality}</Badge>
+                          <Badge variant="outline">{video.aspect_ratio}</Badge>
                           <Badge variant="outline">{video.style}</Badge>
+                          {video.loop && <Badge variant="outline">Loop</Badge>}
                           {video.duration && <span>{video.duration}s</span>}
                         </div>
                       </div>

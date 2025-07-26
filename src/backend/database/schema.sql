@@ -408,3 +408,36 @@ CREATE TRIGGER update_contacts_updated_at BEFORE UPDATE ON contacts FOR EACH ROW
 CREATE TRIGGER update_ai_agents_updated_at BEFORE UPDATE ON ai_agents FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_products_updated_at BEFORE UPDATE ON products FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_campaigns_updated_at BEFORE UPDATE ON campaigns FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Luma AI Video Generations Table
+CREATE TABLE IF NOT EXISTS luma_generations (
+  id TEXT PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  prompt TEXT NOT NULL,
+  aspect_ratio TEXT DEFAULT '16:9',
+  loop BOOLEAN DEFAULT false,
+  state TEXT NOT NULL DEFAULT 'queued', -- queued, dreaming, completed, failed
+  video_url TEXT,
+  thumbnail_url TEXT,
+  width INTEGER,
+  height INTEGER,
+  failure_reason TEXT,
+  credits_used INTEGER DEFAULT 30,
+  luma_data JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable RLS for luma_generations
+ALTER TABLE luma_generations ENABLE ROW LEVEL SECURITY;
+
+-- Create policy for luma_generations
+CREATE POLICY "Users can access own luma generations" ON luma_generations FOR ALL USING (auth.uid() = user_id);
+
+-- Add trigger for updated_at
+CREATE TRIGGER update_luma_generations_updated_at BEFORE UPDATE ON luma_generations FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Create indexes for luma_generations
+CREATE INDEX IF NOT EXISTS idx_luma_generations_user_id ON luma_generations(user_id);
+CREATE INDEX IF NOT EXISTS idx_luma_generations_state ON luma_generations(state);
+CREATE INDEX IF NOT EXISTS idx_luma_generations_created_at ON luma_generations(created_at);
