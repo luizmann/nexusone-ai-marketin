@@ -1,4 +1,4 @@
-// Sales Page Builder
+// Sales Page Builder (Magic Pages)
 export { default as SalesPageBuilder } from './SalesPageBuilder'
 
 // WhatsApp Marketing  
@@ -12,6 +12,9 @@ export { default as DropMagic } from './DropMagic'
 
 // Performance Analytics
 export { default as PerformanceAnalytics } from './PerformanceAnalytics'
+
+// Live Campaign Tracker
+export { default as LiveCampaignTracker } from './LiveCampaignTracker'
 
 // Settings
 export { default as Settings } from './Settings'

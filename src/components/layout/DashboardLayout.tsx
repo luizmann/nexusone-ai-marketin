@@ -19,6 +19,7 @@ import { PrivacyPolicy } from '../PrivacyPolicy'
 import { StatusReport } from '../StatusReport'
 import { DropshippingDashboard } from '../dropshipping/DropshippingDashboard'
 import { DragDropPageEditor } from '../DragDropPageEditor'
+import { LiveCampaignTracker } from '../LiveCampaignTracker'
 import { DropMagic } from '../../pages/DropMagic'
 import { SmartAppointments } from '../../pages/SmartAppointments'
 import { DragDropEditor } from '../../pages/DragDropEditor'
@@ -26,6 +27,7 @@ import DropshippingMarketplacePage from '../../pages/DropshippingMarketplacePage
 import { LaunchCampaignManager } from '../../pages/LaunchCampaignManager'
 import { ApiTestingPage } from '../../pages/ApiTestingPage'
 import { LumaVideoPage } from '../../pages/LumaVideoPage'
+import { SalesPageBuilder } from '../../pages/SalesPageBuilder'
 import { NexBrainAssistant } from '../features/NexBrainAssistant'
 import { useLanguage } from '../../contexts/LanguageContext'
 
@@ -53,6 +55,8 @@ export function DashboardLayout() {
         return <Analytics />
       case 'monitoring':
         return <MonitoringDashboard />
+      case 'live-campaign-tracker':
+        return <LiveCampaignTracker />
       case 'affiliate':
         return <AffiliateProgram />
       case 'partners':
@@ -61,6 +65,8 @@ export function DashboardLayout() {
         return <Credits />
       case 'sales-page':
         return <SalesPage />
+      case 'magic-pages':
+        return <SalesPageBuilder />
       case 'documentation':
         return <Documentation />
       case 'privacy':
