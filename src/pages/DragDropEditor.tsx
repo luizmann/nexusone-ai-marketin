@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useKV } from '@github/spark/hooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   Palette,
   Type,
@@ -29,10 +30,14 @@ import {
   Grid3X3,
   Square,
   Circle,
-  Triangle
+  Triangle,
+  Images,
+  Brain,
+  Sparkles
 } from '@phosphor-icons/react';
 import { toast } from 'sonner';
 import { useLanguage } from '../contexts/LanguageContext';
+import { fixedCampaignService } from '@/services/fixedCampaignService';
 
 interface PageElement {
   id: string;
@@ -73,6 +78,27 @@ interface LandingPage {
   isPublished: boolean;
   createdAt: string;
   updatedAt: string;
+  campaignAssets?: {
+    generatedImages: Array<{
+      id: string;
+      url: string;
+      type: string;
+      prompt: string;
+    }>;
+    designElements: Array<{
+      id: string;
+      type: string;
+      content: string;
+      styles: any;
+    }>;
+  };
+}
+
+interface AIImageAsset {
+  id: string;
+  url: string;
+  type: 'hero' | 'product' | 'background' | 'icon';
+  prompt: string;
 }
 
 const elementTemplates = [
@@ -140,7 +166,33 @@ export function DragDropEditor() {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [selectedDevice, setSelectedDevice] = useState(0);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [aiImages, setAiImages] = useState<AIImageAsset[]>([]);
+  const [isLoadingAssets, setIsLoadingAssets] = useState(false);
+  const [showImageGallery, setShowImageGallery] = useState(false);
   const canvasRef = useRef<HTMLDivElement>(null);
+
+  // Load campaign assets when page loads
+  useEffect(() => {
+    loadCampaignAssets();
+  }, []);
+
+  const loadCampaignAssets = async () => {
+    setIsLoadingAssets(true);
+    try {
+      // Load last generated campaign assets
+      const campaigns = JSON.parse(localStorage.getItem('generated-campaigns') || '[]');
+      if (campaigns.length > 0) {
+        const lastCampaign = campaigns[campaigns.length - 1];
+        if (lastCampaign.dragDropAssets?.generatedImages) {
+          setAiImages(lastCampaign.dragDropAssets.generatedImages);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load campaign assets:', error);
+    } finally {
+      setIsLoadingAssets(false);
+    }
+  };
 
   const createNewPage = () => {
     const newPage: LandingPage = {
@@ -164,13 +216,15 @@ export function DragDropEditor() {
     toast.success('New page created!');
   };
 
-  const addElement = (template: typeof elementTemplates[0]) => {
+  const addElementWithAIImage = (template: typeof elementTemplates[0], imageUrl?: string) => {
     if (!currentPage) return;
+
+    const content = template.type === 'image' && imageUrl ? imageUrl : template.template.content;
 
     const newElement: PageElement = {
       id: `elem_${Date.now()}`,
       type: template.type,
-      content: template.template.content,
+      content,
       styles: template.template.styles,
       position: {
         x: 50,
@@ -187,6 +241,47 @@ export function DragDropEditor() {
     } : null);
 
     setSelectedElement(newElement);
+  };
+
+  const generateAIImagesForPage = async () => {
+    if (!currentPage) return;
+
+    setIsLoadingAssets(true);
+    try {
+      // Generate images based on page content
+      const pageDescription = `Landing page for ${currentPage.name}`;
+      
+      // Mock AI image generation - in real implementation, this would call the API
+      const mockImages: AIImageAsset[] = [
+        {
+          id: 'ai_hero_1',
+          url: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800',
+          type: 'hero',
+          prompt: `Hero image for ${pageDescription}`
+        },
+        {
+          id: 'ai_product_1',
+          url: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
+          type: 'product',
+          prompt: `Product showcase for ${pageDescription}`
+        },
+        {
+          id: 'ai_background_1',
+          url: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800',
+          type: 'background',
+          prompt: `Background image for ${pageDescription}`
+        }
+      ];
+
+      setAiImages(prev => [...prev, ...mockImages]);
+      toast.success('AI images generated successfully!');
+      
+    } catch (error) {
+      console.error('AI image generation failed:', error);
+      toast.error('Failed to generate AI images');
+    } finally {
+      setIsLoadingAssets(false);
+    }
   };
 
   const updateElement = (elementId: string, updates: Partial<PageElement>) => {
@@ -458,8 +553,9 @@ export function DragDropEditor() {
         {!isPreviewMode && (
           <div className="w-80 border-r bg-muted/30 overflow-y-auto">
             <Tabs defaultValue="elements" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 m-2">
+              <TabsList className="grid w-full grid-cols-4 m-2">
                 <TabsTrigger value="elements">Elements</TabsTrigger>
+                <TabsTrigger value="ai-assets">AI Assets</TabsTrigger>
                 <TabsTrigger value="pages">Pages</TabsTrigger>
                 <TabsTrigger value="settings">Settings</TabsTrigger>
               </TabsList>
@@ -475,7 +571,7 @@ export function DragDropEditor() {
                           key={template.type}
                           variant="outline"
                           className="h-20 flex-col gap-2"
-                          onClick={() => addElement(template)}
+                          onClick={() => addElementWithAIImage(template)}
                           disabled={!currentPage}
                         >
                           <Icon className="w-6 h-6" />
@@ -495,11 +591,22 @@ export function DragDropEditor() {
                       <div>
                         <Label>Content</Label>
                         {selectedElement.type === 'image' ? (
-                          <Input
-                            value={selectedElement.content}
-                            onChange={(e) => updateElement(selectedElement.id, { content: e.target.value })}
-                            placeholder="Image URL"
-                          />
+                          <div className="space-y-2">
+                            <Input
+                              value={selectedElement.content}
+                              onChange={(e) => updateElement(selectedElement.id, { content: e.target.value })}
+                              placeholder="Image URL"
+                            />
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="w-full gap-2"
+                              onClick={() => setShowImageGallery(true)}
+                            >
+                              <Images className="w-4 h-4" />
+                              Choose AI Image
+                            </Button>
+                          </div>
                         ) : (
                           <Textarea
                             value={selectedElement.content}
@@ -574,6 +681,60 @@ export function DragDropEditor() {
                     </div>
                   </div>
                 )}
+              </TabsContent>
+
+              <TabsContent value="ai-assets" className="p-4 space-y-4">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold">AI Generated Assets</h3>
+                    <Button 
+                      size="sm"
+                      onClick={generateAIImagesForPage}
+                      disabled={isLoadingAssets || !currentPage}
+                      className="gap-2"
+                    >
+                      {isLoadingAssets ? (
+                        <Brain className="w-4 h-4 animate-pulse" />
+                      ) : (
+                        <Sparkles className="w-4 h-4" />
+                      )}
+                      Generate
+                    </Button>
+                  </div>
+
+                  {aiImages.length > 0 ? (
+                    <div className="grid grid-cols-2 gap-2">
+                      {aiImages.map((image) => (
+                        <div key={image.id} className="space-y-2">
+                          <div 
+                            className="aspect-video bg-muted rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary"
+                            onClick={() => addElementWithAIImage(elementTemplates[1], image.url)}
+                          >
+                            <img 
+                              src={image.url} 
+                              alt={image.type}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Badge variant="outline" className="text-xs">
+                              {image.type}
+                            </Badge>
+                            <p className="text-xs text-muted-foreground line-clamp-2">
+                              {image.prompt}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Images className="w-12 h-12 mx-auto mb-2" />
+                      <p className="text-sm">No AI assets available</p>
+                      <p className="text-xs">Generate a campaign first or create new assets</p>
+                    </div>
+                  )}
+                </div>
               </TabsContent>
 
               <TabsContent value="pages" className="p-4 space-y-4">
@@ -713,6 +874,76 @@ export function DragDropEditor() {
           </div>
         </div>
       </div>
+
+      {/* AI Image Gallery Dialog */}
+      <Dialog open={showImageGallery} onOpenChange={setShowImageGallery}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Brain className="h-5 w-5 text-purple-500" />
+              AI Generated Images
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {aiImages.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {aiImages.map((image) => (
+                  <Card 
+                    key={image.id}
+                    className="cursor-pointer hover:ring-2 hover:ring-primary transition-all"
+                    onClick={() => {
+                      if (selectedElement && selectedElement.type === 'image') {
+                        updateElement(selectedElement.id, { content: image.url });
+                        setShowImageGallery(false);
+                        toast.success('Image applied to element!');
+                      } else {
+                        addElementWithAIImage(elementTemplates[1], image.url);
+                        setShowImageGallery(false);
+                        toast.success('Image element created!');
+                      }
+                    }}
+                  >
+                    <CardContent className="p-2">
+                      <div className="aspect-video bg-muted rounded-lg overflow-hidden mb-2">
+                        <img 
+                          src={image.url} 
+                          alt={image.type}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Badge variant="outline" className="text-xs">
+                          {image.type}
+                        </Badge>
+                        <p className="text-xs text-muted-foreground line-clamp-2">
+                          {image.prompt}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Images className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="font-semibold mb-2">No AI Images Available</h3>
+                <p className="text-muted-foreground mb-4">
+                  Generate a marketing campaign first to access AI-generated images
+                </p>
+                <Button onClick={generateAIImagesForPage} disabled={isLoadingAssets}>
+                  {isLoadingAssets ? (
+                    <Brain className="w-4 h-4 animate-pulse mr-2" />
+                  ) : (
+                    <Sparkles className="w-4 h-4 mr-2" />
+                  )}
+                  Generate AI Images
+                </Button>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

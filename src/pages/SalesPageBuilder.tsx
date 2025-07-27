@@ -192,7 +192,7 @@ export const SalesPageBuilder: React.FC = () => {
       setCurrentStep(t('Analyzing product data...'))
       
       const productData = {
-        name: pageData.productName,
+        productName: pageData.productName,
         title: pageData.title,
         description: pageData.description,
         price: pageData.price,
@@ -205,19 +205,11 @@ export const SalesPageBuilder: React.FC = () => {
         category: templates.find(t => t.id === selectedTemplate)?.category || 'Business'
       }
 
-      // Step 2: Generate page with NexBrain AI
+      // Step 2: Generate page with Fixed Campaign Service
       setGenerationProgress(30)
       setCurrentStep(t('Generating AI-optimized content...'))
       
-      const preferences = {
-        template: selectedTemplate,
-        conversionFocus: true,
-        mobileOptimized: true,
-        seoOptimized: true,
-        multiLanguage: true
-      }
-
-      const aiGeneratedContent = await nexBrainService.generateMagicPage(productData, preferences)
+      const aiGeneratedContent = await fixedCampaignService.generateCompleteCampaign(productData)
 
       // Step 3: Generate additional assets
       setGenerationProgress(60)
@@ -244,10 +236,16 @@ export const SalesPageBuilder: React.FC = () => {
         conversions: 0,
         conversionRate: '0%',
         createdAt: new Date().toISOString(),
-        aiGenerated: aiGeneratedContent
+        aiGenerated: aiGeneratedContent.generatedContent
       }
 
       setGeneratedPage(finalPage)
+      
+      // Save campaign for drag & drop editor
+      const existingCampaigns = JSON.parse(localStorage.getItem('generated-campaigns') || '[]')
+      existingCampaigns.push(aiGeneratedContent)
+      localStorage.setItem('generated-campaigns', JSON.stringify(existingCampaigns))
+      
       toast.success(t('AI-powered sales page generated successfully!'))
 
     } catch (error) {
