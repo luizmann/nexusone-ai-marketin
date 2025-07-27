@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { CleanSidebar } from './CleanSidebar'
 import { Header } from './Header'
 import { Dashboard } from '../../pages/Dashboard'
@@ -12,11 +12,23 @@ import { NexBrain } from '../features/NexBrain'
 import { Credits } from '../../pages/Credits'
 import { Settings } from '../../pages/Settings'
 import ApiTestPage from '../../pages/ApiTestPage'
+import { APIHealthDashboard } from '../monitoring/APIHealthDashboard'
 import { useLanguage } from '../../contexts/CleanLanguageContext'
 
 export function CleanDashboardLayout() {
   const [activeModule, setActiveModule] = useState('dashboard')
   const { isRTL } = useLanguage()
+
+  // Initialize API health monitoring on component mount
+  useEffect(() => {
+    // Load the health monitor script
+    if (typeof window !== 'undefined' && !window.healthMonitor) {
+      const script = document.createElement('script')
+      script.src = '/src/utils/api-health-monitor.js'
+      script.type = 'module'
+      document.head.appendChild(script)
+    }
+  }, [])
 
   const renderModule = () => {
     switch (activeModule) {
@@ -42,6 +54,8 @@ export function CleanDashboardLayout() {
         return <Settings />
       case 'api-test':
         return <ApiTestPage />
+      case 'api-health':
+        return <APIHealthDashboard />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }

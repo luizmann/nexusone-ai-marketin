@@ -11,9 +11,16 @@
         "lint": "eslint .",
         "optimize": "vite optimize",
         "preview": "vite preview",
-        "deploy:vercel": "npm run build:prod && vercel --prod",
-        "deploy:netlify": "npm run build:prod && netlify deploy --prod --dir=dist",
-        "deploy:check": "node -e \"console.log('🚀 NexusOne AI Platform - Ready for deployment!'); console.log('Run: npm run deploy:vercel or npm run deploy:netlify')\""
+        "validate": "node validate-deployment.js",
+        "validate:api": "./validate-api-config.sh",
+        "build:validated": "npm run validate && npm run build:prod",
+        "deploy:staging": "npm run build:validated && netlify deploy --dir=dist",
+        "deploy:production": "npm run build:validated && netlify deploy --prod --dir=dist",
+        "deploy:vercel": "npm run build:validated && vercel --prod",
+        "deploy:netlify": "npm run deploy:production",
+        "deploy:check": "node -e \"console.log('🚀 NexusOne AI Platform - Deployment Pipeline Ready!'); console.log('Available commands:'); console.log('• npm run validate - Validate deployment readiness'); console.log('• npm run deploy:staging - Deploy to staging'); console.log('• npm run deploy:production - Deploy to production'); console.log('• npm run validate:api - Test API connectivity')\"",
+        "health:monitor": "node -e \"if (typeof window !== 'undefined' && window.healthMonitor) { window.healthMonitor.start(); console.log('Health monitoring started'); } else { console.log('Health monitor not available - run in browser'); }\"",
+        "postinstall": "echo '✅ NexusOne AI dependencies installed successfully!'"
     },
     "dependencies": {
         "@github/spark": "^0.0.1",
