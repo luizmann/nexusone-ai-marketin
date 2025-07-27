@@ -1,19 +1,22 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+}
+
+interface ApiConfig {
+  key: string
+  status: 'active' | 'inactive' | 'testing' | 'error'
+  lastTested?: string
+  description: string
+  required: boolean
+  category: string
 }
 
 interface SaveConfigRequest {
-  apis: Array<{
-    name: string
-    key: string
-    enabled: boolean
-    status: string
-  }>
+  configs: Record<string, ApiConfig>
 }
 
 serve(async (req) => {
@@ -22,75 +25,144 @@ serve(async (req) => {
   }
 
   try {
-    const supabase = createClient(
+    const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      {
+        global: {
+          headers: { Authorization: req.headers.get('Authorization')! },
+        },
+      }
     )
 
-    // Get user from auth header
-    const authHeader = req.headers.get('authorization')
-    if (!authHeader) {
+    // Get the authenticated user
+    const {
+      data: { user },
+    } = await supabaseClient.auth.getUser()
+
+    if (!user) {
       return new Response(
-        JSON.stringify({ error: 'No authorization header' }),
-        { headers: corsHeaders, status: 401 }
+        JSON.stringify({ error: 'Unauthorized' }),
+        { 
+          status: 401, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
       )
     }
 
-    const token = authHeader.replace('Bearer ', '')
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-    
-    if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid token' }),
-        { headers: corsHeaders, status: 401 }
-      )
-    }
+    if (req.method === 'POST') {
+      const { configs }: SaveConfigRequest = await req.json()
 
-    const { apis }: SaveConfigRequest = await req.json()
+      if (!configs) {
+        return new Response(
+          JSON.stringify({ error: 'Missing configs' }),
+          { 
+            status: 400, 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          }
+        )
+      }
 
-    // Save or update each API configuration
-    const results = []
-    for (const api of apis) {
-      const { data, error } = await supabase
+      // Save API configurations to database
+      const { error } = await supabaseClient
         .from('api_configurations')
         .upsert({
           user_id: user.id,
-          api_name: api.name,
-          api_key: api.key,
-          enabled: api.enabled,
-          status: api.status,
+          configurations: configs,
           updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'user_id,api_name'
         })
 
       if (error) {
-        console.error(`Error saving ${api.name}:`, error)
-        results.push({ api: api.name, success: false, error: error.message })
-      } else {
-        results.push({ api: api.name, success: true })
+        console.error('Error saving API configs:', error)
+        return new Response(
+          JSON.stringify({ error: 'Failed to save configurations' }),
+          { 
+            status: 500, 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          }
+        )
       }
+
+      // Also save to environment for immediate use
+      const envUpdates: Record<string, string> = {}
+      
+      Object.entries(configs).forEach(([service, config]) => {
+        if (config.key && config.status === 'active') {
+          const envKey = service.toUpperCase().replace('-', '_') + '_API_KEY'
+          envUpdates[envKey] = config.key
+        }
+      })
+
+      // Save to system environment (this would be handled by deployment scripts)
+      await supabaseClient
+        .from('system_environment')
+        .upsert({
+          user_id: user.id,
+          environment_variables: envUpdates,
+          updated_at: new Date().toISOString()
+        })
+
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: 'API configurations saved successfully',
+          configs_saved: Object.keys(configs).length
+        }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
+    }
+
+    if (req.method === 'GET') {
+      // Retrieve saved configurations
+      const { data, error } = await supabaseClient
+        .from('api_configurations')
+        .select('configurations')
+        .eq('user_id', user.id)
+        .single()
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching API configs:', error)
+        return new Response(
+          JSON.stringify({ error: 'Failed to fetch configurations' }),
+          { 
+            status: 500, 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          }
+        )
+      }
+
+      const configurations = data?.configurations || {}
+
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          configurations
+        }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
     }
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        message: 'API configurations saved',
-        results 
-      }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200,
+      JSON.stringify({ error: 'Method not allowed' }),
+      { 
+        status: 405, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     )
 
   } catch (error) {
-    console.error('Error saving API config:', error)
+    console.error('API config error:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500,
+      JSON.stringify({ 
+        error: error.message || 'Internal server error'
+      }),
+      { 
+        status: 500, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     )
   }

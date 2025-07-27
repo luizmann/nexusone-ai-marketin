@@ -14,6 +14,7 @@ import { Settings } from '../../pages/Settings'
 import ApiTestPage from '../../pages/ApiTestPage'
 import { APIHealthDashboard } from '../monitoring/APIHealthDashboard'
 import { APIConfigPanel } from '../admin/APIConfigPanel'
+import { ApiConfiguration } from '../../pages/ApiConfiguration'
 import { useLanguage } from '../../contexts/CleanLanguageContext'
 
 export function CleanDashboardLayout() {
@@ -58,7 +59,7 @@ export function CleanDashboardLayout() {
       case 'api-health':
         return <APIHealthDashboard />
       case 'api-config':
-        return <APIConfigPanel />
+        return <ApiConfiguration />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }
