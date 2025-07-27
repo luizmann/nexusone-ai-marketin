@@ -11,6 +11,7 @@ import { Progress } from '@/components/ui/progress'
 import { useCredits } from '@/contexts/CreditContext'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { nexBrainService } from '@/services/nexBrainService'
+import { fixedCampaignService } from '@/services/fixedCampaignService'
 import { 
   Globe, 
   Lightning, 
@@ -192,7 +193,7 @@ export const SalesPageBuilder: React.FC = () => {
       setCurrentStep(t('Analyzing product data...'))
       
       const productData = {
-        name: pageData.productName,
+        productName: pageData.productName,
         title: pageData.title,
         description: pageData.description,
         price: pageData.price,
@@ -205,19 +206,11 @@ export const SalesPageBuilder: React.FC = () => {
         category: templates.find(t => t.id === selectedTemplate)?.category || 'Business'
       }
 
-      // Step 2: Generate page with NexBrain AI
+      // Step 2: Generate page with Fixed Campaign Service
       setGenerationProgress(30)
       setCurrentStep(t('Generating AI-optimized content...'))
       
-      const preferences = {
-        template: selectedTemplate,
-        conversionFocus: true,
-        mobileOptimized: true,
-        seoOptimized: true,
-        multiLanguage: true
-      }
-
-      const aiGeneratedContent = await nexBrainService.generateMagicPage(productData, preferences)
+      const aiGeneratedContent = await fixedCampaignService.generateCompleteCampaign(productData)
 
       // Step 3: Generate additional assets
       setGenerationProgress(60)
@@ -244,10 +237,16 @@ export const SalesPageBuilder: React.FC = () => {
         conversions: 0,
         conversionRate: '0%',
         createdAt: new Date().toISOString(),
-        aiGenerated: aiGeneratedContent
+        aiGenerated: aiGeneratedContent.generatedContent
       }
 
       setGeneratedPage(finalPage)
+      
+      // Save campaign for drag & drop editor
+      const existingCampaigns = JSON.parse(localStorage.getItem('generated-campaigns') || '[]')
+      existingCampaigns.push(aiGeneratedContent)
+      localStorage.setItem('generated-campaigns', JSON.stringify(existingCampaigns))
+      
       toast.success(t('AI-powered sales page generated successfully!'))
 
     } catch (error) {
@@ -298,7 +297,193 @@ export const SalesPageBuilder: React.FC = () => {
     }
   }
 
-  const resetBuilder = () => {
+  // Create sample campaign for testing
+  const createSampleCampaign = () => {
+    const samplePageData: GeneratedPageData = {
+      id: `sample_page_${Date.now()}`,
+      title: 'FitTracker Pro - Transform Your Health',
+      template: 'E-commerce Hero',
+      url: 'https://nexusone.ai/sample-fittracker',
+      status: 'published',
+      views: 1247,
+      conversions: 89,
+      conversionRate: '7.1%',
+      createdAt: new Date().toISOString(),
+      aiGenerated: {
+        headline: 'Transform Your Health Journey with FitTracker Pro',
+        subheadline: 'The smart fitness tracker that adapts to your lifestyle and motivates you every step of the way',
+        hero: {
+          title: 'Revolutionary FitTracker Pro',
+          subtitle: 'Your personal health companion',
+          imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800',
+          ctaText: 'Start Your Journey'
+        },
+        problem: 'Many fitness enthusiasts struggle with consistency, tracking progress, and staying motivated to reach their health goals.',
+        solution: 'FitTracker Pro uses AI-powered insights to provide personalized recommendations, 24/7 health monitoring, and smart motivation systems that adapt to your unique lifestyle.',
+        benefits: [
+          'AI-powered personalized insights',
+          '24/7 comprehensive health monitoring',
+          'Smart motivation and coaching system',
+          'Advanced sleep and recovery tracking',
+          'Water-resistant design for all activities'
+        ],
+        features: [
+          'Heart Rate Monitoring - 24/7 continuous tracking',
+          'Sleep Analysis - Detailed sleep quality insights',
+          'Fitness Coaching - AI-powered workout recommendations',
+          'Water Resistance - IP68 rated for swimming',
+          'Long Battery Life - Up to 7 days on single charge'
+        ],
+        testimonials: [
+          {
+            name: 'Sarah Johnson',
+            role: 'Marathon Runner',
+            content: 'FitTracker Pro helped me improve my training efficiency by 40%. The AI insights are incredible!',
+            rating: 5
+          },
+          {
+            name: 'Mike Chen',
+            role: 'Busy Professional',
+            content: 'Finally a tracker that understands my lifestyle. The sleep tracking changed my life.',
+            rating: 5
+          }
+        ],
+        pricing: {
+          title: 'Special Launch Offer',
+          price: '$149',
+          originalPrice: '$249',
+          ctaText: 'Order Now - Limited Time',
+          guarantees: ['30-day money-back guarantee', 'Free worldwide shipping']
+        },
+        cta: 'Order Now - Limited Time',
+        faq: [
+          {
+            question: 'How accurate is the heart rate monitoring?',
+            answer: 'FitTracker Pro uses advanced sensors with 99.5% accuracy rate, clinically tested and verified.'
+          },
+          {
+            question: 'Is it waterproof?',
+            answer: 'Yes, it\'s rated IP68 for swimming, showering, and all water activities up to 50 meters depth.'
+          }
+        ],
+        footer: {
+          companyName: 'FitTech Solutions',
+          contactInfo: 'support@fittrackerpro.com | 1-800-FIT-TRACK',
+          disclaimer: 'Results may vary. This device is not intended for medical diagnosis.'
+        },
+        assets: {
+          heroImage: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800',
+          backgroundImage: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800',
+          productImages: [
+            'https://images.unsplash.com/photo-1508746829417-e1b5e819d300?w=800',
+            'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800'
+          ]
+        },
+        seo: {
+          title: 'FitTracker Pro - AI-Powered Fitness Tracker | Transform Your Health',
+          description: 'Revolutionary fitness tracker with AI insights. 24/7 health monitoring, personalized coaching, and advanced features.',
+          keywords: ['fitness tracker', 'health monitoring', 'AI fitness', 'heart rate monitor']
+        }
+      }
+    };
+
+    // Also create campaign data
+    const sampleCampaign = {
+      id: `sample_campaign_${Date.now()}`,
+      title: 'FitTracker Pro Campaign',
+      productName: 'FitTracker Pro',
+      description: 'Revolutionary fitness tracker that helps you achieve your health goals',
+      targetAudience: 'Fitness enthusiasts',
+      businessType: 'E-commerce',
+      price: '$149',
+      cta: 'Order Now',
+      generatedContent: samplePageData.aiGenerated,
+      marketingAssets: {
+        landingPageUrl: samplePageData.url,
+        facebookAds: [
+          {
+            id: 'fb_ad_1',
+            headline: 'Transform Your Health Journey with FitTracker Pro',
+            description: 'AI-powered fitness tracking that adapts to your lifestyle. Get personalized insights and achieve your goals faster.',
+            imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800',
+            targeting: { interests: ['fitness', 'health', 'technology'], ageRange: '25-65' }
+          }
+        ],
+        videos: [
+          {
+            id: 'promo_video_1',
+            title: 'FitTracker Pro - Your Health Transformation Starts Here',
+            description: 'See how FitTracker Pro uses AI to revolutionize your fitness journey',
+            scriptContent: 'Meet FitTracker Pro - the revolutionary fitness tracker that adapts to YOU. With AI-powered insights, 24/7 monitoring, and personalized coaching, you\'ll achieve your health goals faster than ever before.',
+            videoUrl: undefined
+          }
+        ],
+        whatsappFlow: {
+          welcomeMessage: 'Hi! 👋 Welcome to FitTracker Pro! Ready to transform your health journey with AI-powered insights?',
+          productPresentation: 'FitTracker Pro uses advanced AI to provide personalized fitness insights. With 24/7 heart rate monitoring, sleep analysis, and smart coaching, you\'ll achieve your goals 40% faster! Currently available for just $149 (normally $249).',
+          objectionHandling: [
+            'I understand the investment concern - think of it as investing in your health and future! Most customers save money on gym trainers and health apps.',
+            'Worried about accuracy? FitTracker Pro has 99.5% accuracy rate, clinically tested and verified by health professionals.',
+            'Not sure about tech complexity? Our AI makes it simple - just wear it and get personalized insights automatically!'
+          ],
+          closingMessages: [
+            'This special launch price won\'t last long. Ready to start your transformation? 💪',
+            'Over 50,000 people have already transformed their health with FitTracker Pro. Join them today!',
+            'Click the link below to secure your FitTracker Pro at the special launch price! 👇'
+          ]
+        }
+      },
+      dragDropAssets: {
+        generatedImages: [
+          {
+            id: 'hero_fitness',
+            url: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800',
+            type: 'hero',
+            prompt: 'Hero image for fitness tracker campaign'
+          },
+          {
+            id: 'product_showcase',
+            url: 'https://images.unsplash.com/photo-1508746829417-e1b5e819d300?w=800',
+            type: 'product',
+            prompt: 'Product showcase for fitness tracker'
+          },
+          {
+            id: 'lifestyle_bg',
+            url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800',
+            type: 'background',
+            prompt: 'Fitness lifestyle background image'
+          }
+        ],
+        designElements: [
+          {
+            id: 'main_headline',
+            type: 'text',
+            content: 'Transform Your Health Journey with FitTracker Pro',
+            styles: { fontSize: '36px', fontWeight: 'bold', color: '#1a1a1a', textAlign: 'center' }
+          },
+          {
+            id: 'cta_button',
+            type: 'button',
+            content: 'Order Now - Limited Time',
+            styles: { backgroundColor: '#007bff', color: '#ffffff', padding: '16px 32px', borderRadius: '8px' }
+          }
+        ]
+      },
+      status: 'completed',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    // Set the generated page
+    setGeneratedPage(samplePageData);
+
+    // Save campaign for drag & drop editor
+    const existingCampaigns = JSON.parse(localStorage.getItem('generated-campaigns') || '[]');
+    existingCampaigns.push(sampleCampaign);
+    localStorage.setItem('generated-campaigns', JSON.stringify(existingCampaigns));
+
+    toast.success(t('✨ Sample campaign loaded! You can now see how AI-generated content works.'));
+  };
     setSelectedTemplate(null)
     setPageData({
       title: '',
@@ -404,11 +589,11 @@ export const SalesPageBuilder: React.FC = () => {
                 {t('AI Quick Start')}
               </CardTitle>
               <CardDescription>
-                {t('Import from URL or start from scratch with AI assistance')}
+                {t('Import from URL, start from scratch, or try a sample campaign')}
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-3 gap-4">
                 <div className="space-y-3">
                   <Label htmlFor="product-url">{t('Import from Product URL')}</Label>
                   <div className="flex gap-2">
@@ -426,6 +611,20 @@ export const SalesPageBuilder: React.FC = () => {
                       {currentStep ? <Lightning className="h-4 w-4 animate-pulse" /> : t('Import')}
                     </Button>
                   </div>
+                </div>
+                <div className="space-y-3">
+                  <Label>{t('Try Sample Campaign')}</Label>
+                  <Button 
+                    onClick={createSampleCampaign}
+                    variant="outline"
+                    className="w-full gap-2"
+                  >
+                    <Sparkle className="h-4 w-4" />
+                    {t('Load Sample')}
+                  </Button>
+                  <p className="text-xs text-muted-foreground">
+                    {t('See how the system works with real content')}
+                  </p>
                 </div>
                 <div className="space-y-3">
                   <Label>{t('AI Assistance')}</Label>
@@ -981,25 +1180,44 @@ export const SalesPageBuilder: React.FC = () => {
                       {/* AI Generated Hero Section */}
                       <div className="text-center space-y-4">
                         <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                          {generatedPage.aiGenerated?.headline || pageData.title}
+                          {generatedPage.aiGenerated?.headline || generatedPage.aiGenerated?.heroSection?.title || pageData.title || 'Transform Your Life Today'}
                         </h1>
                         <p className="text-lg text-gray-600">
-                          {generatedPage.aiGenerated?.subheadline || pageData.description}
+                          {generatedPage.aiGenerated?.subheadline || generatedPage.aiGenerated?.heroSection?.subtitle || pageData.description || 'Discover the solution you\'ve been waiting for'}
                         </p>
                         
                         {/* AI Generated Hero Image */}
                         <div className="w-full h-48 bg-gradient-to-r from-primary/20 to-accent/20 rounded-lg flex items-center justify-center">
-                          <div className="text-center">
-                            <Images className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
-                            <span className="text-muted-foreground">{t('AI Generated Hero Image')}</span>
-                          </div>
+                          {generatedPage.aiGenerated?.heroSection?.imageUrl ? (
+                            <img 
+                              src={generatedPage.aiGenerated.heroSection.imageUrl} 
+                              alt="Hero Image"
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          ) : (
+                            <div className="text-center">
+                              <Images className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
+                              <span className="text-muted-foreground">{t('AI Generated Hero Image')}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
 
                       {/* AI Generated Benefits */}
-                      {generatedPage.aiGenerated?.benefits && (
+                      {generatedPage.aiGenerated?.benefits || generatedPage.aiGenerated?.solutionSection?.benefits ? (
                         <div className="grid md:grid-cols-3 gap-4">
-                          {generatedPage.aiGenerated.benefits.slice(0, 3).map((benefit: string, index: number) => (
+                          {(generatedPage.aiGenerated.benefits || generatedPage.aiGenerated.solutionSection?.benefits || []).slice(0, 3).map((benefit: string, index: number) => (
+                            <div key={index} className="text-center p-4 border rounded-lg">
+                              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                <Sparkle className="h-6 w-6 text-primary" />
+                              </div>
+                              <p className="text-sm font-medium">{benefit}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="grid md:grid-cols-3 gap-4">
+                          {['Save time and effort', 'Get professional results', 'Enjoy peace of mind'].map((benefit: string, index: number) => (
                             <div key={index} className="text-center p-4 border rounded-lg">
                               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-2">
                                 <Sparkle className="h-6 w-6 text-primary" />
@@ -1012,9 +1230,11 @@ export const SalesPageBuilder: React.FC = () => {
 
                       {/* Pricing Section */}
                       <div className="text-center bg-muted/20 p-6 rounded-lg">
-                        <div className="text-4xl font-bold text-green-600 mb-2">{pageData.price}</div>
+                        <div className="text-4xl font-bold text-green-600 mb-2">
+                          {generatedPage.aiGenerated?.pricingSection?.price || pageData.price || '$99'}
+                        </div>
                         <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-600">
-                          {generatedPage.aiGenerated?.cta || pageData.cta}
+                          {generatedPage.aiGenerated?.cta || generatedPage.aiGenerated?.pricingSection?.ctaText || pageData.cta || 'Buy Now'}
                         </Button>
                       </div>
 
@@ -1022,16 +1242,20 @@ export const SalesPageBuilder: React.FC = () => {
                       <div className="space-y-4">
                         <h3 className="text-xl font-semibold text-center">{t('What Our Customers Say')}</h3>
                         <div className="grid gap-4">
-                          {[1, 2, 3].map((i) => (
+                          {(generatedPage.aiGenerated?.socialProof?.testimonials || [
+                            {name: 'Sarah Johnson', role: 'Verified Customer', content: 'This product changed my life! Highly recommended.', rating: 5},
+                            {name: 'Mike Chen', role: 'Business Owner', content: 'Exactly what I needed. Great value for money.', rating: 5},
+                            {name: 'Lisa Davis', role: 'Professional', content: 'Outstanding quality and customer service.', rating: 5}
+                          ]).slice(0, 3).map((testimonial: any, i: number) => (
                             <div key={i} className="bg-muted/20 p-4 rounded-lg">
                               <div className="flex items-center gap-3 mb-2">
                                 <div className="w-10 h-10 bg-primary/20 rounded-full"></div>
                                 <div>
-                                  <p className="font-medium text-sm">Customer {i}</p>
-                                  <p className="text-xs text-muted-foreground">Verified Purchase</p>
+                                  <p className="font-medium text-sm">{testimonial.name}</p>
+                                  <p className="text-xs text-muted-foreground">{testimonial.role}</p>
                                 </div>
                               </div>
-                              <p className="text-sm">{t('AI-generated testimonial showcasing product benefits...')}</p>
+                              <p className="text-sm">{testimonial.content}</p>
                             </div>
                           ))}
                         </div>
@@ -1059,28 +1283,30 @@ export const SalesPageBuilder: React.FC = () => {
                       <div>
                         <Label className="text-sm font-semibold">{t('Headline')}</Label>
                         <div className="p-3 bg-muted/20 rounded-lg">
-                          <p className="font-semibold text-lg">{generatedPage.aiGenerated.headline}</p>
+                          <p className="font-semibold text-lg">
+                            {generatedPage.aiGenerated.headline || generatedPage.aiGenerated.heroSection?.title || 'AI-Generated Headline Will Appear Here'}
+                          </p>
                         </div>
                       </div>
 
                       <div>
                         <Label className="text-sm font-semibold">{t('Subheadline')}</Label>
                         <div className="p-3 bg-muted/20 rounded-lg">
-                          <p>{generatedPage.aiGenerated.subheadline}</p>
+                          <p>{generatedPage.aiGenerated.subheadline || generatedPage.aiGenerated.heroSection?.subtitle || 'AI-Generated Subheadline Will Appear Here'}</p>
                         </div>
                       </div>
 
                       <div>
                         <Label className="text-sm font-semibold">{t('Problem Statement')}</Label>
                         <div className="p-3 bg-muted/20 rounded-lg">
-                          <p>{generatedPage.aiGenerated.problem}</p>
+                          <p>{generatedPage.aiGenerated.problem || generatedPage.aiGenerated.problemSection?.description || 'AI-Generated Problem Statement Will Appear Here'}</p>
                         </div>
                       </div>
 
                       <div>
                         <Label className="text-sm font-semibold">{t('Solution')}</Label>
                         <div className="p-3 bg-muted/20 rounded-lg">
-                          <p>{generatedPage.aiGenerated.solution}</p>
+                          <p>{generatedPage.aiGenerated.solution || generatedPage.aiGenerated.solutionSection?.description || 'AI-Generated Solution Will Appear Here'}</p>
                         </div>
                       </div>
 
@@ -1088,7 +1314,7 @@ export const SalesPageBuilder: React.FC = () => {
                         <Label className="text-sm font-semibold">{t('Key Benefits')}</Label>
                         <div className="p-3 bg-muted/20 rounded-lg">
                           <ul className="list-disc list-inside space-y-1">
-                            {generatedPage.aiGenerated.benefits?.map((benefit: string, index: number) => (
+                            {(generatedPage.aiGenerated.benefits || generatedPage.aiGenerated.solutionSection?.benefits || ['AI-Generated Benefit 1', 'AI-Generated Benefit 2', 'AI-Generated Benefit 3']).map((benefit: string, index: number) => (
                               <li key={index}>{benefit}</li>
                             ))}
                           </ul>
@@ -1099,10 +1325,32 @@ export const SalesPageBuilder: React.FC = () => {
                         <Label className="text-sm font-semibold">{t('Call-to-Action')}</Label>
                         <div className="p-3 bg-muted/20 rounded-lg">
                           <Button className="bg-gradient-to-r from-purple-500 to-pink-600">
-                            {generatedPage.aiGenerated.cta}
+                            {generatedPage.aiGenerated.cta || generatedPage.aiGenerated.pricingSection?.ctaText || 'AI-Generated CTA'}
                           </Button>
                         </div>
                       </div>
+
+                      {generatedPage.aiGenerated.featuresSection?.features && (
+                        <div>
+                          <Label className="text-sm font-semibold">{t('Features')}</Label>
+                          <div className="p-3 bg-muted/20 rounded-lg">
+                            <ul className="list-disc list-inside space-y-1">
+                              {generatedPage.aiGenerated.featuresSection.features.map((feature: any, index: number) => (
+                                <li key={index}>
+                                  <strong>{feature.title}:</strong> {feature.description}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) || (
+                    <div className="text-center py-8">
+                      <Brain className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-muted-foreground">
+                        {t('Generate a page to see AI-created content here')}
+                      </p>
                     </div>
                   )}
                 </CardContent>
