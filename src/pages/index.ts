@@ -27,3 +27,6 @@ export { AIMarketingFunnelTest } from './AIMarketingFunnelTest'
 
 // Real-Time System Test
 export { RealTimeSystemTest } from './RealTimeSystemTest'
+
+// Production Edge Function Validator
+export { default as ProductionEdgeFunctionValidator } from './ProductionEdgeFunctionValidator'
