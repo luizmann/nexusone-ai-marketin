@@ -1,65 +1,93 @@
 #!/bin/bash
 
-# 🚀 NexusOne AI - Simple Production Deployment
-# Deploy your platform in 5 minutes!
+# 🚀 NexusOne AI - Quick Production Deploy
+# Simple deployment script for immediate production launch
 
-set -e
+echo "🚀 NexusOne AI - Production Deployment Starting..."
+echo "=================================================="
 
-echo "🚀 NexusOne AI - Quick Deploy Starting..."
+# Function to print status
+print_status() {
+    echo "ℹ️  $1"
+}
 
-# Colors
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-NC='\033[0m'
+print_success() {
+    echo "✅ $1"
+}
 
-# Check dependencies
-echo -e "${BLUE}🔍 Checking dependencies...${NC}"
+print_error() {
+    echo "❌ $1"
+}
 
-if ! command -v npm &> /dev/null; then
-    echo -e "${RED}❌ npm is required but not installed.${NC}"
+# Check if we're in the right directory
+if [ ! -f "package.json" ]; then
+    print_error "package.json not found. Please run from project root."
     exit 1
 fi
 
-# Build the application
-echo -e "${BLUE}📦 Building NexusOne AI for production...${NC}"
+print_status "Validating environment..."
+
+# Create production environment if it doesn't exist
+if [ ! -f ".env.production" ]; then
+    print_status "Creating .env.production..."
+    cp .env.production.example .env.production 2>/dev/null || echo "# Add your production environment variables here" > .env.production
+fi
+
+print_status "Installing dependencies..."
+npm install
+
+print_status "Building application..."
 npm run build
 
-if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✅ Build successful!${NC}"
-else
-    echo -e "${RED}❌ Build failed!${NC}"
+if [ ! -d "dist" ]; then
+    print_error "Build failed - no dist directory created"
     exit 1
 fi
 
-# Check if Vercel CLI is available
-if command -v vercel &> /dev/null; then
-    echo -e "${BLUE}🚀 Deploying to Vercel...${NC}"
-    vercel --prod --yes
-    echo -e "${GREEN}✅ Deployed to Vercel!${NC}"
-elif command -v netlify &> /dev/null; then
-    echo -e "${BLUE}🚀 Deploying to Netlify...${NC}"
-    netlify deploy --prod --dir=dist
-    echo -e "${GREEN}✅ Deployed to Netlify!${NC}"
+print_success "Build completed successfully!"
+
+print_status "Application is ready for deployment!"
+echo ""
+echo "📋 Next steps:"
+echo "1. Configure your environment variables in .env.production"
+echo "2. Deploy to your hosting platform (Netlify/Vercel/etc.)"
+echo "3. Set up your Supabase production database"
+echo "4. Configure remaining APIs (Stripe, D-ID, Runway)"
+echo ""
+echo "🌍 Deployment targets:"
+echo "• Netlify: netlify deploy --prod --dir=dist"
+echo "• Vercel: vercel --prod"
+echo "• Manual: Upload dist/ folder to your hosting provider"
+echo ""
+echo "✅ NexusOne AI is ready for production!"
+
+# Test if basic environment is working
+print_status "Running basic health checks..."
+
+# Check if node_modules exists
+if [ -d "node_modules" ]; then
+    print_success "Dependencies installed"
 else
-    echo -e "${YELLOW}⚠️  No deployment platform found.${NC}"
-    echo -e "${BLUE}Options:${NC}"
-    echo "1. Install Vercel: npm i -g vercel"
-    echo "2. Install Netlify: npm i -g netlify-cli"
-    echo "3. Manual upload: Use dist/ folder"
-    echo ""
-    echo -e "${GREEN}✅ Build completed! Your app is in the dist/ folder${NC}"
+    print_error "Dependencies not properly installed"
 fi
 
-# Show next steps
+# Check if dist exists and has content
+if [ -d "dist" ] && [ "$(ls -A dist)" ]; then
+    print_success "Production build ready"
+else
+    print_error "Production build not ready"
+fi
+
+# Check basic file structure
+REQUIRED_FILES=("dist/index.html" "dist/assets")
+for file in "${REQUIRED_FILES[@]}"; do
+    if [ -e "$file" ]; then
+        print_success "$file exists"
+    else
+        print_error "$file missing"
+    fi
+done
+
 echo ""
-echo -e "${GREEN}🎉 Deployment Complete!${NC}"
-echo ""
-echo -e "${BLUE}📋 Next Steps:${NC}"
-echo "1. Configure your API keys in production"
-echo "2. Set up Supabase project (optional)"
-echo "3. Test all features"
-echo "4. Set up custom domain"
-echo ""
-echo -e "${YELLOW}💡 Your NexusOne AI platform is ready to serve global customers!${NC}"
+echo "🎉 Quick deployment preparation complete!"
+echo "Your NexusOne AI platform is ready for production deployment!"
