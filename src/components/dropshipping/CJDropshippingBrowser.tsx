@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Loader2, Search, Grid3X3, List, Star, ShoppingCart, Eye, Heart } from '@phosphor-icons/react'
-import { useLanguage } from '../../contexts/LanguageContext'
+import { useLanguage } from '../../contexts/CleanLanguageContext'
 import { toast } from 'sonner'
 
 interface CJProduct {

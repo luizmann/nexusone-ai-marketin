@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { toast } from 'sonner'
 import { Loader2, CheckCircle, XCircle, Play, Eye, Settings, Globe, ShoppingCart, MessageSquare, TrendingUp, Video, Bot, Zap, Users, BarChart } from '@phosphor-icons/react'
-import { useLanguage } from '../contexts/LanguageContext'
+import { useLanguage } from '../contexts/CleanLanguageContext'
 
 interface TestResult {
   success: boolean

@@ -8,7 +8,7 @@ import { Progress } from '@/components/ui/progress'
 import { CJDropshippingBrowser } from '../components/dropshipping/CJDropshippingBrowser'
 import { ProductCatalogBrowser } from '../components/dropshipping/ProductCatalogBrowser'
 import { Package, ShoppingCart, TrendingUp, Users, DollarSign, Star, Zap, Globe, Truck } from '@phosphor-icons/react'
-import { useLanguage } from '../contexts/LanguageContext'
+import { useLanguage } from '../contexts/CleanLanguageContext'
 
 export function DropshippingMarketplacePage() {
   const { t } = useLanguage()

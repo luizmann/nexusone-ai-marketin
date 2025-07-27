@@ -15,7 +15,7 @@ import {
   Sparkles,
   Brain
 } from '@phosphor-icons/react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage } from '@/contexts/CleanLanguageContext';
 import { toast } from 'sonner';
 
 interface PageSection {

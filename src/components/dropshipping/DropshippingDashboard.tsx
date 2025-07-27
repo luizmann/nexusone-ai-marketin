@@ -27,7 +27,7 @@ import { DropshippingMarketplace } from './DropshippingMarketplace'
 import { AICampaignBuilder } from './AICampaignBuilder'
 import { CheckoutSystem } from './CheckoutSystem'
 import { FulfillmentSystem } from './FulfillmentSystem'
-import { useLanguage } from '../../contexts/LanguageContext'
+import { useLanguage } from '../../contexts/CleanLanguageContext'
 
 export function DropshippingDashboard() {
   const [activeTab, setActiveTab] = useState('overview')

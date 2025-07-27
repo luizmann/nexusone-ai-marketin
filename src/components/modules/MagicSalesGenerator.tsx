@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useLanguage } from '@/contexts/CleanLanguageContext'
 import { useKV } from '@github/spark/hooks'
 import { toast } from 'sonner'
 import { 

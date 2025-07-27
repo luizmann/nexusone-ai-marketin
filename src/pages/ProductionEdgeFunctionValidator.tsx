@@ -20,7 +20,7 @@ import {
   BarChart3,
   Image
 } from '@phosphor-icons/react'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useLanguage } from '@/contexts/CleanLanguageContext'
 import { createClient } from '@supabase/supabase-js'
 
 const SUPABASE_URL = 'https://hbfgtdxvlbkvkrjqxnac.supabase.co'

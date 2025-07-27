@@ -31,7 +31,7 @@ import { SalesPageBuilder } from '../../pages/SalesPageBuilder'
 import { NexBrainAssistant } from '../features/NexBrainAssistant'
 import { RealTimeSystemTest } from '../../pages/RealTimeSystemTest'
 import ProductionEdgeFunctionValidator from '../../pages/ProductionEdgeFunctionValidator'
-import { useLanguage } from '../../contexts/LanguageContext'
+import { useLanguage } from '../../contexts/CleanLanguageContext'
 
 export function DashboardLayout() {
   const [activeModule, setActiveModule] = useState('dashboard')

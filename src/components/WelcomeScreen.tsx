@@ -9,7 +9,7 @@ import { SalesPage } from './SalesPage'
 import { Documentation } from './ComprehensiveDocumentation'
 import { ComprehensivePrivacyPolicy } from './ComprehensivePrivacyPolicy'
 import { Zap, BookOpen, Shield, Sparkles } from '@phosphor-icons/react'
-import { useLanguage } from '../contexts/LanguageContext'
+import { useLanguage } from '../contexts/CleanLanguageContext'
 import { LanguageSelector } from './LanguageSelector'
 
 export function WelcomeScreen() {

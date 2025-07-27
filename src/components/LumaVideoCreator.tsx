@@ -28,7 +28,7 @@ import {
   Copy,
   Trash2
 } from '@phosphor-icons/react'
-import { useLanguage } from '../contexts/LanguageContext'
+import { useLanguage } from '../contexts/CleanLanguageContext'
 import { RealTimeVideoPreview } from './RealTimeVideoPreview'
 import { lumaAI, LumaGenerationRequest, LumaGeneration } from '../services/luma-ai'
 

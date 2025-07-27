@@ -13,7 +13,7 @@ import {
   Hash,
   Layout
 } from '@phosphor-icons/react'
-import { useLanguage } from '../contexts/LanguageContext'
+import { useLanguage } from '../contexts/CleanLanguageContext'
 
 interface DashboardProps {
   onModuleChange?: (module: string) => void

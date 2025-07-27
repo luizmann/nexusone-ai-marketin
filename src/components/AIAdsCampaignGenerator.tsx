@@ -24,7 +24,7 @@ import {
   Sparkle,
   Robot
 } from '@phosphor-icons/react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage } from '@/contexts/CleanLanguageContext';
 import { useCredits } from '@/contexts/CreditContext';
 import { nexBrainService } from '@/services/nexBrainService';
 import { toast } from 'sonner';

@@ -20,7 +20,7 @@ import {
   PlayCircle,
   PauseCircle
 } from '@phosphor-icons/react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage } from '@/contexts/CleanLanguageContext';
 import { nexBrainService, CampaignPerformanceData, OptimizationSuggestion } from '@/services/nexBrainService';
 import { toast } from 'sonner';
 

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { useKV } from '@github/spark/hooks'
 import { User, SignOut } from '@phosphor-icons/react'
-import { useLanguage } from '../../contexts/LanguageContext'
+import { useLanguage } from '../../contexts/CleanLanguageContext'
 import { LanguageSelector } from '../LanguageSelector'
 
 export function Header() {

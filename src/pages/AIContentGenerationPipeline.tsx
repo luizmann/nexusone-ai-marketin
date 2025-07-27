@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Label } from '@/components/ui/label'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useLanguage } from '@/contexts/CleanLanguageContext'
 import { AIContentGenerationService } from '@/services/aiContentGeneration'
 import { 
   Loader2, 

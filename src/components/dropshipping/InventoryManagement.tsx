@@ -29,7 +29,7 @@ import {
   BarChart3
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
-import { useLanguage } from '../../contexts/LanguageContext'
+import { useLanguage } from '../../contexts/CleanLanguageContext'
 
 interface Product {
   id: string

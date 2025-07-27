@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useKV } from '@github/spark/hooks'
 import { toast } from 'sonner'
-import { useLanguage } from '../contexts/LanguageContext'
+import { useLanguage } from '../contexts/CleanLanguageContext'
 import { 
   MessageCircle, 
   Bot,

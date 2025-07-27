@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { useKV } from '@github/spark/hooks'
 import { toast } from 'sonner'
-import { useLanguage } from '../contexts/LanguageContext'
+import { useLanguage } from '../contexts/CleanLanguageContext'
 import { 
   Calendar, 
   Clock, 

@@ -10,7 +10,7 @@ import { Brain, Send, Loader2, Sparkles, MessageSquare, Copy, Download } from '@
 import { useKV } from '@github/spark/hooks';
 import { openaiChatService, type ChatMessage } from '@/lib/openai';
 import { toast } from 'sonner';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage } from '@/contexts/CleanLanguageContext';
 
 export function NexBrainAssistant() {
   const { t } = useLanguage();

@@ -15,7 +15,7 @@ import {
   Download,
   ExternalLink
 } from "@phosphor-icons/react"
-import { useLanguage } from '../contexts/LanguageContext'
+import { useLanguage } from '../contexts/CleanLanguageContext'
 import { LanguageSelector } from './LanguageSelector'
 
 export function PrivacyPolicy() {

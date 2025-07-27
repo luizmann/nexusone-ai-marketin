@@ -26,7 +26,7 @@ import {
   CurrencyDollar,
   Magic
 } from '@phosphor-icons/react'
-import { useLanguage } from '../contexts/LanguageContext'
+import { useLanguage } from '../contexts/CleanLanguageContext'
 import { LanguageSelector } from './LanguageSelector'
 
 interface PricingTier {

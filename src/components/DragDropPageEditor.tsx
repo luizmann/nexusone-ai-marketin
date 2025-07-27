@@ -29,7 +29,7 @@ import {
   Code,
   Play
 } from '@phosphor-icons/react'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useLanguage } from '@/contexts/CleanLanguageContext'
 import { useKV } from '@github/spark/hooks'
 import { toast } from 'sonner'
 import { TemplateModal } from './TemplateModal'

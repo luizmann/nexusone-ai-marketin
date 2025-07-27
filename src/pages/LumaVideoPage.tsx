@@ -1,6 +1,6 @@
 import React from 'react'
 import { LumaVideoCreator } from '../components/LumaVideoCreator'
-import { useLanguage } from '../contexts/LanguageContext'
+import { useLanguage } from '../contexts/CleanLanguageContext'
 
 export function LumaVideoPage() {
   const { t } = useLanguage()
