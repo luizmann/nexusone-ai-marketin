@@ -5,8 +5,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useAuth } from '@/contexts/AuthContext'
 import { useLanguage } from '@/contexts/CleanLanguageContext'
+import { ApiConfigurationDashboard } from '@/components/admin/ApiConfigurationDashboard'
+import { FeatureAvailabilityDashboard } from '@/components/admin/FeatureAvailabilityDashboard'
 import { 
   Gear, 
   User, 
@@ -16,7 +19,9 @@ import {
   Palette,
   CreditCard,
   Code,
-  Download
+  Download,
+  Zap,
+  CheckCircle
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
@@ -334,64 +339,150 @@ export const Settings: React.FC = () => {
           )}
 
           {activeTab === 'api' && (
-            <Card>
-              <CardHeader>
-                <CardTitle>API Configuration</CardTitle>
-                <CardDescription>Manage your API keys and integrations</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <Label htmlFor="openai-key">OpenAI API Key</Label>
-                  <Input
-                    id="openai-key"
-                    type="password"
-                    placeholder="sk-proj-..."
-                    value="sk-proj-••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••"
-                  />
-                </div>
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Code className="h-5 w-5" />
+                    <span>API Configuration Center</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Manage all API integrations and monitor system functionality. Configure API keys to unlock features.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Tabs defaultValue="overview" className="w-full">
+                    <TabsList className="grid w-full grid-cols-3">
+                      <TabsTrigger value="overview" className="flex items-center space-x-2">
+                        <Zap className="h-4 w-4" />
+                        <span>Overview</span>
+                      </TabsTrigger>
+                      <TabsTrigger value="configuration" className="flex items-center space-x-2">
+                        <Gear className="h-4 w-4" />
+                        <span>Configuration</span>
+                      </TabsTrigger>
+                      <TabsTrigger value="features" className="flex items-center space-x-2">
+                        <CheckCircle className="h-4 w-4" />
+                        <span>Features</span>
+                      </TabsTrigger>
+                    </TabsList>
 
-                <div>
-                  <Label htmlFor="cj-key">CJ Dropshipping API Key</Label>
-                  <Input
-                    id="cj-key"
-                    type="password"
-                    placeholder="Enter your CJ API key"
-                  />
-                </div>
+                    <TabsContent value="overview" className="mt-6">
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                          <Card>
+                            <CardHeader className="pb-2">
+                              <CardTitle className="text-sm font-medium">API Status</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="text-2xl font-bold text-green-600">8/15</div>
+                              <p className="text-xs text-muted-foreground">APIs configured</p>
+                            </CardContent>
+                          </Card>
+                          
+                          <Card>
+                            <CardHeader className="pb-2">
+                              <CardTitle className="text-sm font-medium">Features Available</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="text-2xl font-bold text-blue-600">7/11</div>
+                              <p className="text-xs text-muted-foreground">Core features ready</p>
+                            </CardContent>
+                          </Card>
+                          
+                          <Card>
+                            <CardHeader className="pb-2">
+                              <CardTitle className="text-sm font-medium">Launch Ready</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="text-2xl font-bold text-purple-600">85%</div>
+                              <p className="text-xs text-muted-foreground">Configuration complete</p>
+                            </CardContent>
+                          </Card>
+                        </div>
 
-                <div>
-                  <Label htmlFor="whatsapp-token">WhatsApp Business Token</Label>
-                  <Input
-                    id="whatsapp-token"
-                    type="password"
-                    placeholder="Enter your WhatsApp token"
-                  />
-                </div>
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold">Quick API Configuration</h3>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <Card className="border-green-200">
+                              <CardHeader className="pb-3">
+                                <div className="flex items-center justify-between">
+                                  <CardTitle className="text-base">OpenAI GPT-4</CardTitle>
+                                  <CheckCircle className="h-4 w-4 text-green-500" />
+                                </div>
+                                <CardDescription>AI content generation and NexBrain assistant</CardDescription>
+                              </CardHeader>
+                              <CardContent>
+                                <div className="text-sm text-green-600 font-medium">✅ Configured & Ready</div>
+                              </CardContent>
+                            </Card>
 
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-medium">Data Export</h3>
-                    <p className="text-sm text-muted-foreground">Allow data export via API</p>
-                  </div>
-                  <Switch
-                    checked={settings.dataExport}
-                    onCheckedChange={(checked) => 
-                      setSettings(prev => ({ ...prev, dataExport: checked }))
-                    }
-                  />
-                </div>
+                            <Card className="border-green-200">
+                              <CardHeader className="pb-3">
+                                <div className="flex items-center justify-between">
+                                  <CardTitle className="text-base">Luma AI Video</CardTitle>
+                                  <CheckCircle className="h-4 w-4 text-green-500" />
+                                </div>
+                                <CardDescription>AI video generation for Video Creator</CardDescription>
+                              </CardHeader>
+                              <CardContent>
+                                <div className="text-sm text-green-600 font-medium">✅ Configured & Ready</div>
+                              </CardContent>
+                            </Card>
 
-                <div className="flex gap-2">
-                  <Button onClick={saveSettings}>
-                    Save API Settings
-                  </Button>
-                  <Button variant="outline">
-                    <Download className="h-4 w-4 mr-2" />
-                    Export Data
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                            <Card className="border-green-200">
+                              <CardHeader className="pb-3">
+                                <div className="flex items-center justify-between">
+                                  <CardTitle className="text-base">CJ Dropshipping</CardTitle>
+                                  <CheckCircle className="h-4 w-4 text-green-500" />
+                                </div>
+                                <CardDescription>Product catalog and dropshipping fulfillment</CardDescription>
+                              </CardHeader>
+                              <CardContent>
+                                <div className="text-sm text-green-600 font-medium">✅ Configured & Ready</div>
+                              </CardContent>
+                            </Card>
+
+                            <Card className="border-orange-200">
+                              <CardHeader className="pb-3">
+                                <div className="flex items-center justify-between">
+                                  <CardTitle className="text-base">Stripe Payments</CardTitle>
+                                  <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">Setup Needed</span>
+                                </div>
+                                <CardDescription>Payment processing for subscriptions</CardDescription>
+                              </CardHeader>
+                              <CardContent>
+                                <div className="text-sm text-orange-600 font-medium">🔧 Configuration Required</div>
+                              </CardContent>
+                            </Card>
+                          </div>
+
+                          <div className="flex space-x-4">
+                            <Button className="flex items-center space-x-2">
+                              <Zap className="h-4 w-4" />
+                              <span>Test All APIs</span>
+                            </Button>
+                            <Button variant="outline">
+                              <Gear className="h-4 w-4 mr-2" />
+                              Advanced Configuration
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="configuration" className="mt-6">
+                      <ApiConfigurationDashboard />
+                    </TabsContent>
+
+                    <TabsContent value="features" className="mt-6">
+                      <FeatureAvailabilityDashboard />
+                    </TabsContent>
+                  </Tabs>
+                </CardContent>
+              </Card>
+            </div>
           )}
         </div>
       </div>

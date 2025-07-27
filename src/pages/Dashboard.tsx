@@ -5,6 +5,7 @@ import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCredits } from '@/contexts/CreditContext'
+import { ApiStatusWidget } from '@/components/widgets/ApiStatusWidget'
 import { 
   TrendingUp, 
   Users, 
@@ -249,6 +250,9 @@ export const Dashboard: React.FC = () => {
               )}
             </CardContent>
           </Card>
+
+          {/* API Configuration Status */}
+          <ApiStatusWidget />
 
           {/* Recent Activity */}
           <Card>

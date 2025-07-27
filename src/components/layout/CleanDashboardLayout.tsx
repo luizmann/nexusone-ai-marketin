@@ -11,6 +11,7 @@ import { SmartAppointments } from '../features/SmartAppointments'
 import { NexBrain } from '../features/NexBrain'
 import { Credits } from '../../pages/Credits'
 import { Settings } from '../../pages/Settings'
+import ApiTestPage from '../../pages/ApiTestPage'
 import { useLanguage } from '../../contexts/CleanLanguageContext'
 
 export function CleanDashboardLayout() {
@@ -39,6 +40,8 @@ export function CleanDashboardLayout() {
         return <Credits />
       case 'settings':
         return <Settings />
+      case 'api-test':
+        return <ApiTestPage />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }
