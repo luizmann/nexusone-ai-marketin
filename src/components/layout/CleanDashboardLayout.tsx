@@ -13,6 +13,7 @@ import { Credits } from '../../pages/Credits'
 import { Settings } from '../../pages/Settings'
 import ApiTestPage from '../../pages/ApiTestPage'
 import { APIHealthDashboard } from '../monitoring/APIHealthDashboard'
+import { APIConfigPanel } from '../admin/APIConfigPanel'
 import { useLanguage } from '../../contexts/CleanLanguageContext'
 
 export function CleanDashboardLayout() {
@@ -56,6 +57,8 @@ export function CleanDashboardLayout() {
         return <ApiTestPage />
       case 'api-health':
         return <APIHealthDashboard />
+      case 'api-config':
+        return <APIConfigPanel />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }

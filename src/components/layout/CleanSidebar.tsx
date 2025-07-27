@@ -10,7 +10,8 @@ import {
   Calendar, 
   Brain, 
   CreditCard, 
-  Settings 
+  Settings,
+  Plug
 } from 'lucide-react'
 
 interface CleanSidebarProps {
@@ -75,6 +76,12 @@ export function CleanSidebar({ activeModule, onModuleChange }: CleanSidebarProps
       label: t('credits'),
       icon: CreditCard,
       description: t('usage_and_billing')
+    },
+    {
+      id: 'api-config',
+      label: 'API Config',
+      icon: Plug,
+      description: 'Configure API integrations'
     },
     {
       id: 'settings',
