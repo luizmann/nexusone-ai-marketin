@@ -1143,3 +1143,5 @@ export function DragDropEditor() {
     </div>
   );
 }
+
+export default DragDropEditor;

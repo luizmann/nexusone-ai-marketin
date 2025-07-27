@@ -1450,7 +1450,7 @@ export const SalesPageBuilder: React.FC = () => {
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default SalesPageBuilder
+export default SalesPageBuilder;
