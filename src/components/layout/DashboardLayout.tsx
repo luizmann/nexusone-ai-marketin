@@ -30,7 +30,7 @@ import { LumaVideoPage } from '../../pages/LumaVideoPage'
 import { SalesPageBuilder } from '../../pages/SalesPageBuilder'
 import { NexBrainAssistant } from '../features/NexBrainAssistant'
 import { RealTimeSystemTest } from '../../pages/RealTimeSystemTest'
-import { ProductionEdgeFunctionValidator } from '../../pages/ProductionEdgeFunctionValidator'
+import ProductionEdgeFunctionValidator from '../../pages/ProductionEdgeFunctionValidator'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export function DashboardLayout() {
