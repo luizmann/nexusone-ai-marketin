@@ -29,6 +29,7 @@ import { ApiTestingPage } from '../../pages/ApiTestingPage'
 import { LumaVideoPage } from '../../pages/LumaVideoPage'
 import { SalesPageBuilder } from '../../pages/SalesPageBuilder'
 import { NexBrainAssistant } from '../features/NexBrainAssistant'
+import { RealTimeSystemTest } from '../../pages/RealTimeSystemTest'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export function DashboardLayout() {
@@ -93,6 +94,8 @@ export function DashboardLayout() {
         return <LumaVideoPage />
       case 'nexbrain':
         return <NexBrainAssistant />
+      case 'system-test':
+        return <RealTimeSystemTest />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }

@@ -24,3 +24,6 @@ export { default as Credits } from './Credits'
 
 // AI Marketing Funnel Test
 export { AIMarketingFunnelTest } from './AIMarketingFunnelTest'
+
+// Real-Time System Test
+export { RealTimeSystemTest } from './RealTimeSystemTest'

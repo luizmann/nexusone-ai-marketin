@@ -39,6 +39,7 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
 
   const modules = [
     { id: 'dashboard', label: t('navigation.dashboard'), icon: House },
+    { id: 'system-test', label: '🧪 Real-Time System Test', icon: FlaskIcon },
     { id: 'nexbrain', label: 'NexBrain AI Assistant', icon: Brain },
     { id: 'launch-campaigns', label: 'Launch Campaign Manager', icon: Rocket },
     { id: 'dropshipping-marketplace', label: 'CJ Dropshipping', icon: Package },

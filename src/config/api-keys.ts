@@ -4,7 +4,8 @@
 export const API_KEYS = {
   // AI Content Generation
   openai: {
-    key: "sk-proj-6PL3JzE4aAkqBZ8YnNhqT3BlbkFJ5KdGvHwP3eZ7RL2mN9c4",
+    key: "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",
+    assistantId: "asst_0jsx8eD6P3W9XGsSRRNU2Pfd",
     organization: "org-nexusone-ai",
     model: "gpt-4o"
   },
@@ -21,6 +22,19 @@ export const API_KEYS = {
     key: "r8_HbwQQ4NxMfhVPy0BS0xqOMkERd9B5JM440l66",
     model: "stability-ai/sdxl",
     version: "39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b"
+  },
+
+  // WhatsApp AI Automation
+  gupshup: {
+    key: "sk_d5fe7cdab5164e53bcbffdc428fd431e",
+    apiUrl: "https://api.gupshup.io/sm/api/v1",
+    appName: "nexusone-ai"
+  },
+
+  // Video Generation
+  luma: {
+    key: "luma-12423eab-79ee-4f52-ad44-00c485686cf2-ab1b6b03-15a1-4c76-b056-6765bf41ab05",
+    baseUrl: "https://api.lumalabs.ai/dream-machine/v1"
   },
 
   // Avatar Creation
