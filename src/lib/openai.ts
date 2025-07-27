@@ -24,7 +24,7 @@ export interface AssistantResponse {
   status: 'completed' | 'failed' | 'in_progress';
 }
 
-class NexBrainService {
+class OpenAIChatService {
   private threads: Map<string, string> = new Map();
 
   async createThread(): Promise<string> {
@@ -221,5 +221,5 @@ class NexBrainService {
   }
 }
 
-export const nexBrainService = new NexBrainService();
+export const openaiChatService = new OpenAIChatService();
 export default openai;

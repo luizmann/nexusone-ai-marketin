@@ -653,4 +653,4 @@ export class NexBrainService {
 export const nexBrainService = NexBrainService.getInstance();
 
 // Export types
-export { NexBrainService, CampaignPerformanceData, OptimizationSuggestion };
+export type { CampaignPerformanceData, OptimizationSuggestion };

@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Brain, Send, Loader2, Sparkles, MessageSquare, Copy, Download } from '@phosphor-icons/react';
 import { useKV } from '@github/spark/hooks';
-import { nexBrainService, type ChatMessage } from '@/lib/openai';
+import { openaiChatService, type ChatMessage } from '@/lib/openai';
 import { toast } from 'sonner';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -47,7 +47,7 @@ export function NexBrainAssistant() {
     setIsLoading(true);
 
     try {
-      const response = await nexBrainService.sendMessage(
+      const response = await openaiChatService.sendMessage(
         currentMessage,
         threadId,
         'current-user'
@@ -80,7 +80,7 @@ export function NexBrainAssistant() {
 
     setIsLoading(true);
     try {
-      const content = await nexBrainService.generateContent(currentMessage, contentType);
+      const content = await openaiChatService.generateContent(currentMessage, contentType);
       setGeneratedContent(content);
       toast.success(t('Content generated successfully'));
     } catch (error) {
