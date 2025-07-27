@@ -195,7 +195,299 @@ export const CampaignGenerator: React.FC = () => {
     }
   }
 
-  const getStepIcon = (status: string) => {
+  // Create sample campaign for testing
+  const createSampleCampaign = () => {
+    const sampleCampaign: FixedCampaignData = {
+      id: `sample_campaign_${Date.now()}`,
+      title: 'Sample FitTracker Pro Campaign',
+      productName: 'FitTracker Pro',
+      description: 'Revolutionary fitness tracker that helps you achieve your health goals with AI-powered insights',
+      targetAudience: 'Fitness enthusiasts and health-conscious individuals',
+      businessType: 'E-commerce',
+      price: '$149',
+      cta: 'Order Now - Limited Time',
+      generatedContent: {
+        headline: 'Transform Your Health Journey with FitTracker Pro',
+        subheadline: 'The smart fitness tracker that adapts to your lifestyle and motivates you every step of the way',
+        heroSection: {
+          title: 'Revolutionary FitTracker Pro',
+          subtitle: 'Your personal health companion powered by AI',
+          imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800',
+          ctaText: 'Start Your Transformation'
+        },
+        problemSection: {
+          title: 'Struggling to Stay Motivated?',
+          description: 'Many fitness enthusiasts struggle with consistency, accurate tracking, and staying motivated to reach their health goals. Traditional fitness trackers provide data but lack the intelligence to truly guide your journey.',
+          painPoints: [
+            'Lack of personalized insights and recommendations',
+            'Difficulty maintaining motivation and consistency',
+            'Inaccurate tracking leading to frustration',
+            'No adaptive coaching based on your progress'
+          ]
+        },
+        solutionSection: {
+          title: 'FitTracker Pro is Your AI-Powered Solution',
+          description: 'Our revolutionary fitness tracker uses advanced AI algorithms to provide personalized insights, adaptive coaching, and motivation that evolves with your fitness journey.',
+          benefits: [
+            'AI-powered personalized workout recommendations',
+            '24/7 comprehensive health monitoring with 99.5% accuracy',
+            'Smart motivation system that adapts to your personality',
+            'Advanced sleep and recovery analysis',
+            'Water-resistant design for all activities'
+          ]
+        },
+        featuresSection: {
+          title: 'Powerful Features That Set Us Apart',
+          features: [
+            {
+              title: 'AI Health Coach',
+              description: 'Personalized workout plans and health recommendations based on your data',
+              icon: 'brain'
+            },
+            {
+              title: '24/7 Heart Rate Monitoring',
+              description: 'Continuous, accurate heart rate tracking with zone analysis',
+              icon: 'heart'
+            },
+            {
+              title: 'Advanced Sleep Analysis',
+              description: 'Detailed sleep quality insights with improvement suggestions',
+              icon: 'moon'
+            },
+            {
+              title: 'Smart Recovery Tracking',
+              description: 'Monitor your recovery and get rest recommendations',
+              icon: 'leaf'
+            }
+          ]
+        },
+        socialProof: {
+          testimonials: [
+            {
+              name: 'Sarah Johnson',
+              role: 'Marathon Runner',
+              content: 'FitTracker Pro helped me improve my training efficiency by 40%. The AI insights are incredible - it\'s like having a personal trainer on my wrist!',
+              rating: 5
+            },
+            {
+              name: 'Mike Chen',
+              role: 'Busy Professional',
+              content: 'Finally a tracker that understands my hectic lifestyle. The sleep tracking and stress management features changed my life.',
+              rating: 5
+            },
+            {
+              name: 'Lisa Rodriguez',
+              role: 'Fitness Enthusiast',
+              content: 'The personalized workout recommendations are spot-on. I\'ve never been more motivated to stay active!',
+              rating: 5
+            }
+          ],
+          stats: [
+            { number: '50,000+', label: 'Happy Users Worldwide' },
+            { number: '99.5%', label: 'Accuracy Rate' },
+            { number: '40%', label: 'Average Improvement' },
+            { number: '7 Days', label: 'Battery Life' }
+          ]
+        },
+        pricingSection: {
+          title: 'Special Launch Offer - Limited Time Only',
+          price: '$149',
+          originalPrice: '$249',
+          ctaText: 'Order Now - Save $100',
+          guarantees: [
+            '30-day money-back guarantee',
+            'Free worldwide shipping',
+            '2-year warranty included',
+            '24/7 customer support'
+          ]
+        },
+        faqSection: {
+          title: 'Frequently Asked Questions',
+          questions: [
+            {
+              question: 'How accurate is the heart rate monitoring?',
+              answer: 'FitTracker Pro uses advanced optical sensors with 99.5% accuracy rate, clinically tested and verified by independent health organizations.'
+            },
+            {
+              question: 'Is it waterproof?',
+              answer: 'Yes, FitTracker Pro is rated IP68 for water resistance up to 50 meters, perfect for swimming, showering, and all water activities.'
+            },
+            {
+              question: 'How long does the battery last?',
+              answer: 'With normal usage, FitTracker Pro lasts up to 7 days on a single charge. Heavy GPS usage may reduce battery life to 3-4 days.'
+            },
+            {
+              question: 'What smartphones are compatible?',
+              answer: 'FitTracker Pro works with iPhone 6s and later (iOS 12+) and Android devices running Android 6.0 or later.'
+            }
+          ]
+        },
+        footer: {
+          companyName: 'FitTech Solutions Inc.',
+          contactInfo: 'support@fittrackerpro.com | 1-800-FIT-TRACK | Live Chat Available 24/7',
+          disclaimer: 'Results may vary based on individual usage. This device is not intended for medical diagnosis or treatment.'
+        }
+      },
+      marketingAssets: {
+        landingPageUrl: 'https://nexusone.ai/campaigns/sample-fittracker',
+        facebookAds: [
+          {
+            id: 'fb_ad_hero',
+            headline: 'Transform Your Health Journey with AI-Powered FitTracker Pro',
+            description: 'Get personalized insights, 24/7 monitoring, and smart coaching. Limited time: Save $100!',
+            imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200',
+            targeting: {
+              interests: ['fitness', 'health tracking', 'wearable technology', 'personal training'],
+              demographics: { ageRange: '25-65', income: 'middle to high' },
+              behaviors: ['fitness enthusiasts', 'health conscious', 'tech early adopters']
+            }
+          },
+          {
+            id: 'fb_ad_social_proof',
+            headline: '50,000+ People Transformed Their Health with FitTracker Pro',
+            description: 'Join the fitness revolution. AI-powered insights that actually work. See results in just weeks!',
+            imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200',
+            targeting: {
+              interests: ['fitness motivation', 'health goals', 'lifestyle change'],
+              demographics: { ageRange: '25-55' },
+              behaviors: ['recently searched for fitness trackers']
+            }
+          }
+        ],
+        videos: [
+          {
+            id: 'hero_video',
+            title: 'FitTracker Pro - Your AI Health Coach',
+            description: 'See how FitTracker Pro uses artificial intelligence to revolutionize your fitness journey',
+            scriptContent: `
+              [Scene 1 - Hook (0-3s)]
+              "What if your fitness tracker could actually think?"
+              
+              [Scene 2 - Problem (3-11s)]
+              "Most fitness trackers just collect data. But data without intelligence is just noise. You need insights, not just numbers."
+              
+              [Scene 3 - Solution (11-23s)]
+              "Meet FitTracker Pro - the first AI-powered fitness tracker that learns from your behavior, adapts to your lifestyle, and provides personalized coaching that evolves with you. 24/7 heart rate monitoring, advanced sleep analysis, and smart recovery recommendations."
+              
+              [Scene 4 - Social Proof (23-27s)]
+              "Join 50,000+ users who've already transformed their health with 40% better results than traditional trackers."
+              
+              [Scene 5 - CTA (27-30s)]
+              "Limited time: Save $100. Order your FitTracker Pro today!"
+            `,
+            videoUrl: undefined
+          }
+        ],
+        whatsappFlow: {
+          welcomeMessage: 'Hi there! 👋 Welcome to FitTracker Pro! I\'m excited to help you discover how our AI-powered fitness tracker can transform your health journey. What brings you here today?',
+          productPresentation: 'FitTracker Pro is revolutionary! 🚀 Here\'s what makes it special:\n\n✅ AI-powered personalized insights\n✅ 99.5% accurate 24/7 health monitoring\n✅ Smart coaching that adapts to YOU\n✅ Advanced sleep & recovery analysis\n✅ 7-day battery life\n✅ Waterproof design\n\nSpecial launch offer: Just $149 (normally $249) - that\'s $100 off! 💰',
+          objectionHandling: [
+            'I totally understand the price concern! Think of it this way - most people spend $149 on a few personal training sessions. FitTracker Pro gives you personalized AI coaching 24/7 for life. Plus, we offer a 30-day money-back guarantee, so there\'s zero risk! 💪',
+            'Great question about effectiveness! Unlike other trackers that just show data, FitTracker Pro uses AI to actually improve your results. Our users see 40% better fitness outcomes on average. We have 50,000+ happy customers and a 99.5% accuracy rate - clinically verified! 📊',
+            'I understand there are many options out there. What sets FitTracker Pro apart is the AI brain inside. It learns your patterns, adapts to your lifestyle, and provides coaching that gets smarter over time. No other tracker on the market has this level of intelligence. Plus, you get our premium health insights normally worth $20/month for free! 🧠'
+          ],
+          closingMessages: [
+            'This special $100 discount is only available for a limited time. Would you like to secure your FitTracker Pro at this exclusive price? I can help you complete your order right now! ⏰',
+            'Amazing choice! You\'re about to join 50,000+ people who\'ve transformed their health with FitTracker Pro. Ready to start your transformation? I can walk you through the simple ordering process! 🎉',
+            'Perfect! Click this link to secure your FitTracker Pro at the special launch price: [ORDER LINK] Your new AI health coach will be on its way to you within 24 hours! 🚀'
+          ]
+        }
+      },
+      dragDropAssets: {
+        generatedImages: [
+          {
+            id: 'hero_main',
+            url: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200',
+            type: 'hero',
+            prompt: 'Professional fitness tracker hero image with modern design'
+          },
+          {
+            id: 'product_detail',
+            url: 'https://images.unsplash.com/photo-1508746829417-e1b5e819d300?w=800',
+            type: 'product',
+            prompt: 'Detailed product showcase of smartwatch with health features'
+          },
+          {
+            id: 'lifestyle_context',
+            url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200',
+            type: 'background',
+            prompt: 'Active lifestyle background with fitness and health theme'
+          },
+          {
+            id: 'social_proof',
+            url: 'https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800',
+            type: 'icon',
+            prompt: 'Happy customers using fitness tracker testimonials'
+          }
+        ],
+        designElements: [
+          {
+            id: 'main_headline',
+            type: 'text',
+            content: 'Transform Your Health Journey with FitTracker Pro',
+            styles: {
+              fontSize: '42px',
+              fontWeight: 'bold',
+              color: '#1a1a1a',
+              textAlign: 'center',
+              lineHeight: '1.2'
+            }
+          },
+          {
+            id: 'primary_cta',
+            type: 'button',
+            content: 'Order Now - Save $100',
+            styles: {
+              backgroundColor: '#007bff',
+              color: '#ffffff',
+              padding: '18px 36px',
+              borderRadius: '12px',
+              fontSize: '20px',
+              fontWeight: '600',
+              boxShadow: '0 4px 14px rgba(0, 123, 255, 0.3)'
+            }
+          },
+          {
+            id: 'feature_container',
+            type: 'container',
+            content: '',
+            styles: {
+              backgroundColor: '#f8f9fa',
+              padding: '32px',
+              borderRadius: '16px',
+              border: '1px solid #e9ecef',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+            }
+          }
+        ]
+      },
+      status: 'completed',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    setGeneratedCampaign(sampleCampaign);
+    
+    // Save to localStorage for drag & drop editor
+    const existingCampaigns = JSON.parse(localStorage.getItem('generated-campaigns') || '[]');
+    existingCampaigns.push(sampleCampaign);
+    localStorage.setItem('generated-campaigns', JSON.stringify(existingCampaigns));
+
+    // Set the campaign data fields
+    setCampaignData({
+      productUrl: '',
+      productName: sampleCampaign.productName,
+      description: sampleCampaign.description,
+      businessType: sampleCampaign.businessType,
+      targetAudience: sampleCampaign.targetAudience,
+      price: sampleCampaign.price,
+      cta: sampleCampaign.cta,
+      budget: '$1000',
+      goals: 'Increase sales and brand awareness'
+    });
+
+    toast.success('✨ Sample campaign loaded! Explore all the AI-generated content and assets.');
+  };
     switch (status) {
       case 'completed':
         return <CheckCircle className="h-5 w-5 text-green-500" />
@@ -242,8 +534,20 @@ export const CampaignGenerator: React.FC = () => {
           {/* Campaign Types */}
           <Card>
             <CardHeader>
-              <CardTitle>Choose Campaign Type</CardTitle>
-              <CardDescription>Select the type of campaign that best fits your goals</CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Choose Campaign Type</CardTitle>
+                  <CardDescription>Select the type of campaign that best fits your goals</CardDescription>
+                </div>
+                <Button 
+                  variant="outline" 
+                  onClick={createSampleCampaign}
+                  className="gap-2"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  Try Sample
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">

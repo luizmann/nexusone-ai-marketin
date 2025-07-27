@@ -183,12 +183,45 @@ export function DragDropEditor() {
       const campaigns = JSON.parse(localStorage.getItem('generated-campaigns') || '[]');
       if (campaigns.length > 0) {
         const lastCampaign = campaigns[campaigns.length - 1];
+        console.log('Loading campaign assets:', lastCampaign);
+        
+        // Load images from campaign
         if (lastCampaign.dragDropAssets?.generatedImages) {
+          console.log('Found generated images:', lastCampaign.dragDropAssets.generatedImages);
           setAiImages(lastCampaign.dragDropAssets.generatedImages);
         }
+        
+        // Update current page with campaign assets if editing
+        if (currentPage && lastCampaign.id) {
+          setCurrentPage(prev => prev ? {
+            ...prev,
+            campaignAssets: lastCampaign.dragDropAssets,
+            updatedAt: new Date().toISOString()
+          } : null);
+        }
+        
+        toast.success(`${t('Campaign assets loaded successfully!')} (${lastCampaign.dragDropAssets?.generatedImages?.length || 0} images)`);
+      } else {
+        console.log('No campaigns found in localStorage');
+        // Load placeholder images if no campaigns exist
+        setAiImages([
+          {
+            id: 'placeholder_1',
+            url: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800',
+            type: 'hero',
+            prompt: 'Placeholder hero image'
+          },
+          {
+            id: 'placeholder_2',
+            url: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
+            type: 'product',
+            prompt: 'Placeholder product image'
+          }
+        ]);
       }
     } catch (error) {
       console.error('Failed to load campaign assets:', error);
+      toast.error(t('Failed to load campaign assets'));
     } finally {
       setIsLoadingAssets(false);
     }
@@ -243,7 +276,161 @@ export function DragDropEditor() {
     setSelectedElement(newElement);
   };
 
-  const generateAIImagesForPage = async () => {
+  // Create sample campaign for testing
+  const createSampleCampaign = () => {
+    const sampleCampaign = {
+      id: `sample_${Date.now()}`,
+      title: 'Sample Product Campaign',
+      productName: 'FitTracker Pro',
+      description: 'Revolutionary fitness tracker that helps you achieve your health goals',
+      targetAudience: 'Fitness enthusiasts',
+      businessType: 'E-commerce',
+      price: '$149',
+      cta: 'Order Now',
+      generatedContent: {
+        headline: 'Transform Your Health Journey with FitTracker Pro',
+        subheadline: 'The smart fitness tracker that adapts to your lifestyle and motivates you every step of the way',
+        heroSection: {
+          title: 'Revolutionary FitTracker Pro',
+          subtitle: 'Your personal health companion',
+          imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800',
+          ctaText: 'Start Your Journey'
+        },
+        problemSection: {
+          title: 'Struggling to Stay Motivated?',
+          description: 'Many fitness enthusiasts struggle with consistency, tracking progress, and staying motivated to reach their health goals.',
+          painPoints: [
+            'Lack of accurate fitness tracking',
+            'Difficulty staying motivated',
+            'No personalized insights'
+          ]
+        },
+        solutionSection: {
+          title: 'FitTracker Pro is Your Solution',
+          description: 'Our AI-powered fitness tracker provides personalized insights, motivation, and comprehensive health monitoring.',
+          benefits: [
+            'AI-powered personalized insights',
+            '24/7 health monitoring',
+            'Smart motivation system',
+            'Advanced sleep tracking',
+            'Water-resistant design'
+          ]
+        },
+        featuresSection: {
+          title: 'Powerful Features',
+          features: [
+            { title: 'Heart Rate Monitoring', description: '24/7 continuous heart rate tracking', icon: 'heart' },
+            { title: 'Sleep Analysis', description: 'Detailed sleep quality insights', icon: 'moon' },
+            { title: 'Fitness Coaching', description: 'AI-powered workout recommendations', icon: 'trophy' }
+          ]
+        },
+        socialProof: {
+          testimonials: [
+            { name: 'Sarah Johnson', role: 'Marathon Runner', content: 'FitTracker Pro helped me improve my training efficiency by 40%!', rating: 5 },
+            { name: 'Mike Chen', role: 'Busy Professional', content: 'Finally a tracker that understands my lifestyle. Love the insights!', rating: 5 }
+          ],
+          stats: [
+            { number: '50,000+', label: 'Happy Users' },
+            { number: '99.5%', label: 'Accuracy Rate' }
+          ]
+        },
+        pricingSection: {
+          title: 'Special Launch Offer',
+          price: '$149',
+          originalPrice: '$249',
+          ctaText: 'Order Now - Limited Time',
+          guarantees: ['30-day money-back guarantee', 'Free worldwide shipping']
+        },
+        faqSection: {
+          title: 'Frequently Asked Questions',
+          questions: [
+            { question: 'How accurate is the heart rate monitoring?', answer: 'FitTracker Pro uses advanced sensors with 99.5% accuracy rate.' },
+            { question: 'Is it waterproof?', answer: 'Yes, it\'s rated IP68 for swimming and showering.' }
+          ]
+        },
+        footer: {
+          companyName: 'FitTech Solutions',
+          contactInfo: 'support@fittrackerpro.com | 1-800-FIT-TRACK',
+          disclaimer: 'Results may vary. This device is not intended for medical diagnosis.'
+        }
+      },
+      marketingAssets: {
+        landingPageUrl: 'https://nexusone.ai/sample-landing',
+        facebookAds: [
+          {
+            id: 'ad_1',
+            headline: 'Transform Your Health Journey with FitTracker Pro',
+            description: 'AI-powered fitness tracking that adapts to your lifestyle',
+            imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800',
+            targeting: { interests: ['fitness', 'health'], ageRange: '25-65' }
+          }
+        ],
+        videos: [
+          {
+            id: 'video_1',
+            title: 'FitTracker Pro Introduction',
+            description: 'See how FitTracker Pro can transform your fitness journey',
+            scriptContent: 'Meet FitTracker Pro - the revolutionary fitness tracker that adapts to YOU...'
+          }
+        ],
+        whatsappFlow: {
+          welcomeMessage: 'Hi! 👋 Welcome to FitTracker Pro! Ready to transform your health journey?',
+          productPresentation: 'FitTracker Pro uses AI to provide personalized fitness insights. With 24/7 heart rate monitoring and smart coaching, you\'ll achieve your goals faster than ever!',
+          objectionHandling: ['I understand the investment concern - think of it as investing in your health and future!'],
+          closingMessages: ['Ready to start your transformation? Get your FitTracker Pro today! 💪']
+        }
+      },
+      dragDropAssets: {
+        generatedImages: [
+          {
+            id: 'hero_fitness',
+            url: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800',
+            type: 'hero',
+            prompt: 'Fitness tracker hero image'
+          },
+          {
+            id: 'product_showcase',
+            url: 'https://images.unsplash.com/photo-1508746829417-e1b5e819d300?w=800',
+            type: 'product',
+            prompt: 'Product showcase image'
+          },
+          {
+            id: 'lifestyle_bg',
+            url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800',
+            type: 'background',
+            prompt: 'Fitness lifestyle background'
+          }
+        ],
+        designElements: [
+          {
+            id: 'main_headline',
+            type: 'text',
+            content: 'Transform Your Health Journey with FitTracker Pro',
+            styles: { fontSize: '36px', fontWeight: 'bold', color: '#1a1a1a', textAlign: 'center' }
+          },
+          {
+            id: 'cta_button',
+            type: 'button',
+            content: 'Order Now - Limited Time',
+            styles: { backgroundColor: '#007bff', color: '#ffffff', padding: '16px 32px', borderRadius: '8px' }
+          }
+        ]
+      },
+      status: 'completed',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    // Save to localStorage
+    const existingCampaigns = JSON.parse(localStorage.getItem('generated-campaigns') || '[]');
+    existingCampaigns.push(sampleCampaign);
+    localStorage.setItem('generated-campaigns', JSON.stringify(existingCampaigns));
+
+    toast.success(t('Sample campaign created! You can now test all features.'));
+    
+    // Reload assets
+    loadCampaignAssets();
+  };
     if (!currentPage) return;
 
     setIsLoadingAssets(true);
@@ -505,6 +692,15 @@ export function DragDropEditor() {
               className="w-64"
             />
           )}
+          <Button 
+            size="sm" 
+            variant="outline" 
+            onClick={createSampleCampaign}
+            className="gap-2"
+          >
+            <Sparkles className="w-4 h-4" />
+            Load Sample Assets
+          </Button>
         </div>
 
         <div className="flex items-center gap-2">
