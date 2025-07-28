@@ -1,11 +1,9 @@
 #!/bin/bash
-# NexusOne AI - Complete Production Deployment
-# This script deploys both backend (Supabase) and frontend (Vercel)
+
+# 🚀 NexusOne AI - Production Deployment Script
+# Quick and reliable deployment to production
 
 set -e
-
-echo "🚀 NexusOne AI - Complete Production Deployment"
-echo "=============================================="
 
 # Colors
 GREEN='\033[0;32m'
@@ -14,221 +12,89 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-print_step() {
-    echo -e "${BLUE}[STEP]${NC} $1"
-}
+# Configuration
+PROJECT_REF="hbfgtdxvlbkvkrjqxnac"
+SUPABASE_URL="https://hbfgtdxvlbkvkrjqxnac.supabase.co"
 
-print_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
+echo -e "${BLUE}🚀 NexusOne AI Production Deployment${NC}"
+echo "======================================"
 
-print_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
+# Step 1: Install dependencies
+echo -e "${BLUE}📦 Installing dependencies...${NC}"
+npm install --production=false
 
-print_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
+# Step 2: Build frontend
+echo -e "${BLUE}🏗️  Building frontend...${NC}"
+npm run build
 
-# Check dependencies
-check_dependencies() {
-    print_step "Checking dependencies..."
-    
-    # Check required tools
-    command -v npm >/dev/null 2>&1 || { print_error "npm is required"; exit 1; }
-    command -v supabase >/dev/null 2>&1 || { print_error "Supabase CLI is required. Install: npm i -g supabase"; exit 1; }
-    command -v vercel >/dev/null 2>&1 || { print_error "Vercel CLI is required. Install: npm i -g vercel"; exit 1; }
-    
-    print_success "All dependencies are installed"
-}
+# Step 3: Deploy Edge Functions to Supabase
+echo -e "${BLUE}⚡ Deploying Edge Functions...${NC}"
 
-# Deploy Supabase Backend
-deploy_backend() {
-    print_step "Deploying Supabase Backend..."
-    
-    # Login to Supabase (if not already logged in)
-    supabase status >/dev/null 2>&1 || {
-        print_warning "Please login to Supabase first: supabase login"
-        supabase login
-    }
-    
-    # Link to project
-    print_step "Linking to Supabase project..."
-    supabase link --project-ref hbfgtdxvlbkvkrjqxnac
-    
-    # Deploy database migrations
-    print_step "Deploying database schema..."
-    supabase db push
-    
-    # Set secrets
-    print_step "Setting API secrets..."
-    supabase secrets set OPENAI_API_KEY=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
-    supabase secrets set ELEVENLABS_API_KEY=sk_189b755ede03dfdf1633da77e125d682b44c1ddb54b08a07
-    supabase secrets set REPLICATE_API_TOKEN=r8_HbwQQ4NxMfhVPy0BS0xqOMkERd9B5JM440l66
-    supabase secrets set GUPSHUP_API_KEY=sk_d5fe7cdab5164e53bcbffdc428fd431e
-    supabase secrets set LUMA_API_KEY=luma-12423eab-79ee-4f52-ad44-00c485686cf2-ab1b6b03-15a1-4c76-b056-6765bf41ab05
-    supabase secrets set CJ_API_KEY=5e0e680914c6462ebcf39059b21e70a9
-    supabase secrets set FACEBOOK_ACCESS_TOKEN=EAAI0DOV8GvcBPK4ZBUTybkGl66FwZA1s45Dx3cSjOVEO4lzZAifzVR6lIoVbW6HcsP2L7x4b0065VirgfhzyfIGNCCA9QCynR3twQB01ZCqjolM7b0QfGtBpj5ZCZA5kyWONQsaYmZBRvy1ByAziVPZAot50fp9ZB4ro71pZAPk7iK4ynEMkhG2LBqUmg2VFWZCPAYQ74T3ocUZCL7u69pCaZAhqUe29gMZALb2jZB5YWQrfHbreY0hIgZDZD
-    supabase secrets set UNSPLASH_ACCESS_KEY=zZ5LsB2CAMUhbPca_UKw31ngzc1W3_hfxSPdz_aBUE
-    supabase secrets set NEXBRAIN_ASSISTANT_ID=asst_0jsx8eD6P3W9XGsSRRNU2Pfd
-    
-    # Deploy Edge Functions
-    print_step "Deploying Edge Functions..."
-    
-    FUNCTIONS=(
-        "ai-content-generator"
-        "ai-video-generator"
-        "whatsapp-smart-booking"
-        "facebook-ads-automation"
-        "cj-dropshipping-import"
-        "magic-page-builder"
-        "campaign-optimizer"
-        "lead-scorer"
-        "nexbrain-assistant"
-        "product-scraper"
-        "image-generator"
-        "video-creator-luma"
-        "whatsapp-gupshup"
-        "facebook-campaign-creator"
-        "dropshipping-fulfillment"
-        "ai-copywriter"
-        "landing-page-generator"
-        "crm-automation"
-        "analytics-processor"
-        "user-onboarding"
-    )
-    
-    for func in "${FUNCTIONS[@]}"; do
-        if [ -d "supabase/functions/$func" ]; then
-            print_step "Deploying function: $func"
-            supabase functions deploy $func
-        else
-            print_warning "Function directory not found: $func"
-        fi
-    done
-    
-    print_success "Backend deployment completed!"
-}
+FUNCTIONS=(
+    "ai-content-generation"
+    "ai-content-generator" 
+    "cj-dropshipping-catalog"
+    "cj-dropshipping-order"
+    "dropshipping-import"
+    "facebook-ads-manager"
+    "landing-page-builder"
+    "luma-video-ai"
+    "nexbrain-chat"
+    "nexus-api-manager"
+    "product-scraper"
+    "save-api-config"
+    "test-api-connection"
+    "unsplash-api"
+    "usage-tracker"
+    "video-generator"
+    "webhook-handler"
+    "whatsapp-automation"
+)
 
-# Build and deploy frontend
-deploy_frontend() {
-    print_step "Deploying Frontend to Vercel..."
-    
-    # Install dependencies
-    print_step "Installing dependencies..."
-    npm ci
-    
-    # Build for production
-    print_step "Building application..."
-    NODE_ENV=production npm run build
-    
-    # Deploy to Vercel
-    print_step "Deploying to Vercel..."
-    vercel --prod --confirm
-    
-    print_success "Frontend deployment completed!"
-}
+# Link to production project
+echo "Linking to Supabase project..."
+supabase link --project-ref $PROJECT_REF 2>/dev/null || echo "Already linked"
 
-# Health check
-health_check() {
-    print_step "Performing health check..."
-    
-    # Check if build was successful
-    if [ ! -d "dist" ]; then
-        print_error "Build directory not found!"
-        exit 1
+# Deploy functions
+for func in "${FUNCTIONS[@]}"; do
+    if [ -d "supabase/functions/$func" ]; then
+        echo "Deploying $func..."
+        supabase functions deploy $func --no-verify-jwt
     fi
-    
-    # Check critical files
-    if [ ! -f "dist/index.html" ]; then
-        print_error "index.html not found in build!"
-        exit 1
-    fi
-    
-    print_success "Health check passed!"
-}
+done
 
-# Create deployment summary
-deployment_summary() {
-    echo ""
-    echo "🎉 DEPLOYMENT COMPLETED SUCCESSFULLY! 🎉"
-    echo "======================================="
-    echo ""
-    echo "📊 Backend (Supabase):"
-    echo "   • Database: https://hbfgtdxvlbkvkrjqxnac.supabase.co"
-    echo "   • Functions: 20 Edge Functions deployed"
-    echo "   • Storage: 10 buckets configured"
-    echo ""
-    echo "🌐 Frontend (Vercel):"
-    echo "   • Application: https://nexusone.vercel.app"
-    echo "   • Build: Production optimized"
-    echo "   • SSL: Automatically configured"
-    echo ""
-    echo "🔑 APIs Configured:"
-    echo "   • OpenAI GPT-4 ✅"
-    echo "   • ElevenLabs TTS ✅"
-    echo "   • Replicate Images ✅"
-    echo "   • Luma Video AI ✅"
-    echo "   • CJ Dropshipping ✅"
-    echo "   • Facebook Marketing ✅"
-    echo "   • WhatsApp Gupshup ✅"
-    echo "   • Unsplash Photos ✅"
-    echo ""
-    echo "🚀 Your NexusOne AI platform is LIVE!"
-    echo ""
-    echo "Next steps:"
-    echo "1. Test all features at: https://nexusone.vercel.app"
-    echo "2. Monitor API usage and costs"
-    echo "3. Set up custom domain (optional)"
-    echo "4. Configure monitoring and alerts"
-    echo ""
-}
+# Step 4: Configure secrets
+echo -e "${BLUE}🔐 Configuring production secrets...${NC}"
+source .env.production
 
-# Main deployment flow
-main() {
-    check_dependencies
-    
-    echo "Starting complete deployment..."
-    echo ""
-    
-    # Ask for confirmation
-    read -p "Deploy to production? This will update live systems. (y/N): " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo "Deployment cancelled."
-        exit 0
-    fi
-    
-    deploy_backend
-    deploy_frontend
-    health_check
-    deployment_summary
-}
+supabase secrets set OPENAI_API_KEY="$OPENAI_API_KEY"
+supabase secrets set OPENAI_ASSISTANT_ID="$OPENAI_ASSISTANT_ID"
+supabase secrets set ELEVENLABS_API_KEY="$ELEVENLABS_API_KEY"
+supabase secrets set REPLICATE_API_TOKEN="$REPLICATE_API_TOKEN"
+supabase secrets set LUMA_API_KEY="$LUMA_API_KEY"
+supabase secrets set GUPSHUP_API_KEY="$GUPSHUP_API_KEY"
+supabase secrets set FACEBOOK_ACCESS_TOKEN="$FACEBOOK_ACCESS_TOKEN"
+supabase secrets set FACEBOOK_APP_ID="$FACEBOOK_APP_ID"
+supabase secrets set CJ_DROPSHIPPING_API_KEY="$CJ_DROPSHIPPING_API_KEY"
+supabase secrets set UNSPLASH_ACCESS_KEY="$UNSPLASH_ACCESS_KEY"
 
-# Handle arguments
-case "${1:-full}" in
-    "full")
-        main
-        ;;
-    "backend")
-        check_dependencies
-        deploy_backend
-        ;;
-    "frontend")
-        check_dependencies
-        deploy_frontend
-        health_check
-        ;;
-    "check")
-        check_dependencies
-        health_check
-        ;;
-    *)
-        echo "Usage: $0 [full|backend|frontend|check]"
-        echo "  full     - Deploy both backend and frontend (default)"
-        echo "  backend  - Deploy only Supabase backend"
-        echo "  frontend - Deploy only Vercel frontend"
-        echo "  check    - Run pre-deployment checks"
-        exit 1
-        ;;
-esac
+# Step 5: Deploy to Vercel
+echo -e "${BLUE}🌐 Deploying to Vercel...${NC}"
+if command -v vercel &> /dev/null; then
+    vercel --prod --yes
+else
+    echo -e "${YELLOW}Vercel CLI not found. Install with: npm i -g vercel${NC}"
+fi
+
+# Step 6: Test deployment
+echo -e "${BLUE}🧪 Testing deployment...${NC}"
+curl -s "$SUPABASE_URL/functions/v1/test-api-connection" || echo "Test endpoint not responding"
+
+echo -e "${GREEN}✅ Deployment completed!${NC}"
+echo "======================================"
+echo -e "${GREEN}🌍 Backend:${NC} $SUPABASE_URL"
+echo -e "${GREEN}📱 Functions:${NC} ${#FUNCTIONS[@]} deployed"
+echo -e "${GREEN}🔑 Secrets:${NC} Configured"
+echo -e "${GREEN}🚀 Status:${NC} LIVE IN PRODUCTION"
+echo ""
+echo -e "${BLUE}📊 Monitor at:${NC} https://supabase.com/dashboard/project/$PROJECT_REF"

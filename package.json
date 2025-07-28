@@ -21,12 +21,17 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:prod": "NODE_ENV=production tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "type-check": "tsc --noEmit",
-    "vercel:deploy": "vercel --prod",
-    "supabase:deploy": "supabase functions deploy",
-    "deploy:full": "npm run build && npm run vercel:deploy && npm run supabase:deploy"
+    "deploy:vercel": "vercel --prod",
+    "deploy:netlify": "netlify deploy --prod --dir=dist",
+    "deploy:supabase": "supabase functions deploy",
+    "deploy:all": "npm run build:prod && npm run deploy:vercel && npm run deploy:supabase",
+    "validate": "node validate-deployment.js",
+    "docker:build": "docker build -t nexusone-ai .",
+    "docker:run": "docker run -p 3000:80 nexusone-ai"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.5",

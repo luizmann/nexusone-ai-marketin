@@ -1,15 +1,15 @@
-# Build settings
+# NexusOne AI - Netlify Deployment Configuration
 [build]
   publish = "dist/"
-  command = "npm run build:prod"
+  command = "npm run build"
 
 # Environment variables
 [build.environment]
+  NODE_ENV = "production"
   VITE_SUPABASE_URL = "https://hbfgtdxvlbkvkrjqxnac.supabase.co"
-  VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhiZmd0ZHh2bGJrdmtyanlkHnhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY2NjA0NzcsImV4cCI6MjAyMjIzNjQ3N30.4L1VGpMOQR4zNjL5xVKjN8QX9hBf2wP0sA7rD3kF1mE"
-  VITE_CJ_API_KEY = "5e0e680914c6462ebcf39059b21e70a9"
-  VITE_FACEBOOK_ACCESS_TOKEN = "EAAI0DOV8GvcBPK4ZBUTybkGl66FwZA1s45Dx3cSjOVEO4lzZAifzVR6lIoVbW6HcsP2L7x4b0065VirgfhzyfIGNCCA9QCynR3twQB01ZCqjolM7b0QfGtBpj5ZCZA5kyWONQsaYmZBRvy1ByAziVPZAot50fp9ZB4ro71pZAPk7iK4ynEMkhG2LBqUmg2VFWZCPAYQ74T3ocUZCL7u69pCaZAhqUe29gMZALb2jZB5YWQrfHbreY0hIgZDZD"
+  VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhiZmd0ZHh2bGJrdmtyanh4bmFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ2NzI4MDAsImV4cCI6MjAyMDI0ODgwMH0.XYKhOW-Q5kz9O2P7vX1cFm3d8jR6sN0tA9wK4eL7mGp"
   VITE_APP_NAME = "NexusOne AI"
+  VITE_APP_VERSION = "1.0.0"
   VITE_ENVIRONMENT = "production"
 
 # Redirects for SPA

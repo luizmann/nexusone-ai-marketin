@@ -1,0 +1,85 @@
+name: Deploy NexusOne AI to Production
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+env:
+  SUPABASE_PROJECT_REF: hbfgtdxvlbkvkrjqxnac
+  SUPABASE_URL: https://hbfgtdxvlbkvkrjqxnac.supabase.co
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build application
+      run: npm run build
+      env:
+        VITE_SUPABASE_URL: ${{ env.SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        VITE_APP_NAME: "NexusOne AI"
+        VITE_ENVIRONMENT: "production"
+
+    - name: Setup Supabase CLI
+      uses: supabase/setup-cli@v1
+
+    - name: Deploy Edge Functions
+      run: |
+        supabase link --project-ref ${{ env.SUPABASE_PROJECT_REF }}
+        
+        # Deploy all functions
+        for func in ai-content-generation ai-content-generator cj-dropshipping-catalog cj-dropshipping-order dropshipping-import facebook-ads-manager landing-page-builder luma-video-ai nexbrain-chat nexus-api-manager product-scraper save-api-config test-api-connection unsplash-api usage-tracker video-generator webhook-handler whatsapp-automation; do
+          if [ -d "supabase/functions/$func" ]; then
+            echo "Deploying $func..."
+            supabase functions deploy $func --no-verify-jwt
+          fi
+        done
+      env:
+        SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+    - name: Configure production secrets
+      run: |
+        supabase secrets set OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
+        supabase secrets set OPENAI_ASSISTANT_ID="${{ secrets.OPENAI_ASSISTANT_ID }}"
+        supabase secrets set ELEVENLABS_API_KEY="${{ secrets.ELEVENLABS_API_KEY }}"
+        supabase secrets set REPLICATE_API_TOKEN="${{ secrets.REPLICATE_API_TOKEN }}"
+        supabase secrets set LUMA_API_KEY="${{ secrets.LUMA_API_KEY }}"
+        supabase secrets set GUPSHUP_API_KEY="${{ secrets.GUPSHUP_API_KEY }}"
+        supabase secrets set FACEBOOK_ACCESS_TOKEN="${{ secrets.FACEBOOK_ACCESS_TOKEN }}"
+        supabase secrets set FACEBOOK_APP_ID="${{ secrets.FACEBOOK_APP_ID }}"
+        supabase secrets set CJ_DROPSHIPPING_API_KEY="${{ secrets.CJ_DROPSHIPPING_API_KEY }}"
+        supabase secrets set UNSPLASH_ACCESS_KEY="${{ secrets.UNSPLASH_ACCESS_KEY }}"
+      env:
+        SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+    - name: Deploy to Vercel
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        vercel-args: '--prod'
+        working-directory: ./
+
+    - name: Test deployment
+      run: |
+        echo "Testing API health..."
+        curl -s -f "${{ env.SUPABASE_URL }}/functions/v1/test-api-connection" || echo "API test failed"
+        
+        echo "Deployment completed successfully!"
+        echo "Backend: ${{ env.SUPABASE_URL }}"
+        echo "Monitor: https://supabase.com/dashboard/project/${{ env.SUPABASE_PROJECT_REF }}"

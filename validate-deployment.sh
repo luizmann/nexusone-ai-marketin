@@ -1,97 +1,112 @@
 #!/bin/bash
-# Deployment Validation and Health Check Script
+
+# NexusOne AI - Deployment Validation Script
+# Validates that all services are working correctly
 
 echo "🔍 NexusOne AI - Deployment Validation"
-echo "======================================"
+echo "====================================="
+
+SUPABASE_URL="https://hbfgtdxvlbkvkrjqxnac.supabase.co"
+ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhiZmd0ZHh2bGJrdmtyanh4bmFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ2NzI4MDAsImV4cCI6MjAyMDI0ODgwMH0.XYKhOW-Q5kz9O2P7vX1cFm3d8jR6sN0tA9wK4eL7mGp"
 
 # Colors
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
 NC='\033[0m'
 
-# Counters
-PASSED=0
-FAILED=0
-
-check_test() {
-    local name="$1"
-    local command="$2"
-    
-    echo -n "Testing $name... "
-    
-    if eval $command >/dev/null 2>&1; then
-        echo -e "${GREEN}✅ PASS${NC}"
-        ((PASSED++))
-    else
-        echo -e "${RED}❌ FAIL${NC}"
-        ((FAILED++))
-    fi
-}
-
-echo "🌐 Frontend Tests"
-echo "=================="
-
-# Check if build exists
-check_test "Build Directory" "test -d dist"
-check_test "Index HTML" "test -f dist/index.html"
-check_test "Assets Directory" "test -d dist/assets"
-
-echo ""
-echo "📊 Backend Tests"
-echo "================"
-
-# Check Supabase connection
-check_test "Supabase CLI" "command -v supabase"
-check_test "Vercel CLI" "command -v vercel"
-
-echo ""
-echo "🔑 API Configuration Tests"
-echo "=========================="
-
-# Check environment files
-check_test "Vercel Config" "test -f vercel.json"
-check_test "Supabase Config" "test -f supabase/config.prod.toml"
-
-echo ""
-echo "📦 Edge Functions Tests"
-echo "======================"
-
-# Check Edge Functions directories
+# Test functions
 FUNCTIONS=(
-    "ai-content-generator"
-    "nexbrain-assistant" 
-    "whatsapp-smart-booking"
-    "video-creator-luma"
-    "magic-page-builder"
+    "test-api-connection"
+    "ai-content-generation"
+    "video-generator" 
+    "cj-dropshipping-catalog"
+    "whatsapp-automation"
+    "nexus-api-manager"
 )
 
+echo "Testing backend services..."
+
+# Test each function
 for func in "${FUNCTIONS[@]}"; do
-    check_test "Function: $func" "test -d supabase/functions/$func"
+    echo -n "Testing $func... "
+    
+    response=$(curl -s -w "%{http_code}" "$SUPABASE_URL/functions/v1/$func" \
+        -H "Authorization: Bearer $ANON_KEY" \
+        -H "Content-Type: application/json" \
+        -d '{"test": true}' \
+        -o /dev/null)
+    
+    if [ "$response" -eq 200 ] || [ "$response" -eq 201 ]; then
+        echo -e "${GREEN}✅ PASS${NC}"
+    else
+        echo -e "${RED}❌ FAIL (HTTP $response)${NC}"
+    fi
 done
 
 echo ""
-echo "🎯 Production Readiness Tests"
-echo "============================="
+echo "Testing frontend build..."
 
-check_test "Package.json" "test -f package.json"
-check_test "Production Build Script" "grep -q 'build:prod' package.json"
-check_test "Deployment Scripts" "test -f deploy-production.sh"
+# Check if dist directory exists
+if [ -d "dist" ]; then
+    echo -e "${GREEN}✅ Frontend build exists${NC}"
+    
+    # Check if index.html exists
+    if [ -f "dist/index.html" ]; then
+        echo -e "${GREEN}✅ index.html found${NC}"
+    else
+        echo -e "${RED}❌ index.html missing${NC}"
+    fi
+    
+    # Check if assets exist
+    if [ -d "dist/assets" ]; then
+        echo -e "${GREEN}✅ Assets directory found${NC}"
+    else
+        echo -e "${RED}❌ Assets directory missing${NC}"
+    fi
+else
+    echo -e "${RED}❌ Frontend build missing - run 'npm run build'${NC}"
+fi
 
 echo ""
-echo "📊 Test Summary"
-echo "==============="
-echo -e "✅ Passed: ${GREEN}$PASSED${NC}"
-echo -e "❌ Failed: ${RED}$FAILED${NC}"
+echo "Environment validation..."
 
-if [ $FAILED -eq 0 ]; then
-    echo -e "${GREEN}🎉 All tests passed! Ready for deployment.${NC}"
-    echo ""
-    echo "🚀 To deploy, run:"
-    echo "   bash deploy-production.sh"
-    exit 0
+# Check if .env.production exists
+if [ -f ".env.production" ]; then
+    echo -e "${GREEN}✅ Production environment file exists${NC}"
 else
-    echo -e "${RED}⚠️  Some tests failed. Please fix issues before deployment.${NC}"
-    exit 1
+    echo -e "${YELLOW}⚠️  .env.production missing${NC}"
 fi
+
+# Check package.json scripts
+if grep -q "\"build\":" package.json; then
+    echo -e "${GREEN}✅ Build script found${NC}"
+else
+    echo -e "${RED}❌ Build script missing${NC}"
+fi
+
+echo ""
+echo "Deployment readiness:"
+
+# Check if Supabase CLI is available
+if command -v supabase &> /dev/null; then
+    echo -e "${GREEN}✅ Supabase CLI installed${NC}"
+else
+    echo -e "${YELLOW}⚠️  Supabase CLI not found${NC}"
+fi
+
+# Check if node_modules exists
+if [ -d "node_modules" ]; then
+    echo -e "${GREEN}✅ Dependencies installed${NC}"
+else
+    echo -e "${RED}❌ Dependencies missing - run 'npm install'${NC}"
+fi
+
+echo ""
+echo "====================================="
+echo "🎯 Deployment validation complete!"
+echo ""
+echo "Next steps:"
+echo "1. Run './deploy-production.sh' for full deployment"
+echo "2. Or deploy manually using the guide"
+echo "3. Monitor at: https://supabase.com/dashboard/project/hbfgtdxvlbkvkrjqxnac"

@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # NexusOne AI Frontend
+  nexusone-frontend:
+    build: .
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_SUPABASE_URL=https://hbfgtdxvlbkvkrjqxnac.supabase.co
+      - VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhiZmd0ZHh2bGJrdmtyanh4bmFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ2NzI4MDAsImV4cCI6MjAyMDI0ODgwMH0.XYKhOW-Q5kz9O2P7vX1cFm3d8jR6sN0tA9wK4eL7mGp
+      - VITE_APP_NAME=NexusOne AI
+      - VITE_ENVIRONMENT=production
+    volumes:
+      - ./dist:/usr/share/nginx/html:ro
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nexusone.rule=Host(`app.nexusone.ai`)"
+      - "traefik.http.routers.nexusone.tls.certresolver=letsencrypt"
+
+  # Reverse Proxy (Traefik)
+  traefik:
+    image: traefik:v2.10
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.email=admin@nexusone.ai"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-data:/data
+    restart: unless-stopped
+
+volumes:
+  traefik-data:
+
+networks:
+  default:
+    name: nexusone-network
