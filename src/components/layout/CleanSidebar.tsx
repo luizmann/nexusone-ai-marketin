@@ -104,6 +104,12 @@ export function CleanSidebar({ activeModule, onModuleChange }: CleanSidebarProps
       description: 'System administration'
     },
     {
+      id: 'system-status',
+      label: '🔧 System Status',
+      icon: Shield,
+      description: 'Monitor all integrations'
+    },
+    {
       id: 'settings',
       label: t('settings'),
       icon: Settings,

@@ -165,6 +165,7 @@ src/backend/tsconfig.json
 src/backend/utils/helpers.ts
 src/business-report.md
 src/components/AIAdsCampaignGenerator.tsx
+src/components/AISystemStatus.tsx
 src/components/AffiliateProgram.tsx
 src/components/Analytics.tsx
 src/components/ApiTestingDashboard.tsx
@@ -188,6 +189,10 @@ src/components/LiveCampaignTracker.tsx
 src/components/LumaVideoCreator.tsx
 src/components/MarketExpansion.tsx
 src/components/MonitoringDashboard.tsx
+src/components/NexBrainCapabilities.tsx
+src/components/NexBrainQuickStart.tsx
+src/components/NexBrainTester.tsx
+src/components/OpenAIKeyHelper.tsx
 src/components/PageTemplates.ts
 src/components/PartnerIntegrations.tsx
 src/components/PrivacyPolicy.tsx

@@ -59,18 +59,23 @@ export function NexBrain() {
       // Use the API service for AI response
       const { apiService } = await import('../../services/apiService')
       
-      if (!apiService.isConfigured('openai')) {
-        throw new Error('OpenAI API not configured. Please configure it in Admin settings.')
+      // Try NexBrain Assistant first
+      let aiResponseText
+      try {
+        aiResponseText = await apiService.runNexBrainAssistant(userMessage.message)
+        console.log('NexBrain Assistant response received')
+      } catch (assistantError) {
+        console.log('NexBrain Assistant failed, trying regular OpenAI:', assistantError)
+        // Fallback to regular OpenAI
+        aiResponseText = await apiService.generateContent(
+          `You are NexBrain, an intelligent marketing assistant for NexusOne platform. 
+           User query: "${userMessage.message}"
+           
+           Provide a helpful, actionable response focused on marketing automation, 
+           campaign creation, product research, or business growth. Be concise but detailed.`,
+          'text'
+        )
       }
-
-      const aiResponseText = await apiService.generateContent(
-        `You are NexBrain, an intelligent marketing assistant for NexusOne platform. 
-         User query: "${userMessage.message}"
-         
-         Provide a helpful, actionable response focused on marketing automation, 
-         campaign creation, product research, or business growth. Be concise but detailed.`,
-        'text'
-      )
 
       const aiResponse = {
         type: 'assistant',
@@ -79,6 +84,7 @@ export function NexBrain() {
       }
 
       setConversation(prev => [...prev, aiResponse])
+      toast.success('NexBrain responded successfully!')
     } catch (error) {
       console.error('AI Response Error:', error)
       
@@ -90,7 +96,7 @@ export function NexBrain() {
       }
       
       setConversation(prev => [...prev, fallbackResponse])
-      toast.error('AI API error. Using fallback response.')
+      toast.error('AI API error. Using fallback response. Check API configuration.')
     } finally {
       setIsProcessing(false)
     }

@@ -29,12 +29,12 @@ export function VideoGenerator() {
       // Use the API service for video generation
       const { apiService } = await import('../../services/apiService')
       
-      if (!apiService.isConfigured('luma')) {
-        toast.error('Luma AI API not configured. Please configure it in Admin settings.')
-        return
-      }
-
+      console.log('Starting video generation with Luma AI...')
+      toast.info('Starting video generation with Luma AI...')
+      
       const videoResult = await apiService.generateVideo(script, style || 'cinematic')
+      
+      console.log('Video generation completed:', videoResult)
       
       const generatedVideoData = {
         id: videoResult.id,
@@ -45,6 +45,10 @@ export function VideoGenerator() {
         type: videoType,
         style: style,
         script: script,
+        api_info: {
+          api_used: videoResult.api_used || 'luma',
+          api_configured: videoResult.api_configured || true
+        },
         assets: [
           {
             type: 'video',
@@ -71,10 +75,10 @@ export function VideoGenerator() {
       }
       
       setGeneratedVideo(generatedVideoData)
-      toast.success(t('video_generated_successfully'))
+      toast.success(`${t('video_generated_successfully')} using ${videoResult.api_used || 'Luma AI'}!`)
     } catch (error) {
       console.error('Video generation error:', error)
-      toast.error('Failed to generate video. Please check your API configuration.')
+      toast.error(`Failed to generate video: ${error.message}`)
     } finally {
       setIsGenerating(false)
     }

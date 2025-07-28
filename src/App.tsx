@@ -17,6 +17,13 @@ function App() {
     // Check if the application is properly initialized
     const initializeApp = async () => {
       try {
+        // Initialize API keys
+        const { apiKeyManager } = await import('./services/apiKeyManager')
+        apiKeyManager.setDefaultKeys()
+        await apiKeyManager.loadAPIKeys()
+        
+        console.log('✅ NexusOne AI Platform initialized with API keys')
+        
         // Wait a moment for KV to load
         await new Promise(resolve => setTimeout(resolve, 100))
         setIsLoading(false)
@@ -35,6 +42,7 @@ function App() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground">Loading NexusOne AI Platform...</p>
+          <p className="text-xs text-muted-foreground mt-2">Initializing AI systems...</p>
         </div>
       </div>
     )

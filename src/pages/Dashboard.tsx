@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useCredits } from '@/contexts/CreditContext'
 import { ApiStatusWidget } from '@/components/widgets/ApiStatusWidget'
 import { AISystemStatus } from '@/components/AISystemStatus'
+import { toast } from 'sonner'
 import { 
   TrendingUp, 
   Users, 
@@ -143,7 +144,28 @@ export const Dashboard: React.FC = () => {
               Ready to scale your business with AI-powered automation?
             </p>
           </div>
-          <div className="mt-4 md:mt-0">
+          <div className="mt-4 md:mt-0 flex gap-2">
+            <Button 
+              size="lg" 
+              variant="secondary" 
+              className="bg-white text-primary hover:bg-white/90"
+              onClick={() => {
+                // Quick system test
+                import('../services/apiService').then(({ apiService }) => {
+                  Promise.all([
+                    apiService.testAPI('openai'),
+                    apiService.testAPI('luma'),
+                    apiService.testAPI('cj_dropshipping')
+                  ]).then(results => {
+                    const working = results.filter(Boolean).length
+                    toast.success(`✅ ${working}/3 core systems operational!`)
+                  })
+                })
+              }}
+            >
+              <Lightning className="h-5 w-5 mr-2" />
+              Test Systems
+            </Button>
             <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-white/90">
               <Lightning className="h-5 w-5 mr-2" />
               Generate Campaign
