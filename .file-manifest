@@ -1,4 +1,12 @@
+.devcontainer/devcontainer.json
+.devcontainer/onCreate.sh
+.devcontainer/postStartCommand.sh
+.devcontainer/refreshTools.sh
+.devcontainer/spark.conf
+.env.example
+.file-manifest
 .github/workflows/deploy-production.yml
+.gitignore
 .spark-initial-sha
 .spark-workbench-id
 AI_CAMPAIGN_GENERATION_TEST_REPORT.md
@@ -20,6 +28,7 @@ COMPLETE_STATUS_REPORT.md
 COMPLETE_SYSTEM_STATUS_REPORT.md
 COMPREHENSIVE_STATUS_REPORT_2025.md
 CRITICAL_SYSTEM_STATUS_REPORT.md
+DEPLOYMENT.md
 DEPLOYMENT_GUIDE.md
 DEPLOYMENT_PIPELINE_GUIDE.md
 DEPLOYMENT_PIPELINE_STATUS.md
@@ -63,6 +72,7 @@ PRODUCTION_PACKAGE_STRUCTURE.md
 PRODUCTION_READY_COMPLETE.md
 PRODUCTION_READY_REPORT.md
 PRODUCTION_SETUP_GUIDE.md
+README.md
 RELATORIO_SITUACAO_ATUAL_NEXUSONE.md
 REORGANIZATION_REPORT.md
 SUPABASE_DEPLOYMENT_GUIDE.md
@@ -72,6 +82,7 @@ SUPABASE_EDGE_FUNCTIONS_DEPLOYMENT_GUIDE.md
 check-deploy-readiness.js
 deploy-backend-complete.sh
 deploy-backend-quick.sh
+deploy-commands.sh
 deploy-config.json
 deploy-edge-functions.sh
 deploy-express.sh
@@ -89,6 +100,7 @@ deploy-simple.sh
 deploy-supabase-complete.sh
 deploy-supabase.sh
 deploy-ultimate.sh
+deploy.sh
 deployment-config.json
 health-check.js
 index.html
@@ -96,6 +108,7 @@ migrate-to-git.sh
 netlify.toml
 package-lock.json
 package.json
+packages/spark-tools/package.json
 quick-git-setup.sh
 setup-environment.sh
 src/App.tsx
@@ -344,3 +357,4 @@ validate-deployment.sh
 validate-deployment.ts
 validate-functions.sh
 vercel.json
+vite.config.ts
