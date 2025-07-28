@@ -29,97 +29,44 @@ export function WinnerProducts() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Simular carregamento de produtos do CJ Dropshipping
     const loadProducts = async () => {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      const mockProducts: Product[] = [
-        {
-          id: '1',
-          name: 'Smartwatch Fitness Tracker Pro',
-          price: 89.99,
-          originalPrice: 179.99,
-          discount: 50,
-          rating: 4.8,
-          reviews: 2547,
-          image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop',
-          category: 'Electronics',
-          trending: true,
-          bestseller: true
-        },
-        {
-          id: '2',
-          name: 'Wireless Bluetooth Earbuds',
-          price: 49.99,
-          originalPrice: 99.99,
-          discount: 50,
-          rating: 4.6,
-          reviews: 1832,
-          image: 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=400&h=400&fit=crop',
-          category: 'Electronics',
-          trending: true,
-          bestseller: false
-        },
-        {
-          id: '3',
-          name: 'LED Strip Lights RGB 16.4ft',
-          price: 29.99,
-          originalPrice: 59.99,
-          discount: 50,
-          rating: 4.7,
-          reviews: 3241,
-          image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop',
-          category: 'Home & Garden',
-          trending: false,
-          bestseller: true
-        },
-        {
-          id: '4',
-          name: 'Portable Phone Charger 10000mAh',
-          price: 39.99,
-          originalPrice: 79.99,
-          discount: 50,
-          rating: 4.5,
-          reviews: 1567,
-          image: 'https://images.unsplash.com/photo-1609592553918-6b4b7c5b0b2f?w=400&h=400&fit=crop',
-          category: 'Electronics',
-          trending: true,
-          bestseller: false
-        },
-        {
-          id: '5',
-          name: 'Car Phone Mount Magnetic',
-          price: 19.99,
-          originalPrice: 39.99,
-          discount: 50,
-          rating: 4.4,
-          reviews: 987,
-          image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop',
-          category: 'Automotive',
-          trending: false,
-          bestseller: true
-        },
-        {
-          id: '6',
-          name: 'Kitchen Knife Set Professional',
-          price: 79.99,
-          originalPrice: 159.99,
-          discount: 50,
-          rating: 4.9,
-          reviews: 754,
-          image: 'https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=400&h=400&fit=crop',
-          category: 'Kitchen',
-          trending: false,
-          bestseller: false
-        }
-      ]
-      
-      setProducts(mockProducts)
-      setIsLoading(false)
+      try {
+        setIsLoading(true)
+        // Try to load products from CJ Dropshipping API via service
+        const { apiService } = await import('../../services/apiService')
+        const loadedProducts = await apiService.getCJProducts(
+          selectedCategory === 'all' ? undefined : selectedCategory,
+          searchTerm
+        )
+        
+        // Transform API response to our Product interface
+        const transformedProducts: Product[] = loadedProducts.map(product => ({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          originalPrice: product.originalPrice,
+          discount: product.discount,
+          rating: product.rating,
+          reviews: product.reviews,
+          image: product.image,
+          category: product.category,
+          trending: product.trending || false,
+          bestseller: product.reviews > 2000
+        }))
+        
+        setProducts(transformedProducts)
+        toast.success(`${transformedProducts.length} products loaded from CJ Dropshipping`)
+      } catch (error) {
+        console.error('Failed to load products:', error)
+        toast.error('Failed to load products. Please check your CJ Dropshipping API configuration.')
+        setProducts([])
+      } finally {
+        setIsLoading(false)
+      }
     }
 
     loadProducts()
-  }, [])
+  }, [selectedCategory, searchTerm])
 
   const categories = ['all', 'Electronics', 'Home & Garden', 'Kitchen', 'Automotive', 'Fashion', 'Sports']
 

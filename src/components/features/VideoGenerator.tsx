@@ -26,33 +26,40 @@ export function VideoGenerator() {
     setIsGenerating(true)
     
     try {
-      // Simular geração de vídeo com IA
-      await new Promise(resolve => setTimeout(resolve, 5000))
+      // Use the API service for video generation
+      const { apiService } = await import('../../services/apiService')
       
-      const mockVideo = {
-        id: `video_${Date.now()}`,
-        title: 'Vídeo Promocional Gerado com IA',
-        url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        thumbnail: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=450&fit=crop',
-        duration: duration || '30s',
+      if (!apiService.isConfigured('luma')) {
+        toast.error('Luma AI API not configured. Please configure it in Admin settings.')
+        return
+      }
+
+      const videoResult = await apiService.generateVideo(script, style || 'cinematic')
+      
+      const generatedVideoData = {
+        id: videoResult.id,
+        title: `AI Generated Video - ${videoType}`,
+        url: videoResult.video_url,
+        thumbnail: videoResult.thumbnail,
+        duration: videoResult.duration,
         type: videoType,
         style: style,
         script: script,
         assets: [
           {
+            type: 'video',
+            name: 'Generated Video',
+            url: videoResult.video_url
+          },
+          {
             type: 'audio',
-            name: 'Narração IA',
+            name: 'AI Narration',
             url: '#'
           },
           {
             type: 'music',
-            name: 'Música de Fundo',
+            name: 'Background Music',
             url: '#'
-          },
-          {
-            type: 'images',
-            name: '8 Imagens Geradas',
-            count: 8
           }
         ],
         analytics: {
@@ -63,10 +70,11 @@ export function VideoGenerator() {
         }
       }
       
-      setGeneratedVideo(mockVideo)
+      setGeneratedVideo(generatedVideoData)
       toast.success(t('video_generated_successfully'))
     } catch (error) {
-      toast.error(t('error_generating_video'))
+      console.error('Video generation error:', error)
+      toast.error('Failed to generate video. Please check your API configuration.')
     } finally {
       setIsGenerating(false)
     }

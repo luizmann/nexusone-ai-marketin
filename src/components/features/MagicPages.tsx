@@ -23,24 +23,59 @@ export function MagicPages() {
     setIsGenerating(true)
     
     try {
-      // Simular geração de página com IA
-      await new Promise(resolve => setTimeout(resolve, 3000))
+      // Use the API service for AI-powered page generation
+      const { apiService } = await import('../../services/apiService')
       
-      const mockPage = {
-        title: businessDescription ? `${businessDescription} - Solução Perfeita` : 'Produto Incrível - Oferta Especial',
-        subtitle: 'Transforme sua vida hoje mesmo com esta oportunidade única!',
+      if (!apiService.isConfigured('openai')) {
+        toast.error('OpenAI API not configured. Please configure it in Admin settings.')
+        return
+      }
+
+      const prompt = `Create a high-converting landing page for:
+      ${productUrl ? `Product URL: ${productUrl}` : ''}
+      ${businessDescription ? `Business: ${businessDescription}` : ''}
+      
+      Generate:
+      1. Compelling headline
+      2. Persuasive subtitle
+      3. Key benefits (4-5 points)
+      4. Social proof elements
+      5. Urgency/scarcity elements
+      6. Call-to-action text
+      
+      Format as JSON with structured sections.`
+
+      const aiResponse = await apiService.generateContent(prompt, 'text')
+      
+      // Try to parse AI response as JSON, fallback to structured text
+      let pageContent
+      try {
+        pageContent = JSON.parse(aiResponse)
+      } catch {
+        // If not JSON, create structured content from text
+        pageContent = {
+          title: businessDescription ? `${businessDescription} - Solução Perfeita` : 'Produto Incrível - Oferta Especial',
+          subtitle: 'Transforme sua vida hoje mesmo com esta oportunidade única!',
+          content: aiResponse
+        }
+      }
+
+      const generatedPageData = {
+        id: `page_${Date.now()}`,
+        title: pageContent.title || pageContent.headline || 'AI Generated Landing Page',
+        subtitle: pageContent.subtitle || pageContent.subheadline || 'High-Converting Sales Page',
         sections: [
           {
             type: 'hero',
-            title: 'OFERTA IMPERDÍVEL! 🔥',
-            subtitle: 'Últimas 24 horas com desconto de 50%',
-            cta: 'GARANTIR AGORA',
+            title: pageContent.headline || 'OFERTA IMPERDÍVEL! 🔥',
+            subtitle: pageContent.subheadline || 'Últimas 24 horas com desconto de 50%',
+            cta: pageContent.cta || 'GARANTIR AGORA',
             image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop'
           },
           {
             type: 'benefits',
             title: 'Por que escolher nossa solução?',
-            items: [
+            items: pageContent.benefits || [
               '✅ Resultados garantidos em 30 dias',
               '✅ Suporte 24/7 especializado',
               '✅ Garantia de 100% do dinheiro de volta',
@@ -48,20 +83,8 @@ export function MagicPages() {
             ]
           },
           {
-            type: 'testimonials',
-            title: 'O que nossos clientes dizem',
-            testimonials: [
-              {
-                name: 'Maria Silva',
-                comment: 'Produto mudou minha vida! Recomendo para todos.',
-                rating: 5
-              },
-              {
-                name: 'João Santos',
-                comment: 'Excelente qualidade e entrega rápida.',
-                rating: 5
-              }
-            ]
+            type: 'content',
+            content: pageContent.content || aiResponse
           },
           {
             type: 'urgency',
@@ -76,8 +99,20 @@ export function MagicPages() {
           views: 0,
           conversions: 0,
           revenue: 0
-        }
+        },
+        generatedAt: new Date().toISOString(),
+        prompt: `${productUrl} ${businessDescription}`.trim()
       }
+      
+      setGeneratedPage(generatedPageData)
+      toast.success('Landing page generated successfully with AI!')
+    } catch (error) {
+      console.error('Page generation error:', error)
+      toast.error('Failed to generate page. Please check your API configuration.')
+    } finally {
+      setIsGenerating(false)
+    }
+  }
       
       setGeneratedPage(mockPage)
       toast.success(t('landing_page_generated_successfully'))

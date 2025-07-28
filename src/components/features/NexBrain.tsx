@@ -56,18 +56,41 @@ export function NexBrain() {
     setIsProcessing(true)
 
     try {
-      // Simular processamento da IA
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // Use the API service for AI response
+      const { apiService } = await import('../../services/apiService')
+      
+      if (!apiService.isConfigured('openai')) {
+        throw new Error('OpenAI API not configured. Please configure it in Admin settings.')
+      }
+
+      const aiResponseText = await apiService.generateContent(
+        `You are NexBrain, an intelligent marketing assistant for NexusOne platform. 
+         User query: "${userMessage.message}"
+         
+         Provide a helpful, actionable response focused on marketing automation, 
+         campaign creation, product research, or business growth. Be concise but detailed.`,
+        'text'
+      )
 
       const aiResponse = {
         type: 'assistant',
-        message: generateAIResponse(userMessage.message),
+        message: aiResponseText,
         timestamp: new Date().toLocaleTimeString()
       }
 
       setConversation(prev => [...prev, aiResponse])
     } catch (error) {
-      toast.error(t('error_processing_request'))
+      console.error('AI Response Error:', error)
+      
+      // Fallback to mock response if API fails
+      const fallbackResponse = {
+        type: 'assistant',
+        message: generateAIResponse(userMessage.message),
+        timestamp: new Date().toLocaleTimeString()
+      }
+      
+      setConversation(prev => [...prev, fallbackResponse])
+      toast.error('AI API error. Using fallback response.')
     } finally {
       setIsProcessing(false)
     }

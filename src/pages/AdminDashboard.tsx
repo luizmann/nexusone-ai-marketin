@@ -1,391 +1,471 @@
-import React, { useState, useEffect } from 'react'
-import { useLanguage } from '../contexts/CleanLanguageContext'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useState, useEffect } from 'react'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
+import { useKV } from '@github/spark/hooks'
+import { useLanguage } from '../contexts/CleanLanguageContext'
+import { apiService, APIKeys } from '../services/apiService'
 import { 
   Users, 
   DollarSign, 
-  Activity, 
   TrendingUp, 
-  Settings, 
-  Key, 
+  Activity,
+  Settings,
   Database,
-  Shield,
+  BarChart3,
+  Key,
+  CheckCircle,
+  XCircle,
   AlertTriangle,
-  Eye,
-  Edit,
-  Trash2,
-  Download,
-  RefreshCw
-} from '@phosphor-icons/react'
-import { useKV } from '@github/spark/hooks'
+  Cpu,
+  Brain,
+  Video,
+  MessageSquare,
+  Camera,
+  Globe
+} from 'lucide-react'
 import { toast } from 'sonner'
 
-interface Customer {
+interface AdminUser {
   id: string
   name: string
   email: string
   plan: 'free' | 'pro' | 'premium'
   credits: number
-  totalSpent: number
-  joinDate: string
+  videoCredits: number
+  createdAt: string
   lastActive: string
-  status: 'active' | 'inactive' | 'suspended'
-  avatar?: string
+  totalSpent: number
+  campaignsCreated: number
+  videosGenerated: number
+  leads: number
+  sales: number
 }
 
-interface APIConfig {
+interface APIStatus {
+  service: keyof APIKeys
   name: string
-  key: string
-  status: 'active' | 'inactive' | 'error'
-  usage: number
-  limit: number
-  cost: number
-}
-
-interface Analytics {
-  totalUsers: number
-  activeUsers: number
-  totalRevenue: number
-  monthlyGrowth: number
-  creditsUsed: number
-  apiCalls: number
+  status: 'connected' | 'disconnected' | 'testing'
+  icon: any
+  description: string
 }
 
 export function AdminDashboard() {
   const { t } = useLanguage()
-  const [customers, setCustomers] = useKV<Customer[]>('admin-customers', [])
-  const [apiConfigs, setApiConfigs] = useKV<APIConfig[]>('admin-api-configs', [])
-  const [analytics, setAnalytics] = useKV<Analytics>('admin-analytics', {
+  const [users, setUsers] = useKV<AdminUser[]>('admin-users', [])
+  const [stats, setStats] = useKV('admin-stats', {
     totalUsers: 0,
-    activeUsers: 0,
     totalRevenue: 0,
-    monthlyGrowth: 0,
-    creditsUsed: 0,
-    apiCalls: 0
+    activeUsers: 0,
+    totalCampaigns: 0
+  })
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null)
+  const [apiKeys, setApiKeys] = useState<APIKeys>(apiService.getAPIKeys())
+  const [apiStatuses, setApiStatuses] = useState<APIStatus[]>([])
+  const [systemSettings, setSystemSettings] = useKV('system-settings', {
+    maintenanceMode: false,
+    registrationOpen: true,
+    defaultCredits: { free: 50, pro: 500, premium: 2000 },
+    creditCosts: { campaign: 20, video: 30, magicPage: 15, whatsapp: 5 }
   })
 
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('')
-
-  // Initialize with sample data
+  // Initialize API statuses
   useEffect(() => {
-    if (customers.length === 0) {
-      const sampleCustomers: Customer[] = [
-        {
-          id: '1',
-          name: 'João Silva',
-          email: 'joao@empresa.com',
-          plan: 'premium',
-          credits: 1500,
-          totalSpent: 297.00,
-          joinDate: '2024-01-15',
-          lastActive: '2024-01-20',
-          status: 'active'
-        },
-        {
-          id: '2',
-          name: 'Maria Santos',
-          email: 'maria@negocio.com',
-          plan: 'pro',
-          credits: 300,
-          totalSpent: 194.00,
-          joinDate: '2024-01-10',
-          lastActive: '2024-01-19',
-          status: 'active'
-        },
-        {
-          id: '3',
-          name: 'Pedro Costa',
-          email: 'pedro@startup.com',
-          plan: 'free',
-          credits: 25,
-          totalSpent: 0,
-          joinDate: '2024-01-18',
-          lastActive: '2024-01-18',
-          status: 'active'
-        }
-      ]
-      setCustomers(sampleCustomers)
-    }
+    const statuses: APIStatus[] = [
+      {
+        service: 'openai',
+        name: 'OpenAI GPT-4',
+        status: 'disconnected',
+        icon: Brain,
+        description: 'AI content generation and NexBrain assistant'
+      },
+      {
+        service: 'luma',
+        name: 'Luma AI',
+        status: 'disconnected',
+        icon: Video,
+        description: 'AI video generation and creation'
+      },
+      {
+        service: 'elevenlabs',
+        name: 'ElevenLabs',
+        status: 'disconnected',
+        icon: MessageSquare,
+        description: 'Text-to-speech and voice generation'
+      },
+      {
+        service: 'replicate',
+        name: 'Replicate',
+        status: 'disconnected',
+        icon: Camera,
+        description: 'AI image generation and processing'
+      },
+      {
+        service: 'gupshup',
+        name: 'Gupshup WhatsApp',
+        status: 'disconnected',
+        icon: MessageSquare,
+        description: 'WhatsApp Business API integration'
+      },
+      {
+        service: 'cj_dropshipping',
+        name: 'CJ Dropshipping',
+        status: 'disconnected',
+        icon: Globe,
+        description: 'Product catalog and order fulfillment'
+      },
+      {
+        service: 'unsplash',
+        name: 'Unsplash',
+        status: 'disconnected',
+        icon: Camera,
+        description: 'Stock photography and images'
+      },
+      {
+        service: 'facebook',
+        name: 'Facebook Marketing',
+        status: 'disconnected',
+        icon: TrendingUp,
+        description: 'Facebook and Instagram ad campaigns'
+      }
+    ]
 
-    if (apiConfigs.length === 0) {
-      const sampleConfigs: APIConfig[] = [
-        {
-          name: 'OpenAI GPT-4',
-          key: 'sk-proj-****************************',
-          status: 'active',
-          usage: 75,
-          limit: 100,
-          cost: 45.20
-        },
-        {
-          name: 'Luma AI Video',
-          key: 'luma-****************************',
-          status: 'active',
-          usage: 60,
-          limit: 100,
-          cost: 30.50
-        },
-        {
-          name: 'ElevenLabs TTS',
-          key: 'sk_****************************',
-          status: 'active',
-          usage: 40,
-          limit: 100,
-          cost: 15.80
-        },
-        {
-          name: 'Replicate AI',
-          key: 'r8_****************************',
-          status: 'active',
-          usage: 85,
-          limit: 100,
-          cost: 25.60
-        },
-        {
-          name: 'CJ Dropshipping',
-          key: 'cj_****************************',
-          status: 'active',
-          usage: 20,
-          limit: 100,
-          cost: 5.00
-        },
-        {
-          name: 'Gupshup WhatsApp',
-          key: 'gup_****************************',
-          status: 'active',
-          usage: 50,
-          limit: 100,
-          cost: 12.30
-        }
-      ]
-      setApiConfigs(sampleConfigs)
-    }
-
-    const sampleAnalytics: Analytics = {
-      totalUsers: 156,
-      activeUsers: 89,
-      totalRevenue: 12847.50,
-      monthlyGrowth: 23.5,
-      creditsUsed: 45890,
-      apiCalls: 123456
-    }
-    setAnalytics(sampleAnalytics)
+    setApiStatuses(statuses)
+    checkAllAPIStatuses(statuses)
   }, [])
 
-  const handleAddAPI = (newAPI: Omit<APIConfig, 'usage' | 'cost'>) => {
-    const apiWithDefaults: APIConfig = {
-      ...newAPI,
-      usage: 0,
-      cost: 0
+  const checkAllAPIStatuses = async (statuses: APIStatus[]) => {
+    const updatedStatuses = [...statuses]
+    
+    for (let i = 0; i < updatedStatuses.length; i++) {
+      const status = updatedStatuses[i]
+      if (apiService.isConfigured(status.service)) {
+        status.status = 'testing'
+        setApiStatuses([...updatedStatuses])
+        
+        try {
+          const isConnected = await apiService.testAPI(status.service)
+          status.status = isConnected ? 'connected' : 'disconnected'
+        } catch (error) {
+          status.status = 'disconnected'
+        }
+      } else {
+        status.status = 'disconnected'
+      }
     }
-    setApiConfigs([...apiConfigs, apiWithDefaults])
-    toast.success('API configurada com sucesso!')
+    
+    setApiStatuses(updatedStatuses)
   }
 
-  const handleUpdateAPI = (index: number, updatedAPI: APIConfig) => {
-    const newConfigs = [...apiConfigs]
-    newConfigs[index] = updatedAPI
-    setApiConfigs(newConfigs)
-    toast.success('API atualizada com sucesso!')
-  }
+  // Mock data for demonstration
+  useEffect(() => {
+    const mockUsers: AdminUser[] = [
+      {
+        id: '1',
+        name: 'João Silva',
+        email: 'joao@email.com',
+        plan: 'pro',
+        credits: 250,
+        videoCredits: 8,
+        createdAt: '2024-01-15',
+        lastActive: '2024-01-20',
+        totalSpent: 297,
+        campaignsCreated: 15,
+        videosGenerated: 8,
+        leads: 124,
+        sales: 8
+      },
+      {
+        id: '2',
+        name: 'Maria Santos',
+        email: 'maria@email.com',
+        plan: 'premium',
+        credits: 850,
+        videoCredits: 25,
+        createdAt: '2024-01-10',
+        lastActive: '2024-01-20',
+        totalSpent: 594,
+        campaignsCreated: 32,
+        videosGenerated: 18,
+        leads: 287,
+        sales: 23
+      },
+      {
+        id: '3',
+        name: 'Pedro Costa',
+        email: 'pedro@email.com',
+        plan: 'free',
+        credits: 15,
+        videoCredits: 1,
+        createdAt: '2024-01-18',
+        lastActive: '2024-01-19',
+        totalSpent: 0,
+        campaignsCreated: 3,
+        videosGenerated: 1,
+        leads: 45,
+        sales: 2
+      }
+    ]
 
-  const handleDeleteAPI = (index: number) => {
-    const newConfigs = apiConfigs.filter((_, i) => i !== index)
-    setApiConfigs(newConfigs)
-    toast.success('API removida com sucesso!')
-  }
-
-  const filteredCustomers = customers.filter(customer =>
-    customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
-  const getPlanColor = (plan: string) => {
-    switch (plan) {
-      case 'premium': return 'bg-gradient-to-r from-purple-500 to-pink-500'
-      case 'pro': return 'bg-gradient-to-r from-blue-500 to-cyan-500'
-      default: return 'bg-gray-500'
+    if (users.length === 0) {
+      setUsers(mockUsers)
+      setStats({
+        totalUsers: mockUsers.length,
+        totalRevenue: mockUsers.reduce((sum, user) => sum + user.totalSpent, 0),
+        activeUsers: mockUsers.filter(user => {
+          const lastActive = new Date(user.lastActive)
+          const daysDiff = (Date.now() - lastActive.getTime()) / (1000 * 60 * 60 * 24)
+          return daysDiff <= 7
+        }).length,
+        totalCampaigns: mockUsers.reduce((sum, user) => sum + user.campaignsCreated, 0)
+      })
     }
+  }, [users.length, setUsers, setStats])
+
+  const updateUserPlan = (userId: string, newPlan: 'free' | 'pro' | 'premium') => {
+    setUsers(prev => prev.map(user => 
+      user.id === userId ? { ...user, plan: newPlan } : user
+    ))
+    toast.success('User plan updated successfully')
   }
 
-  const getStatusColor = (status: string) => {
+  const addCredits = (userId: string, amount: number) => {
+    setUsers(prev => prev.map(user => 
+      user.id === userId ? { ...user, credits: user.credits + amount } : user
+    ))
+    toast.success(`${amount} credits added successfully`)
+  }
+
+  const handleAPIKeyChange = (service: keyof APIKeys, value: string) => {
+    const newKeys = { ...apiKeys, [service]: value }
+    setApiKeys(newKeys)
+  }
+
+  const saveAPIKeys = () => {
+    apiService.saveAPIKeys(apiKeys)
+    toast.success('API keys saved successfully')
+    // Re-test all APIs
+    checkAllAPIStatuses(apiStatuses)
+  }
+
+  const testSingleAPI = async (service: keyof APIKeys) => {
+    const statusIndex = apiStatuses.findIndex(s => s.service === service)
+    if (statusIndex === -1) return
+
+    const updatedStatuses = [...apiStatuses]
+    updatedStatuses[statusIndex].status = 'testing'
+    setApiStatuses(updatedStatuses)
+
+    try {
+      const isConnected = await apiService.testAPI(service)
+      updatedStatuses[statusIndex].status = isConnected ? 'connected' : 'disconnected'
+      toast.success(isConnected ? 'API connection successful' : 'API connection failed')
+    } catch (error) {
+      updatedStatuses[statusIndex].status = 'disconnected'
+      toast.error('API connection failed')
+    }
+
+    setApiStatuses(updatedStatuses)
+  }
+
+  const updateSystemSettings = (key: string, value: any) => {
+    setSystemSettings(prev => ({ ...prev, [key]: value }))
+    toast.success('System settings updated')
+  }
+
+  const getStatusIcon = (status: APIStatus['status']) => {
     switch (status) {
-      case 'active': return 'text-green-600 bg-green-100'
-      case 'error': return 'text-red-600 bg-red-100'
-      default: return 'text-gray-600 bg-gray-100'
+      case 'connected':
+        return <CheckCircle className="h-5 w-5 text-green-500" />
+      case 'disconnected':
+        return <XCircle className="h-5 w-5 text-red-500" />
+      case 'testing':
+        return <AlertTriangle className="h-5 w-5 text-yellow-500 animate-pulse" />
     }
   }
 
   return (
-    <div className="flex-1 space-y-6 p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
-          <p className="text-muted-foreground">Gerencie clientes, APIs e monitore performance</p>
-        </div>
-        <Button onClick={() => setIsLoading(!isLoading)}>
-          <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-          Atualizar Dados
-        </Button>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-foreground">Admin Dashboard</h1>
+        <p className="text-muted-foreground">Manage users, API integrations, and system settings</p>
       </div>
 
-      {/* Analytics Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Usuários</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analytics.totalUsers}</div>
-            <p className="text-xs text-muted-foreground">
-              {analytics.activeUsers} ativos
-            </p>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Total Users</p>
+                <p className="text-2xl font-bold">{stats.totalUsers}</p>
+              </div>
+              <Users className="h-8 w-8 text-blue-600" />
+            </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Receita Total</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">R$ {analytics.totalRevenue.toFixed(2)}</div>
-            <p className="text-xs text-muted-foreground">
-              +{analytics.monthlyGrowth}% este mês
-            </p>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
+                <p className="text-2xl font-bold">R$ {stats.totalRevenue}</p>
+              </div>
+              <DollarSign className="h-8 w-8 text-green-600" />
+            </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Créditos Utilizados</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analytics.creditsUsed.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              Este mês
-            </p>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Active Users</p>
+                <p className="text-2xl font-bold">{stats.activeUsers}</p>
+              </div>
+              <Activity className="h-8 w-8 text-purple-600" />
+            </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Chamadas de API</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analytics.apiCalls.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              Total
-            </p>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Total Campaigns</p>
+                <p className="text-2xl font-bold">{stats.totalCampaigns}</p>
+              </div>
+              <TrendingUp className="h-8 w-8 text-orange-600" />
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      <Tabs defaultValue="customers" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="customers">
-            <Users className="h-4 w-4 mr-2" />
-            Clientes
-          </TabsTrigger>
-          <TabsTrigger value="apis">
-            <Key className="h-4 w-4 mr-2" />
-            APIs
-          </TabsTrigger>
-          <TabsTrigger value="analytics">
-            <Activity className="h-4 w-4 mr-2" />
-            Analytics
-          </TabsTrigger>
-          <TabsTrigger value="settings">
-            <Settings className="h-4 w-4 mr-2" />
-            Configurações
-          </TabsTrigger>
+      <Tabs defaultValue="apis" className="w-full">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="apis">API Configuration</TabsTrigger>
+          <TabsTrigger value="users">Users</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="database">Database</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="customers" className="space-y-4">
+        <TabsContent value="apis" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Gestão de Clientes</CardTitle>
-              <CardDescription>
-                Monitore e gerencie todos os clientes da plataforma
-              </CardDescription>
-              <div className="flex items-center space-x-2">
-                <Input
-                  placeholder="Buscar por nome ou email..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="max-w-sm"
-                />
-                <Button variant="outline">
-                  <Download className="h-4 w-4 mr-2" />
-                  Exportar
-                </Button>
-              </div>
+              <CardTitle className="flex items-center gap-2">
+                <Key className="h-5 w-5" />
+                API Keys Configuration
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {apiStatuses.map((api) => (
+                <div key={api.service} className="p-4 border rounded-lg space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <api.icon className="h-6 w-6" />
+                      <div>
+                        <h3 className="font-medium">{api.name}</h3>
+                        <p className="text-sm text-muted-foreground">{api.description}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {getStatusIcon(api.status)}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => testSingleAPI(api.service)}
+                        disabled={api.status === 'testing'}
+                      >
+                        Test
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-2">
+                    <Input
+                      type="password"
+                      placeholder={`Enter ${api.name} API key`}
+                      value={apiKeys[api.service]}
+                      onChange={(e) => handleAPIKeyChange(api.service, e.target.value)}
+                      className="flex-1"
+                    />
+                  </div>
+                </div>
+              ))}
+              
+              <Button onClick={saveAPIKeys} className="w-full">
+                Save All API Keys
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="users" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                User Management
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Cliente</TableHead>
-                    <TableHead>Plano</TableHead>
-                    <TableHead>Créditos</TableHead>
-                    <TableHead>Total Gasto</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Ações</TableHead>
+                    <TableHead>User</TableHead>
+                    <TableHead>Plan</TableHead>
+                    <TableHead>Credits</TableHead>
+                    <TableHead>Campaigns</TableHead>
+                    <TableHead>Leads</TableHead>
+                    <TableHead>Sales</TableHead>
+                    <TableHead>Revenue</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredCustomers.map((customer) => (
-                    <TableRow key={customer.id}>
-                      <TableCell className="flex items-center space-x-3">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage src={customer.avatar} />
-                          <AvatarFallback>{customer.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                        </Avatar>
+                  {users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>
                         <div>
-                          <div className="font-medium">{customer.name}</div>
-                          <div className="text-sm text-muted-foreground">{customer.email}</div>
+                          <div className="font-medium">{user.name}</div>
+                          <div className="text-sm text-muted-foreground">{user.email}</div>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge className={`${getPlanColor(customer.plan)} text-white`}>
-                          {customer.plan.toUpperCase()}
+                        <Badge variant={
+                          user.plan === 'premium' ? 'default' : 
+                          user.plan === 'pro' ? 'secondary' : 'outline'
+                        }>
+                          {user.plan.toUpperCase()}
                         </Badge>
                       </TableCell>
-                      <TableCell>{customer.credits.toLocaleString()}</TableCell>
-                      <TableCell>R$ {customer.totalSpent.toFixed(2)}</TableCell>
+                      <TableCell>{user.credits}</TableCell>
+                      <TableCell>{user.campaignsCreated}</TableCell>
+                      <TableCell>{user.leads}</TableCell>
+                      <TableCell>{user.sales}</TableCell>
+                      <TableCell>R$ {user.totalSpent}</TableCell>
                       <TableCell>
-                        <Badge className={getStatusColor(customer.status)}>
-                          {customer.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setSelectedCustomer(customer)}
+                        <div className="flex gap-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => addCredits(user.id, 100)}
                           >
-                            <Eye className="h-4 w-4" />
+                            +100
                           </Button>
-                          <Button variant="ghost" size="sm">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            <Trash2 className="h-4 w-4" />
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => setSelectedUser(user)}
+                          >
+                            Edit
                           </Button>
                         </div>
                       </TableCell>
@@ -397,370 +477,261 @@ export function AdminDashboard() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="apis" className="space-y-4">
-          <APIManagementPanel
-            apiConfigs={apiConfigs}
-            onAdd={handleAddAPI}
-            onUpdate={handleUpdateAPI}
-            onDelete={handleDeleteAPI}
-          />
-        </TabsContent>
-
         <TabsContent value="analytics" className="space-y-4">
-          <AnalyticsPanel analytics={analytics} customers={customers} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5" />
+                  Revenue by Plan
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span>Premium</span>
+                    <span className="font-bold">R$ 594</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Pro</span>
+                    <span className="font-bold">R$ 297</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Free</span>
+                    <span className="font-bold">R$ 0</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Activity className="h-5 w-5" />
+                  API Usage Statistics
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span>OpenAI Calls</span>
+                    <span className="font-bold">1,247</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Videos Generated</span>
+                    <span className="font-bold">27</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Images Created</span>
+                    <span className="font-bold">156</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>WhatsApp Messages</span>
+                    <span className="font-bold">892</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
         <TabsContent value="settings" className="space-y-4">
-          <SystemSettingsPanel />
-        </TabsContent>
-      </Tabs>
-    </div>
-  )
-}
-
-interface APIManagementPanelProps {
-  apiConfigs: APIConfig[]
-  onAdd: (api: Omit<APIConfig, 'usage' | 'cost'>) => void
-  onUpdate: (index: number, api: APIConfig) => void
-  onDelete: (index: number) => void
-}
-
-function APIManagementPanel({ apiConfigs, onAdd, onUpdate, onDelete }: APIManagementPanelProps) {
-  const [newAPI, setNewAPI] = useState({
-    name: '',
-    key: '',
-    status: 'active' as const,
-    limit: 100
-  })
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (newAPI.name && newAPI.key) {
-      onAdd(newAPI)
-      setNewAPI({ name: '', key: '', status: 'active', limit: 100 })
-    }
-  }
-
-  return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <Card>
-        <CardHeader>
-          <CardTitle>Adicionar Nova API</CardTitle>
-          <CardDescription>Configure uma nova integração de API</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="api-name">Nome da API</Label>
-              <Input
-                id="api-name"
-                value={newAPI.name}
-                onChange={(e) => setNewAPI({ ...newAPI, name: e.target.value })}
-                placeholder="Ex: OpenAI GPT-4"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="api-key">Chave da API</Label>
-              <Input
-                id="api-key"
-                type="password"
-                value={newAPI.key}
-                onChange={(e) => setNewAPI({ ...newAPI, key: e.target.value })}
-                placeholder="Insira a chave da API"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="api-limit">Limite de Uso (%)</Label>
-              <Input
-                id="api-limit"
-                type="number"
-                value={newAPI.limit}
-                onChange={(e) => setNewAPI({ ...newAPI, limit: parseInt(e.target.value) })}
-                placeholder="100"
-              />
-            </div>
-            <Button type="submit" className="w-full">
-              <Key className="h-4 w-4 mr-2" />
-              Adicionar API
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>APIs Configuradas</CardTitle>
-          <CardDescription>Gerencie suas integrações ativas</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {apiConfigs.map((api, index) => (
-            <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-              <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-medium">{api.name}</h4>
-                  <Badge className={getStatusColor(api.status)}>
-                    {api.status}
-                  </Badge>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="h-5 w-5" />
+                System Settings
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="maintenance">Maintenance Mode</Label>
+                  <p className="text-sm text-muted-foreground">Block new user access</p>
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {api.key.replace(/(.{10}).*(.{6})/, '$1...$2')}
-                </p>
-                <div className="mt-2">
-                  <div className="flex items-center justify-between text-sm mb-1">
-                    <span>Uso: {api.usage}%</span>
-                    <span>Custo: R$ {api.cost.toFixed(2)}</span>
-                  </div>
-                  <Progress value={api.usage} className="h-2" />
+                <Switch
+                  id="maintenance"
+                  checked={systemSettings.maintenanceMode}
+                  onCheckedChange={(checked) => updateSystemSettings('maintenanceMode', checked)}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="registration">Open Registration</Label>
+                  <p className="text-sm text-muted-foreground">Allow new user signups</p>
+                </div>
+                <Switch
+                  id="registration"
+                  checked={systemSettings.registrationOpen}
+                  onCheckedChange={(checked) => updateSystemSettings('registrationOpen', checked)}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label>Free Plan Credits</Label>
+                  <Input 
+                    type="number" 
+                    value={systemSettings.defaultCredits.free}
+                    onChange={(e) => updateSystemSettings('defaultCredits', {
+                      ...systemSettings.defaultCredits,
+                      free: parseInt(e.target.value)
+                    })}
+                  />
+                </div>
+                <div>
+                  <Label>Pro Plan Credits</Label>
+                  <Input 
+                    type="number" 
+                    value={systemSettings.defaultCredits.pro}
+                    onChange={(e) => updateSystemSettings('defaultCredits', {
+                      ...systemSettings.defaultCredits,
+                      pro: parseInt(e.target.value)
+                    })}
+                  />
+                </div>
+                <div>
+                  <Label>Premium Plan Credits</Label>
+                  <Input 
+                    type="number" 
+                    value={systemSettings.defaultCredits.premium}
+                    onChange={(e) => updateSystemSettings('defaultCredits', {
+                      ...systemSettings.defaultCredits,
+                      premium: parseInt(e.target.value)
+                    })}
+                  />
                 </div>
               </div>
-              <div className="ml-4 flex items-center space-x-2">
-                <Switch
-                  checked={api.status === 'active'}
-                  onCheckedChange={(checked) => {
-                    const updatedAPI = { ...api, status: checked ? 'active' as const : 'inactive' as const }
-                    onUpdate(index, updatedAPI)
-                  }}
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => onDelete(index)}
-                >
-                  <Trash2 className="h-4 w-4" />
+
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                  <Label>Campaign Cost</Label>
+                  <Input 
+                    type="number" 
+                    value={systemSettings.creditCosts.campaign}
+                    onChange={(e) => updateSystemSettings('creditCosts', {
+                      ...systemSettings.creditCosts,
+                      campaign: parseInt(e.target.value)
+                    })}
+                  />
+                </div>
+                <div>
+                  <Label>Video Cost</Label>
+                  <Input 
+                    type="number" 
+                    value={systemSettings.creditCosts.video}
+                    onChange={(e) => updateSystemSettings('creditCosts', {
+                      ...systemSettings.creditCosts,
+                      video: parseInt(e.target.value)
+                    })}
+                  />
+                </div>
+                <div>
+                  <Label>Magic Page Cost</Label>
+                  <Input 
+                    type="number" 
+                    value={systemSettings.creditCosts.magicPage}
+                    onChange={(e) => updateSystemSettings('creditCosts', {
+                      ...systemSettings.creditCosts,
+                      magicPage: parseInt(e.target.value)
+                    })}
+                  />
+                </div>
+                <div>
+                  <Label>WhatsApp Cost</Label>
+                  <Input 
+                    type="number" 
+                    value={systemSettings.creditCosts.whatsapp}
+                    onChange={(e) => updateSystemSettings('creditCosts', {
+                      ...systemSettings.creditCosts,
+                      whatsapp: parseInt(e.target.value)
+                    })}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="database" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Database className="h-5 w-5" />
+                Database Management
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Button variant="outline">
+                  Export Users
+                </Button>
+                <Button variant="outline">
+                  Backup Database
+                </Button>
+                <Button variant="destructive">
+                  Clear Cache
                 </Button>
               </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+              
+              <div className="p-4 bg-muted rounded-lg">
+                <h4 className="font-medium mb-2">Database Statistics</h4>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Total Users:</span>
+                    <span className="ml-2 font-medium">{users.length}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Storage Used:</span>
+                    <span className="ml-2 font-medium">2.3 MB</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Total Campaigns:</span>
+                    <span className="ml-2 font-medium">{stats.totalCampaigns}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">API Calls Today:</span>
+                    <span className="ml-2 font-medium">1,247</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+
+      {/* User Edit Modal */}
+      {selectedUser && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <Card className="max-w-md w-full">
+            <CardHeader>
+              <CardTitle>Edit User: {selectedUser.name}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label>Plan</Label>
+                <div className="flex gap-2 mt-1">
+                  {(['free', 'pro', 'premium'] as const).map(plan => (
+                    <Button
+                      key={plan}
+                      size="sm"
+                      variant={selectedUser.plan === plan ? 'default' : 'outline'}
+                      onClick={() => updateUserPlan(selectedUser.id, plan)}
+                    >
+                      {plan.toUpperCase()}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="flex gap-2">
+                <Button onClick={() => setSelectedUser(null)}>Close</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   )
-}
-
-function AnalyticsPanel({ analytics, customers }: { analytics: Analytics, customers: Customer[] }) {
-  const planDistribution = customers.reduce((acc, customer) => {
-    acc[customer.plan] = (acc[customer.plan] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
-
-  return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <Card>
-        <CardHeader>
-          <CardTitle>Distribuição de Planos</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {Object.entries(planDistribution).map(([plan, count]) => (
-            <div key={plan} className="flex items-center justify-between">
-              <span className="capitalize">{plan}</span>
-              <Badge variant="secondary">{count} usuários</Badge>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Receita por Plano</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span>Premium</span>
-            <span className="font-medium">R$ 8.910,00</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span>Pro</span>
-            <span className="font-medium">R$ 3.937,50</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span>Free</span>
-            <span className="font-medium">R$ 0,00</span>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Uso de APIs</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>OpenAI</span>
-              <span>75%</span>
-            </div>
-            <Progress value={75} />
-          </div>
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Luma AI</span>
-              <span>60%</span>
-            </div>
-            <Progress value={60} />
-          </div>
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Replicate</span>
-              <span>85%</span>
-            </div>
-            <Progress value={85} />
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-function SystemSettingsPanel() {
-  const [settings, setSettings] = useKV('admin-settings', {
-    maintenanceMode: false,
-    allowRegistrations: true,
-    maxUsersPerPlan: {
-      free: 1000,
-      pro: 500,
-      premium: 100
-    },
-    defaultCredits: {
-      free: 50,
-      pro: 500,
-      premium: 2000
-    }
-  })
-
-  return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Configurações do Sistema</CardTitle>
-          <CardDescription>Gerencie configurações globais da plataforma</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <Label htmlFor="maintenance">Modo de Manutenção</Label>
-              <p className="text-sm text-muted-foreground">
-                Bloqueia acesso de novos usuários ao sistema
-              </p>
-            </div>
-            <Switch
-              id="maintenance"
-              checked={settings.maintenanceMode}
-              onCheckedChange={(checked) =>
-                setSettings({ ...settings, maintenanceMode: checked })
-              }
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div>
-              <Label htmlFor="registrations">Permitir Registros</Label>
-              <p className="text-sm text-muted-foreground">
-                Permite que novos usuários se cadastrem
-              </p>
-            </div>
-            <Switch
-              id="registrations"
-              checked={settings.allowRegistrations}
-              onCheckedChange={(checked) =>
-                setSettings({ ...settings, allowRegistrations: checked })
-              }
-            />
-          </div>
-
-          <div className="space-y-4">
-            <h4 className="font-medium">Créditos Padrão por Plano</h4>
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="space-y-2">
-                <Label htmlFor="free-credits">Plano Free</Label>
-                <Input
-                  id="free-credits"
-                  type="number"
-                  value={settings.defaultCredits.free}
-                  onChange={(e) =>
-                    setSettings({
-                      ...settings,
-                      defaultCredits: {
-                        ...settings.defaultCredits,
-                        free: parseInt(e.target.value)
-                      }
-                    })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="pro-credits">Plano Pro</Label>
-                <Input
-                  id="pro-credits"
-                  type="number"
-                  value={settings.defaultCredits.pro}
-                  onChange={(e) =>
-                    setSettings({
-                      ...settings,
-                      defaultCredits: {
-                        ...settings.defaultCredits,
-                        pro: parseInt(e.target.value)
-                      }
-                    })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="premium-credits">Plano Premium</Label>
-                <Input
-                  id="premium-credits"
-                  type="number"
-                  value={settings.defaultCredits.premium}
-                  onChange={(e) =>
-                    setSettings({
-                      ...settings,
-                      defaultCredits: {
-                        ...settings.defaultCredits,
-                        premium: parseInt(e.target.value)
-                      }
-                    })
-                  }
-                />
-              </div>
-            </div>
-          </div>
-
-          <Button>
-            <Database className="h-4 w-4 mr-2" />
-            Salvar Configurações
-          </Button>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Backup e Segurança</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Button variant="outline">
-            <Download className="h-4 w-4 mr-2" />
-            Fazer Backup do Banco de Dados
-          </Button>
-          <Button variant="outline">
-            <Shield className="h-4 w-4 mr-2" />
-            Verificar Integridade do Sistema
-          </Button>
-          <Button variant="destructive">
-            <AlertTriangle className="h-4 w-4 mr-2" />
-            Limpar Logs Antigos
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-function getStatusColor(status: string) {
-  switch (status) {
-    case 'active':
-      return 'text-green-600 bg-green-100'
-    case 'error':
-      return 'text-red-600 bg-red-100'
-    default:
-      return 'text-gray-600 bg-gray-100'
-  }
 }
