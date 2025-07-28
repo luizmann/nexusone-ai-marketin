@@ -11,7 +11,8 @@ import {
   Brain, 
   CreditCard, 
   Settings,
-  Plug
+  Plug,
+  Play
 } from 'lucide-react'
 
 interface CleanSidebarProps {
@@ -82,6 +83,12 @@ export function CleanSidebar({ activeModule, onModuleChange }: CleanSidebarProps
       label: 'API Config',
       icon: Plug,
       description: 'Configure API integrations'
+    },
+    {
+      id: 'live-test',
+      label: 'Live Test',
+      icon: Play,
+      description: 'Test AI campaign generation'
     },
     {
       id: 'settings',
