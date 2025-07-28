@@ -28,6 +28,7 @@ COMPLETE_SYSTEM_STATUS_REPORT.md
 COMPREHENSIVE_API_STATUS_REPORT.md
 COMPREHENSIVE_STATUS_REPORT_2025.md
 CRITICAL_API_STATUS_REPORT.md
+CRITICAL_FIXES_REPORT.md
 CRITICAL_SYSTEM_STATUS_REPORT.md
 DEPLOYMENT.md
 DEPLOYMENT_GUIDE.md
@@ -179,6 +180,7 @@ src/components/Credits.tsx
 src/components/Dashboard.tsx
 src/components/Documentation.tsx
 src/components/DragDropPageEditor.tsx
+src/components/ErrorBoundary.tsx
 src/components/FacebookTokenAnalyzer.tsx
 src/components/LanguageSelector.tsx
 src/components/LiveCampaignTester.tsx
