@@ -57,6 +57,7 @@ FINAL_STATUS_REPORT.md
 GIT_REPOSITORY_MIGRATION_GUIDE.md
 GLOBAL_LAUNCH_STATUS_REPORT.md
 GUPSHUP_WHATSAPP_AI_COMPLETE_REPORT.md
+ISSUES_FIXED_REPORT.md
 LANDING_PAGE_FIXES.md
 LAUNCH_READINESS_REPORT.md
 LIVE_CAMPAIGN_TEST_FINAL_REPORT.md
@@ -201,6 +202,7 @@ src/components/SalesPage.tsx
 src/components/SocialMediaGenerator.tsx
 src/components/SocialPostPerformance.tsx
 src/components/StatusReport.tsx
+src/components/SystemStatusDashboard.tsx
 src/components/TemplateModal.tsx
 src/components/VideoPreviewGenerator.tsx
 src/components/WelcomeScreen.tsx
@@ -307,6 +309,7 @@ src/services/aiContentGeneration.ts
 src/services/aiFunnelService.ts
 src/services/api-integration.ts
 src/services/apiConfigurationService.ts
+src/services/apiKeyManager.ts
 src/services/apiRouter.ts
 src/services/apiService.ts
 src/services/apiTestingService.ts
