@@ -1,32 +1,20 @@
-// Sales Page Builder (Magic Pages)
+// Core Pages
 export { default as SalesPageBuilder } from './SalesPageBuilder'
-
-// WhatsApp Marketing  
 export { default as WhatsAppMarketing } from './WhatsAppMarketing'
-
-// Lead Dashboard
-export { default as LeadDashboard } from './LeadDashboard'
-
-// DropMagic
-export { default as DropMagic } from './DropMagic'
-
-// Performance Analytics
-export { default as PerformanceAnalytics } from './PerformanceAnalytics'
-
-// Live Campaign Tracker
-export { default as LiveCampaignTracker } from './LiveCampaignTracker'
-
-// Settings
 export { default as Settings } from './Settings'
-
-// Credits
 export { default as Credits } from './Credits'
 
-// AI Marketing Funnel Test
-export { AIMarketingFunnelTest } from './AIMarketingFunnelTest'
+// Admin & Configuration
+export { default as AdminDashboard } from './AdminDashboard'
+export { default as ApiConfiguration } from './ApiConfiguration'
 
-// Real-Time System Test
-export { RealTimeSystemTest } from './RealTimeSystemTest'
+// Business Tools
+export { default as WinnerProducts } from './WinnerProducts'
+export { default as SmartAppointments } from './SmartAppointments'
 
-// Production Edge Function Validator
-export { default as ProductionEdgeFunctionValidator } from './ProductionEdgeFunctionValidator'
+// Video Tools
+export { default as LumaVideoPage } from './LumaVideoPage'
+export { default as MagicVideo } from './MagicVideo'
+
+// Development Tools
+export { default as DragDropEditor } from './DragDropEditor'

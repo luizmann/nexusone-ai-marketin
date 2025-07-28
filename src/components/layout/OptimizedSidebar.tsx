@@ -23,7 +23,7 @@ interface OptimizedSidebarProps {
 export function OptimizedSidebar({ activeModule, onModuleChange }: OptimizedSidebarProps) {
   const { t, isRTL } = useLanguage()
 
-  // Core modules organized by category
+  // Core modules organized by category - no duplicates
   const coreModules = [
     {
       id: 'dashboard',
@@ -37,23 +37,23 @@ export function OptimizedSidebar({ activeModule, onModuleChange }: OptimizedSide
   const aiModules = [
     {
       id: 'nexbrain',
-      label: t('nexbrain'),
+      label: 'NexBrain AI',
       icon: Brain,
-      description: t('ai_assistant'),
+      description: 'AI Assistant & Automation',
       category: 'ai'
     },
     {
       id: 'magic-pages',
-      label: t('magic_pages'),
+      label: 'Sales Pages',
       icon: Wand2,
-      description: t('ai_landing_pages'),
+      description: 'AI Landing Page Builder',
       category: 'ai'
     },
     {
       id: 'video-generator',
-      label: t('video_generator'),
+      label: 'Video Magic',
       icon: Video,
-      description: t('ai_video_creation'),
+      description: 'AI Video Creation',
       category: 'ai'
     }
   ]
@@ -61,23 +61,23 @@ export function OptimizedSidebar({ activeModule, onModuleChange }: OptimizedSide
   const marketingModules = [
     {
       id: 'smart-campaigns',
-      label: t('smart_campaigns'),
+      label: 'Smart Ads',
       icon: Target,
-      description: t('facebook_ads_automation'),
+      description: 'Facebook & Instagram Ads',
       category: 'marketing'
     },
     {
       id: 'whatsapp-ai',
-      label: t('whatsapp_ai'),
+      label: 'WhatsApp AI',
       icon: MessageCircle,
-      description: t('automated_sales'),
+      description: 'Automated Sales Chat',
       category: 'marketing'
     },
     {
       id: 'smart-appointments',
-      label: t('smart_appointments'),
+      label: 'Booking AI',
       icon: Calendar,
-      description: t('booking_automation'),
+      description: 'Smart Appointment System',
       category: 'marketing'
     }
   ]
@@ -85,16 +85,16 @@ export function OptimizedSidebar({ activeModule, onModuleChange }: OptimizedSide
   const businessModules = [
     {
       id: 'winner-products',
-      label: t('winner_products'),
+      label: 'Winner Products',
       icon: TrendingUp,
-      description: t('dropshipping_products'),
+      description: 'Dropshipping Products',
       category: 'business'
     },
     {
       id: 'credits',
-      label: t('credits'),
+      label: 'Credits & Billing',
       icon: CreditCard,
-      description: t('usage_and_billing'),
+      description: 'Usage & Payments',
       category: 'business'
     }
   ]
@@ -102,23 +102,23 @@ export function OptimizedSidebar({ activeModule, onModuleChange }: OptimizedSide
   const systemModules = [
     {
       id: 'api-config',
-      label: 'API Config',
+      label: 'API Setup',
       icon: Plug,
-      description: 'Configure integrations',
+      description: 'Configure Integrations',
       category: 'system'
     },
     {
       id: 'admin',
       label: 'Admin Panel',
       icon: Shield,
-      description: 'System administration',
+      description: 'System Management',
       category: 'system'
     },
     {
       id: 'settings',
-      label: t('settings'),
+      label: 'Settings',
       icon: Settings,
-      description: t('preferences'),
+      description: 'User Preferences',
       category: 'system'
     }
   ]
