@@ -26,7 +26,9 @@ COMPLETE_LAUNCH_READY_REPORT_2025.md
 COMPLETE_PRODUCTION_DEPLOYMENT_GUIDE.md
 COMPLETE_STATUS_REPORT.md
 COMPLETE_SYSTEM_STATUS_REPORT.md
+COMPREHENSIVE_API_STATUS_REPORT.md
 COMPREHENSIVE_STATUS_REPORT_2025.md
+CRITICAL_API_STATUS_REPORT.md
 CRITICAL_SYSTEM_STATUS_REPORT.md
 DEPLOYMENT.md
 DEPLOYMENT_GUIDE.md
@@ -79,6 +81,7 @@ SUPABASE_DEPLOYMENT_GUIDE.md
 SUPABASE_DEPLOYMENT_READY.md
 SUPABASE_EDGE_FUNCTIONS_DEPLOYMENT_COMPLETE.md
 SUPABASE_EDGE_FUNCTIONS_DEPLOYMENT_GUIDE.md
+api-test-comprehensive.js
 check-deploy-readiness.js
 deploy-backend-complete.sh
 deploy-backend-quick.sh
@@ -282,6 +285,7 @@ src/pages/MagicVideo.tsx
 src/pages/Modules.tsx
 src/pages/PerformanceAnalytics.tsx
 src/pages/ProductionEdgeFunctionValidator.tsx
+src/pages/QuickAPITest.tsx
 src/pages/RealTimeSystemTest.tsx
 src/pages/SalesPageBuilder.tsx
 src/pages/Settings.tsx
