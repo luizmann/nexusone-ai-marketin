@@ -17,6 +17,7 @@ import { APIConfigPanel } from '../admin/APIConfigPanel'
 import { ApiConfiguration } from '../../pages/ApiConfiguration'
 import { LiveCampaignTester } from '../LiveCampaignTester'
 import { QuickAPITest } from '../../pages/QuickAPITest'
+import { AdminDashboard } from '../../pages/AdminDashboard'
 import { useLanguage } from '../../contexts/CleanLanguageContext'
 
 export function CleanDashboardLayout() {
@@ -66,6 +67,8 @@ export function CleanDashboardLayout() {
         return <LiveCampaignTester />
       case 'quick-api-test':
         return <QuickAPITest />
+      case 'admin':
+        return <AdminDashboard />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }

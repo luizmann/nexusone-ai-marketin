@@ -12,7 +12,8 @@ import {
   CreditCard, 
   Settings,
   Plug,
-  Play
+  Play,
+  Shield
 } from 'lucide-react'
 
 interface CleanSidebarProps {
@@ -95,6 +96,12 @@ export function CleanSidebar({ activeModule, onModuleChange }: CleanSidebarProps
       label: '🔍 API Test',
       icon: Plug,
       description: 'Quick API status check'
+    },
+    {
+      id: 'admin',
+      label: 'Admin Panel',
+      icon: Shield,
+      description: 'System administration'
     },
     {
       id: 'settings',
