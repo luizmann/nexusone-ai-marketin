@@ -260,6 +260,7 @@ src/lib/openai.ts
 src/lib/supabase.ts
 src/pages/AIContentGenerationPipeline.tsx
 src/pages/AIMarketingFunnelTest.tsx
+src/pages/AdminDashboard.tsx
 src/pages/ApiConfiguration.tsx
 src/pages/ApiTestPage.tsx
 src/pages/ApiTestingPage.tsx
