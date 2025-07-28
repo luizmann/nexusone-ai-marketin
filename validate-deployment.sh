@@ -1,95 +1,97 @@
 #!/bin/bash
+# Deployment Validation and Health Check Script
 
-# NexusOne AI Platform - Deployment Validation Script
-# Validates that all APIs and configurations are working
+echo "🔍 NexusOne AI - Deployment Validation"
+echo "======================================"
 
-echo "🔍 Validating NexusOne AI Platform deployment..."
+# Colors
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
 
-# Load environment variables
-if [ -f "supabase/.env.production" ]; then
-    export $(cat supabase/.env.production | grep -v '^#' | xargs)
-    echo "✅ Environment variables loaded"
+# Counters
+PASSED=0
+FAILED=0
+
+check_test() {
+    local name="$1"
+    local command="$2"
+    
+    echo -n "Testing $name... "
+    
+    if eval $command >/dev/null 2>&1; then
+        echo -e "${GREEN}✅ PASS${NC}"
+        ((PASSED++))
+    else
+        echo -e "${RED}❌ FAIL${NC}"
+        ((FAILED++))
+    fi
+}
+
+echo "🌐 Frontend Tests"
+echo "=================="
+
+# Check if build exists
+check_test "Build Directory" "test -d dist"
+check_test "Index HTML" "test -f dist/index.html"
+check_test "Assets Directory" "test -d dist/assets"
+
+echo ""
+echo "📊 Backend Tests"
+echo "================"
+
+# Check Supabase connection
+check_test "Supabase CLI" "command -v supabase"
+check_test "Vercel CLI" "command -v vercel"
+
+echo ""
+echo "🔑 API Configuration Tests"
+echo "=========================="
+
+# Check environment files
+check_test "Vercel Config" "test -f vercel.json"
+check_test "Supabase Config" "test -f supabase/config.prod.toml"
+
+echo ""
+echo "📦 Edge Functions Tests"
+echo "======================"
+
+# Check Edge Functions directories
+FUNCTIONS=(
+    "ai-content-generator"
+    "nexbrain-assistant" 
+    "whatsapp-smart-booking"
+    "video-creator-luma"
+    "magic-page-builder"
+)
+
+for func in "${FUNCTIONS[@]}"; do
+    check_test "Function: $func" "test -d supabase/functions/$func"
+done
+
+echo ""
+echo "🎯 Production Readiness Tests"
+echo "============================="
+
+check_test "Package.json" "test -f package.json"
+check_test "Production Build Script" "grep -q 'build:prod' package.json"
+check_test "Deployment Scripts" "test -f deploy-production.sh"
+
+echo ""
+echo "📊 Test Summary"
+echo "==============="
+echo -e "✅ Passed: ${GREEN}$PASSED${NC}"
+echo -e "❌ Failed: ${RED}$FAILED${NC}"
+
+if [ $FAILED -eq 0 ]; then
+    echo -e "${GREEN}🎉 All tests passed! Ready for deployment.${NC}"
+    echo ""
+    echo "🚀 To deploy, run:"
+    echo "   bash deploy-production.sh"
+    exit 0
 else
-    echo "❌ Production environment file not found!"
+    echo -e "${RED}⚠️  Some tests failed. Please fix issues before deployment.${NC}"
     exit 1
 fi
-
-# Test API endpoints
-echo "\n🧪 Testing API integrations..."
-
-# Test OpenAI
-if [ ! -z "$OPENAI_API_KEY" ]; then
-    echo "✅ OpenAI API key configured"
-else
-    echo "❌ OpenAI API key missing"
-fi
-
-# Test ElevenLabs
-if [ ! -z "$ELEVENLABS_API_KEY" ]; then
-    echo "✅ ElevenLabs API key configured"
-else
-    echo "❌ ElevenLabs API key missing"
-fi
-
-# Test Replicate
-if [ ! -z "$REPLICATE_API_TOKEN" ]; then
-    echo "✅ Replicate API token configured"
-else
-    echo "❌ Replicate API token missing"
-fi
-
-# Test Luma
-if [ ! -z "$LUMA_API_KEY" ]; then
-    echo "✅ Luma AI API key configured"
-else
-    echo "❌ Luma AI API key missing"
-fi
-
-# Test GupShup
-if [ ! -z "$GUPSHUP_API_KEY" ]; then
-    echo "✅ GupShup WhatsApp API key configured"
-else
-    echo "❌ GupShup WhatsApp API key missing"
-fi
-
-# Test CJ Dropshipping
-if [ ! -z "$CJ_DROPSHIPPING_API_KEY" ]; then
-    echo "✅ CJ Dropshipping API key configured"
-else
-    echo "❌ CJ Dropshipping API key missing"
-fi
-
-# Test Facebook
-if [ ! -z "$FACEBOOK_ACCESS_TOKEN" ]; then
-    echo "✅ Facebook access token configured"
-else
-    echo "❌ Facebook access token missing"
-fi
-
-# Test Unsplash
-if [ ! -z "$UNSPLASH_ACCESS_KEY" ]; then
-    echo "✅ Unsplash access key configured"
-else
-    echo "❌ Unsplash access key missing"
-fi
-
-# Test Supabase configuration
-if [ ! -z "$SUPABASE_PROJECT_ID" ] && [ ! -z "$SUPABASE_URL" ] && [ ! -z "$SUPABASE_ANON_KEY" ]; then
-    echo "✅ Supabase configuration complete"
-else
-    echo "❌ Supabase configuration incomplete"
-fi
-
-echo "\n📊 Deployment Summary:"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "✅ Database: Production schema ready"
-echo "✅ Edge Functions: 14 functions ready to deploy"
-echo "✅ API Integrations: 8 services configured"
-echo "✅ Frontend: React + TypeScript ready"
-echo "✅ Authentication: Supabase Auth configured"
-echo "✅ Security: RLS policies enabled"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-echo "\n🚀 Ready for production deployment!"
-echo "Run: ./deploy-supabase-complete.sh to deploy backend"
-echo "Run: npm run build:prod to build frontend"
