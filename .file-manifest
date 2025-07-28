@@ -78,6 +78,7 @@ PRODUCTION_SETUP_GUIDE.md
 README.md
 RELATORIO_SITUACAO_ATUAL_NEXUSONE.md
 REORGANIZATION_REPORT.md
+SISTEMA-LIMPO-REPORT.md
 SUPABASE_DEPLOYMENT_GUIDE.md
 SUPABASE_DEPLOYMENT_READY.md
 SUPABASE_EDGE_FUNCTIONS_DEPLOYMENT_COMPLETE.md
@@ -233,6 +234,8 @@ src/components/layout/CleanDashboardLayout.tsx
 src/components/layout/CleanSidebar.tsx
 src/components/layout/DashboardLayout.tsx
 src/components/layout/Header.tsx
+src/components/layout/OptimizedDashboardLayout.tsx
+src/components/layout/OptimizedSidebar.tsx
 src/components/layout/Sidebar.tsx
 src/components/modules/MagicSalesGenerator.tsx
 src/components/modules/NexBrainAssistant.tsx
@@ -276,6 +279,7 @@ src/pages/ApiTestingPage.tsx
 src/pages/CJComprehensiveTest.tsx
 src/pages/CJDropshippingTest.tsx
 src/pages/CampaignGenerator.tsx
+src/pages/CleanDashboard.tsx
 src/pages/ComprehensiveFunnelTester.tsx
 src/pages/ComprehensiveTestSuite.tsx
 src/pages/ComprehensiveTestingDashboard.tsx
@@ -302,6 +306,7 @@ src/pages/SmartAppointments.tsx
 src/pages/UnsplashIntegration.tsx
 src/pages/WhatsAppMarketing.tsx
 src/pages/WinnerProducts.tsx
+src/pages/index-clean.ts
 src/pages/index.ts
 src/prd.md
 src/production-config.md
