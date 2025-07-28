@@ -1,5 +1,5 @@
 import { useKV } from '@github/spark/hooks'
-import { CleanDashboardLayout } from './components/layout/CleanDashboardLayout'
+import { OptimizedDashboardLayout } from './components/layout/OptimizedDashboardLayout'
 import { WelcomeScreen } from './components/WelcomeScreen'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { Toaster } from '@/components/ui/sonner'
@@ -53,7 +53,7 @@ function App() {
       <AuthProvider>
         <CreditProvider>
           <LanguageProvider>
-            {!user ? <WelcomeScreen /> : <CleanDashboardLayout />}
+            {!user ? <WelcomeScreen /> : <OptimizedDashboardLayout />}
             <Toaster />
           </LanguageProvider>
         </CreditProvider>
