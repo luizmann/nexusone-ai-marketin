@@ -1,0 +1,58 @@
+{
+  "name": "nexusone-ai-deploy",
+  "version": "1.0.0",
+  "description": "Deploy configuration for NexusOne AI Platform",
+  "deployment": {
+    "frontend": {
+      "platform": "vercel",
+      "buildCommand": "npm run build:prod",
+      "outputDirectory": "dist",
+      "framework": "vite",
+      "nodeVersion": "18.x"
+    },
+    "backend": {
+      "platform": "supabase",
+      "type": "edge-functions",
+      "runtime": "deno",
+      "functions": [
+        "ai-content-generation",
+        "ai-content-generator", 
+        "api-proxy",
+        "cj-dropshipping-catalog",
+        "cj-dropshipping-order",
+        "dropshipping-import",
+        "facebook-ads-manager",
+        "landing-page-builder",
+        "luma-video-ai",
+        "nexbrain-chat",
+        "nexus-api-manager",
+        "product-scraper",
+        "save-api-config",
+        "test-api-connection",
+        "unsplash-api",
+        "usage-tracker",
+        "video-generator",
+        "webhook-handler",
+        "whatsapp-automation"
+      ]
+    }
+  },
+  "environment": {
+    "required": [
+      "VITE_SUPABASE_URL",
+      "VITE_SUPABASE_ANON_KEY",
+      "SUPABASE_SERVICE_ROLE_KEY",
+      "OPENAI_API_KEY",
+      "OPENAI_ASSISTANT_ID"
+    ],
+    "optional": [
+      "CJ_DROPSHIPPING_API_KEY",
+      "ELEVENLABS_API_KEY", 
+      "REPLICATE_API_TOKEN",
+      "GUPSHUP_API_KEY",
+      "LUMA_API_KEY",
+      "UNSPLASH_ACCESS_KEY",
+      "FACEBOOK_ACCESS_TOKEN"
+    ]
+  }
+}

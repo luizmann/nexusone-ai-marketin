@@ -13,7 +13,10 @@
         "preview": "vite preview",
         "deploy:vercel": "npm run build:prod && vercel --prod",
         "deploy:netlify": "npm run build:prod && netlify deploy --prod --dir=dist",
-        "deploy:check": "node -e \"console.log('🚀 NexusOne AI Platform - Ready for deployment!'); console.log('Run: npm run deploy:vercel or npm run deploy:netlify')\""
+        "deploy:check": "node check-deploy-readiness.js",
+        "predeploy": "npm run deploy:check",
+        "deploy": "npm run deploy:vercel",
+        "start": "npm run preview"
     },
     "dependencies": {
         "@github/spark": "^0.0.1",
