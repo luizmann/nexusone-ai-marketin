@@ -3,7 +3,6 @@
 .devcontainer/postStartCommand.sh
 .devcontainer/refreshTools.sh
 .devcontainer/spark.conf
-.env.example
 .file-manifest
 .github/workflows/deploy-production.yml
 .gitignore
