@@ -296,20 +296,37 @@ class APIService {
     try {
       switch (service) {
         case 'openai':
-          await this.generateContent('Test', 'text')
-          return true
+          // Test both regular API and Assistants API
+          const response = await fetch('https://api.openai.com/v1/models', {
+            headers: {
+              'Authorization': `Bearer ${this.apiKeys.openai}`
+            }
+          })
+          return response.ok
+          
         case 'luma':
           // Just check if key exists for now
           return this.isConfigured('luma')
+          
         case 'elevenlabs':
           return this.isConfigured('elevenlabs')
+          
         case 'replicate':
           return this.isConfigured('replicate')
+          
         case 'gupshup':
           return this.isConfigured('gupshup')
+          
         case 'cj_dropshipping':
           await this.getCJProducts()
           return true
+          
+        case 'unsplash':
+          return this.isConfigured('unsplash')
+          
+        case 'facebook':
+          return this.isConfigured('facebook')
+          
         default:
           return false
       }

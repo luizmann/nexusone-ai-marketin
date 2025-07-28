@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCredits } from '@/contexts/CreditContext'
 import { ApiStatusWidget } from '@/components/widgets/ApiStatusWidget'
+import { AISystemStatus } from '@/components/AISystemStatus'
 import { 
   TrendingUp, 
   Users, 
@@ -171,6 +172,12 @@ export const Dashboard: React.FC = () => {
         ))}
       </div>
 
+      {/* AI System Status */}
+      <AISystemStatus onOpenSettings={() => {
+        // Navigate to admin dashboard API configuration
+        console.log('Navigate to Admin Dashboard API Configuration')
+      }} />
+
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Quick Actions */}
         <div className="lg:col-span-2">
@@ -250,9 +257,6 @@ export const Dashboard: React.FC = () => {
               )}
             </CardContent>
           </Card>
-
-          {/* API Configuration Status */}
-          <ApiStatusWidget />
 
           {/* Recent Activity */}
           <Card>

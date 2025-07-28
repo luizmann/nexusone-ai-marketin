@@ -7,9 +7,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { useKV } from '@github/spark/hooks'
 import { useLanguage } from '../contexts/CleanLanguageContext'
 import { apiService, APIKeys } from '../services/apiService'
+import { NexBrainTester } from '../components/NexBrainTester'
+import { OpenAIKeyHelper } from '../components/OpenAIKeyHelper'
+import { NexBrainCapabilities } from '../components/NexBrainCapabilities'
 import { 
   Users, 
   DollarSign, 
@@ -27,7 +31,10 @@ import {
   Video,
   MessageSquare,
   Camera,
-  Globe
+  Globe,
+  TestTube,
+  ExternalLink,
+  HelpCircle
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -357,15 +364,133 @@ export function AdminDashboard() {
         </TabsList>
 
         <TabsContent value="apis" className="space-y-4">
+          {/* NexBrain AI Assistant Section */}
+          <Card className="border-2 border-primary/20 bg-gradient-to-r from-blue-50 to-purple-50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <Brain className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold">NexBrain AI Assistant</h3>
+                  <p className="text-sm text-muted-foreground font-normal">
+                    Core AI engine powering Magic Pages, Ads Generation, and Campaign Optimization
+                  </p>
+                </div>
+                <div className="ml-auto">
+                  {apiStatuses.find(api => api.service === 'openai')?.status === 'connected' ? (
+                    <div className="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                      <CheckCircle className="h-4 w-4" />
+                      Active
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
+                      <XCircle className="h-4 w-4" />
+                      Inactive
+                    </div>
+                  )}
+                </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="text-center p-3 bg-white rounded-lg border">
+                  <div className="text-lg font-bold text-primary">GPT-4o</div>
+                  <div className="text-sm text-muted-foreground">Model</div>
+                </div>
+                <div className="text-center p-3 bg-white rounded-lg border">
+                  <div className="text-lg font-bold text-primary">asst_0jsx...</div>
+                  <div className="text-sm text-muted-foreground">Assistant ID</div>
+                </div>
+                <div className="text-center p-3 bg-white rounded-lg border">
+                  <div className="text-lg font-bold text-primary">AI Agents</div>
+                  <div className="text-sm text-muted-foreground">Capability</div>
+                </div>
+              </div>
+              
+              <div className="flex gap-2">
+                <Input
+                  type="password"
+                  placeholder="Enter OpenAI API key (sk-proj-...)"
+                  value={apiKeys.openai}
+                  onChange={(e) => handleAPIKeyChange('openai', e.target.value)}
+                  className="flex-1"
+                />
+                <Button
+                  variant="outline"
+                  onClick={() => testSingleAPI('openai')}
+                  disabled={apiStatuses.find(api => api.service === 'openai')?.status === 'testing'}
+                >
+                  {apiStatuses.find(api => api.service === 'openai')?.status === 'testing' ? 'Testing...' : 'Test'}
+                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="default" size="sm" className="shrink-0">
+                      <TestTube className="h-4 w-4 mr-1" />
+                      Advanced Test
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>NexBrain AI Assistant Testing</DialogTitle>
+                    </DialogHeader>
+                    <NexBrainTester />
+                  </DialogContent>
+                </Dialog>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm" className="shrink-0">
+                      <HelpCircle className="h-4 w-4 mr-1" />
+                      Capabilities
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>NexBrain AI Capabilities</DialogTitle>
+                    </DialogHeader>
+                    <NexBrainCapabilities />
+                  </DialogContent>
+                </Dialog>
+              </div>
+              
+              <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-medium text-blue-900">What NexBrain Powers:</h4>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-800">
+                        Need API Key? <ExternalLink className="h-3 w-3 ml-1" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>OpenAI API Key Setup Guide</DialogTitle>
+                      </DialogHeader>
+                      <OpenAIKeyHelper />
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm text-blue-800">
+                  <div>• Automatic Sales Page Generation</div>
+                  <div>• Facebook Ads Campaign Creation</div>
+                  <div>• WhatsApp Sales Flow Automation</div>
+                  <div>• Product Video Script Writing</div>
+                  <div>• Campaign Performance Analysis</div>
+                  <div>• Lead Conversation Optimization</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Key className="h-5 w-5" />
-                API Keys Configuration
+                Other API Integrations
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              {apiStatuses.map((api) => (
+              {apiStatuses.filter(api => api.service !== 'openai').map((api) => (
                 <div key={api.service} className="p-4 border rounded-lg space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">

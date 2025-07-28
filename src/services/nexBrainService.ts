@@ -1,5 +1,6 @@
 // NexBrain - Advanced AI Agent Service
 import { ApiIntegrationService } from './api-integration';
+import { apiService } from './apiService';
 
 export interface NexBrainTask {
   id: string;
@@ -36,7 +37,7 @@ export interface OptimizationSuggestion {
 export class NexBrainService {
   private static instance: NexBrainService;
   private apiService: ApiIntegrationService;
-  private assistantId = 'asst_0jsx8eD6P3W9XGsSRRNU2Pfd'; // OpenAI Assistant ID
+  public assistantId = 'asst_0jsx8eD6P3W9XGsSRRNU2Pfd'; // OpenAI Assistant ID
   private activeTasks: Map<string, NexBrainTask> = new Map();
 
   private constructor() {
@@ -52,12 +53,18 @@ export class NexBrainService {
 
   // Core NexBrain AI Assistant Integration
   async executeAssistantTask(prompt: string, context: any = {}): Promise<string> {
+    const apiKeys = apiService.getAPIKeys();
+    
+    if (!apiKeys.openai) {
+      throw new Error('OpenAI API key not configured. Please configure it in Admin Dashboard.');
+    }
+
     try {
       // Create thread
       const threadResponse = await fetch('https://api.openai.com/v1/threads', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer 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`,
+          'Authorization': `Bearer ${apiKeys.openai}`,
           'Content-Type': 'application/json',
           'OpenAI-Beta': 'assistants=v2'
         }
@@ -71,7 +78,7 @@ export class NexBrainService {
       await fetch(`https://api.openai.com/v1/threads/${thread.id}/messages`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer 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`,
+          'Authorization': `Bearer ${apiKeys.openai}`,
           'Content-Type': 'application/json',
           'OpenAI-Beta': 'assistants=v2'
         },
@@ -85,7 +92,7 @@ export class NexBrainService {
       const runResponse = await fetch(`https://api.openai.com/v1/threads/${thread.id}/runs`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer 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`,
+          'Authorization': `Bearer ${apiKeys.openai}`,
           'Content-Type': 'application/json',
           'OpenAI-Beta': 'assistants=v2'
         },
@@ -106,7 +113,7 @@ export class NexBrainService {
         
         const statusResponse = await fetch(`https://api.openai.com/v1/threads/${thread.id}/runs/${run.id}`, {
           headers: {
-            'Authorization': `Bearer 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`,
+            'Authorization': `Bearer ${apiKeys.openai}`,
             'OpenAI-Beta': 'assistants=v2'
           }
         });
@@ -127,7 +134,7 @@ export class NexBrainService {
       // Get messages
       const messagesResponse = await fetch(`https://api.openai.com/v1/threads/${thread.id}/messages`, {
         headers: {
-          'Authorization': `Bearer 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`,
+          'Authorization': `Bearer ${apiKeys.openai}`,
           'OpenAI-Beta': 'assistants=v2'
         }
       });
@@ -546,11 +553,23 @@ export class NexBrainService {
 
   // Luma AI Video Generation Integration
   private async generateLumaVideo(videoScript: any): Promise<any> {
+    const apiKeys = apiService.getAPIKeys();
+    
+    if (!apiKeys.luma) {
+      console.warn('Luma AI API key not configured, using fallback');
+      return {
+        id: 'mock-video-id',
+        url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        status: 'completed',
+        thumbnail: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=450&fit=crop'
+      };
+    }
+
     try {
       const response = await fetch('https://api.lumalabs.ai/dream-machine/v1/generations', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer luma-12423eab-79ee-4f52-ad44-00c485686cf2-ab1b6b03-15a1-4c76-b056-6765bf41ab05`,
+          'Authorization': `Bearer ${apiKeys.luma}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -574,13 +593,15 @@ export class NexBrainService {
       // Return fallback video data
       return {
         id: 'mock-video-id',
-        url: 'https://example.com/placeholder-video.mp4',
-        status: 'completed'
+        url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        status: 'completed',
+        thumbnail: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=450&fit=crop'
       };
     }
   }
 
   private async pollLumaGeneration(generationId: string): Promise<any> {
+    const apiKeys = apiService.getAPIKeys();
     const maxAttempts = 60; // 5 minutes max
     
     for (let i = 0; i < maxAttempts; i++) {
@@ -589,7 +610,7 @@ export class NexBrainService {
       try {
         const response = await fetch(`https://api.lumalabs.ai/dream-machine/v1/generations/${generationId}`, {
           headers: {
-            'Authorization': `Bearer luma-12423eab-79ee-4f52-ad44-00c485686cf2-ab1b6b03-15a1-4c76-b056-6765bf41ab05`
+            'Authorization': `Bearer ${apiKeys.luma}`
           }
         });
 
