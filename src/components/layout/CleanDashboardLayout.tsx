@@ -16,6 +16,7 @@ import { APIHealthDashboard } from '../monitoring/APIHealthDashboard'
 import { APIConfigPanel } from '../admin/APIConfigPanel'
 import { ApiConfiguration } from '../../pages/ApiConfiguration'
 import { LiveCampaignTester } from '../LiveCampaignTester'
+import { QuickAPITest } from '../../pages/QuickAPITest'
 import { useLanguage } from '../../contexts/CleanLanguageContext'
 
 export function CleanDashboardLayout() {
@@ -63,6 +64,8 @@ export function CleanDashboardLayout() {
         return <ApiConfiguration />
       case 'live-test':
         return <LiveCampaignTester />
+      case 'quick-api-test':
+        return <QuickAPITest />
       default:
         return <Dashboard onModuleChange={setActiveModule} />
     }

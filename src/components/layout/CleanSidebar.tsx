@@ -91,6 +91,12 @@ export function CleanSidebar({ activeModule, onModuleChange }: CleanSidebarProps
       description: 'Test AI campaign generation'
     },
     {
+      id: 'quick-api-test',
+      label: '🔍 API Test',
+      icon: Plug,
+      description: 'Quick API status check'
+    },
+    {
       id: 'settings',
       label: t('settings'),
       icon: Settings,
