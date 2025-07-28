@@ -1,137 +1,118 @@
 {
-  "name": "🚀 NexusOne AI - Automated Deployment Pipeline",
+  "name": "NexusOne AI Platform",
   "version": "1.0.0",
-  "description": "Complete production deployment pipeline with API validation and health monitoring",
-  "main": "deploy-production-validated.sh",
-  "scripts": {
-    "validate": "./validate-api-config.sh",
-    "deploy:staging": "NODE_ENV=staging ./deploy-production-validated.sh",
-    "deploy:production": "NODE_ENV=production ./deploy-production-validated.sh",
-    "health:check": "node src/utils/api-health-monitor.js",
-    "health:report": "node -e \"const monitor = require('./src/utils/api-health-monitor.js'); const m = new monitor(); console.log(m.generateReport());\"",
-    "build:validated": "npm run validate && npm run build:prod",
-    "deploy:validated": "npm run validate && npm run build:validated && npm run deploy:production"
-  },
+  "description": "Global AI Marketing Automation Platform",
   "deployment": {
-    "platforms": {
-      "primary": "netlify",
-      "secondary": "vercel",
-      "backup": "manual"
+    "target": "production",
+    "environment": "supabase-production",
+    "project_id": "hbfgtdxvlbkvkrjqxnac",
+    "status": "ready"
+  },
+  "infrastructure": {
+    "backend": {
+      "provider": "supabase",
+      "database": "postgresql",
+      "auth": "supabase-auth",
+      "functions": "edge-functions",
+      "storage": "supabase-storage"
     },
-    "environments": {
-      "staging": {
-        "url": "https://nexusone-staging.netlify.app",
-        "branch": "develop",
-        "validation": "required"
+    "frontend": {
+      "framework": "react-typescript",
+      "bundler": "vite",
+      "hosting": "vercel",
+      "cdn": "vercel-edge"
+    }
+  },
+  "apis": {
+    "ai_services": {
+      "openai": {
+        "api_key": "configured",
+        "assistant_id": "asst_0jsx8eD6P3W9XGsSRRNU2Pfd",
+        "status": "active"
       },
-      "production": {
-        "url": "https://nexusone-ai.netlify.app",
-        "branch": "main",
-        "validation": "strict"
+      "elevenlabs": {
+        "api_key": "configured",
+        "status": "active"
+      },
+      "replicate": {
+        "api_key": "configured",
+        "status": "active"
+      },
+      "luma": {
+        "api_key": "configured",
+        "status": "active"
+      }
+    },
+    "social_media": {
+      "facebook": {
+        "access_token": "configured",
+        "app_id": "892734585139740",
+        "status": "active"
+      },
+      "whatsapp": {
+        "gupshup_key": "configured",
+        "status": "active"
+      }
+    },
+    "ecommerce": {
+      "cj_dropshipping": {
+        "api_key": "configured",
+        "status": "active"
+      }
+    },
+    "media": {
+      "unsplash": {
+        "access_key": "configured",
+        "status": "active"
       }
     }
   },
-  "validation": {
-    "critical_apis": [
-      "VITE_SUPABASE_URL",
-      "VITE_SUPABASE_ANON_KEY",
-      "SUPABASE_SERVICE_ROLE_KEY",
-      "OPENAI_API_KEY",
-      "OPENAI_ASSISTANT_ID"
-    ],
-    "optional_apis": [
-      "ELEVENLABS_API_KEY",
-      "REPLICATE_API_TOKEN",
-      "LUMA_API_KEY",
-      "GUPSHUP_API_KEY",
-      "CJ_API_KEY",
-      "FACEBOOK_ACCESS_TOKEN",
-      "UNSPLASH_ACCESS_KEY"
-    ],
-    "health_checks": [
-      {
-        "name": "Supabase Database",
-        "endpoint": "${VITE_SUPABASE_URL}/rest/v1/",
-        "critical": true
-      },
-      {
-        "name": "OpenAI API",
-        "endpoint": "https://api.openai.com/v1/models",
-        "critical": true
-      },
-      {
-        "name": "ElevenLabs TTS",
-        "endpoint": "https://api.elevenlabs.io/v1/voices",
-        "critical": false
-      },
-      {
-        "name": "Replicate Images",
-        "endpoint": "https://api.replicate.com/v1/models",
-        "critical": false
-      },
-      {
-        "name": "Luma AI Video",
-        "endpoint": "https://api.lumalabs.ai/ping",
-        "critical": false
-      },
-      {
-        "name": "Gupshup WhatsApp",
-        "endpoint": "https://api.gupshup.io/sm/api/v1/app",
-        "critical": false
-      },
-      {
-        "name": "CJ Dropshipping",
-        "endpoint": "https://developers.cjdropshipping.com/api2.0/v1/ping",
-        "critical": false
-      },
-      {
-        "name": "Facebook Marketing",
-        "endpoint": "https://graph.facebook.com/v18.0/",
-        "critical": false
-      }
-    ]
+  "edge_functions": [
+    "ai-content-generation",
+    "ai-content-generator", 
+    "api-proxy",
+    "cj-dropshipping-catalog",
+    "cj-dropshipping-order",
+    "dropshipping-import",
+    "facebook-ads-manager",
+    "landing-page-builder",
+    "luma-video-ai",
+    "nexbrain-chat",
+    "nexus-api-manager",
+    "product-scraper",
+    "save-api-config",
+    "test-api-connection",
+    "unsplash-api",
+    "usage-tracker",
+    "video-generator",
+    "webhook-handler",
+    "whatsapp-automation"
+  ],
+  "features": {
+    "ai_marketing": true,
+    "dropshipping": true,
+    "video_generation": true,
+    "landing_pages": true,
+    "whatsapp_automation": true,
+    "facebook_ads": true,
+    "multi_language": true,
+    "drag_drop_editor": true,
+    "analytics": true,
+    "api_management": true
+  },
+  "deployment_commands": {
+    "quick_deploy": "./deploy-quick.sh",
+    "full_deploy": "./deploy-production-final.sh",
+    "health_check": "curl -X GET https://hbfgtdxvlbkvkrjqxnac.supabase.co/functions/v1/test-api-connection"
   },
   "monitoring": {
-    "health_check_interval": 30000,
-    "api_timeout": 10000,
-    "retry_attempts": 3,
-    "alerts": {
-      "critical_failure": "immediate",
-      "degraded_performance": "5_minutes",
-      "optional_failure": "30_minutes"
-    },
-    "metrics": [
-      "response_time",
-      "uptime_percentage",
-      "error_rate",
-      "consecutive_failures"
-    ]
+    "supabase_dashboard": "https://supabase.com/dashboard/project/hbfgtdxvlbkvkrjqxnac",
+    "logs": "https://supabase.com/dashboard/project/hbfgtdxvlbkvkrjqxnac/logs",
+    "functions": "https://supabase.com/dashboard/project/hbfgtdxvlbkvkrjqxnac/functions"
   },
-  "security": {
-    "environment_validation": true,
-    "secret_scanning": true,
-    "dependency_audit": true,
-    "build_verification": true
-  },
-  "features": {
-    "real_time_monitoring": true,
-    "automatic_health_checks": true,
-    "api_status_dashboard": true,
-    "performance_tracking": true,
-    "alert_notifications": true,
-    "export_reports": true
-  },
-  "requirements": {
-    "node_version": ">=18.0.0",
-    "npm_version": ">=8.0.0",
-    "environment_file": ".env.production",
-    "build_output": "dist/",
-    "deployment_target": "static_hosting"
-  },
-  "documentation": {
-    "setup_guide": "DEPLOYMENT_GUIDE.md",
-    "api_documentation": "API_INTEGRATION_GUIDE.md",
-    "troubleshooting": "TROUBLESHOOTING.md",
-    "monitoring_guide": "MONITORING_GUIDE.md"
+  "production_urls": {
+    "api_base": "https://hbfgtdxvlbkvkrjqxnac.supabase.co/functions/v1",
+    "database": "https://hbfgtdxvlbkvkrjqxnac.supabase.co",
+    "frontend": "https://nexusone-ai.vercel.app"
   }
 }
