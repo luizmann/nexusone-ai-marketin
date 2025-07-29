@@ -3,8 +3,10 @@
 .devcontainer/postStartCommand.sh
 .devcontainer/refreshTools.sh
 .devcontainer/spark.conf
+.env.production
 .file-manifest
 .github/workflows/deploy-production.yml
+.github/workflows/deploy.yml
 .gitignore
 .spark-initial-sha
 .spark-workbench-id
@@ -46,6 +48,7 @@ DEPLOY_NOW_COMPLETE.md
 DEPLOY_SIMPLE.md
 DEPLOY_STATUS_FINAL.md
 DEPLOY_STATUS_REPORT.md
+Dockerfile
 EDGE_FUNCTIONS_DEPLOYMENT_STATUS.md
 ERROR_RESOLUTION_REPORT.md
 FACEBOOK_TOKEN_ANALYSIS_REPORT.md
@@ -70,6 +73,8 @@ PRD.md
 PRODUCTION_BACKEND_DEPLOYMENT_COMPLETE.md
 PRODUCTION_DEPLOYMENT_COMPLETE.md
 PRODUCTION_DEPLOYMENT_COMPLETE_FINAL.md
+PRODUCTION_DEPLOYMENT_GUIDE.md
+PRODUCTION_DEPLOYMENT_STATUS.md
 PRODUCTION_DEPLOY_GUIDE.md
 PRODUCTION_LAUNCH_READY.md
 PRODUCTION_PACKAGE_STRUCTURE.md
@@ -108,6 +113,8 @@ deploy-supabase.sh
 deploy-ultimate.sh
 deploy.sh
 deployment-config.json
+docker-compose.yml
+docker/nginx.conf
 health-check.js
 index.html
 migrate-to-git.sh
