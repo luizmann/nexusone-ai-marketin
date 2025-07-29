@@ -12,7 +12,8 @@ import {
   CreditCard, 
   Settings,
   Shield,
-  Plug
+  Plug,
+  TestTube
 } from 'lucide-react'
 
 interface OptimizedSidebarProps {
@@ -100,6 +101,13 @@ export function OptimizedSidebar({ activeModule, onModuleChange }: OptimizedSide
   ]
 
   const systemModules = [
+    {
+      id: 'ai-tester',
+      label: 'AI Test Suite',
+      icon: TestTube,
+      description: 'Test AI Integrations',
+      category: 'system'
+    },
     {
       id: 'api-config',
       label: 'API Setup',
