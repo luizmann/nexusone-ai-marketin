@@ -10,6 +10,7 @@ import { WhatsAppAI } from '../features/WhatsAppAI'
 import { SmartAppointments } from '../features/SmartAppointments'
 import { NexBrain } from '../features/NexBrain'
 import { AIFeaturesTester } from '../features/AIFeaturesTester'
+import { AITestSuite } from '../AITestSuite'
 import { Credits } from '../../pages/Credits'
 import { Settings } from '../../pages/Settings'
 import { AdminDashboard } from '../../pages/AdminDashboard'
@@ -49,7 +50,7 @@ export function OptimizedDashboardLayout() {
       case 'nexbrain':
         return <NexBrain />
       case 'ai-tester':
-        return <AIFeaturesTester />
+        return <AITestSuite />
       case 'credits':
         return <Credits />
       case 'settings':

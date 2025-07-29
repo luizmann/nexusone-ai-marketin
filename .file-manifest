@@ -12,6 +12,7 @@
 .spark-workbench-id
 AI_CAMPAIGN_GENERATION_TEST_REPORT.md
 AI_CONTENT_GENERATION_COMPLETE_REPORT.md
+AI_FEATURES_TEST_REPORT.md
 API_CONFIGURATION_COMPLETE.md
 API_CONFIGURATION_DEPLOYMENT_COMPLETE.md
 API_IMPLEMENTATION_PRIORITY.md
@@ -53,6 +54,7 @@ Dockerfile
 EDGE_FUNCTIONS_DEPLOYMENT_STATUS.md
 ERROR_RESOLUTION_REPORT.md
 FACEBOOK_TOKEN_ANALYSIS_REPORT.md
+FINAL_AI_VALIDATION_REPORT.md
 FINAL_DEPLOYMENT_STATUS.md
 FINAL_DEPLOYMENT_STATUS_COMPLETE.md
 FINAL_LAUNCH_VALIDATION_REPORT.md
@@ -229,6 +231,7 @@ src/components/dropshipping/FulfillmentSystem.tsx
 src/components/dropshipping/InventoryManagement.tsx
 src/components/dropshipping/OrderFulfillment.tsx
 src/components/dropshipping/ProductCatalogBrowser.tsx
+src/components/features/AIFeaturesTester.tsx
 src/components/features/MagicPages.tsx
 src/components/features/NexBrain.tsx
 src/components/features/NexBrainAssistant.tsx
@@ -331,6 +334,7 @@ supabase/migrations/005_production_optimizations.sql
 supabase/migrations/20250101000006_api_configuration_system.sql
 supabase/migrations/20250101_api_management.sql
 supabase/migrations/20250128_luma_ai_integration.sql
+test-ai-features.js
 test-campaign-generation.js
 test-imports.js
 test-pipeline.js
