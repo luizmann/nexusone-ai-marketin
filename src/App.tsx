@@ -1,4 +1,3 @@
-import { useKV } from '@github/spark/hooks'
 import { OptimizedDashboardLayout } from './components/layout/OptimizedDashboardLayout'
 import { WelcomeScreen } from './components/WelcomeScreen'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -9,8 +8,21 @@ import { CreditProvider } from './contexts/CreditContext'
 import { useEffect, useState } from 'react'
 
 function App() {
-  const [user] = useKV('user-profile', null)
+  const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  
+  // Get user from localStorage
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user-profile')
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser))
+      } catch (e) {
+        console.error('Error parsing saved user:', e)
+      }
+    }
+    setIsLoading(false)
+  }, [])
   
   // Initialize the application
   useEffect(() => {
@@ -24,12 +36,10 @@ function App() {
         
         console.log('✅ NexusOne AI Platform initialized with API keys')
         
-        // Wait a moment for KV to load
+        // Wait a moment for initialization
         await new Promise(resolve => setTimeout(resolve, 100))
-        setIsLoading(false)
       } catch (error) {
         console.error('App initialization error:', error)
-        setIsLoading(false)
       }
     }
     
