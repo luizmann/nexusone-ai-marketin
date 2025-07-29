@@ -67,6 +67,8 @@ LANDING_PAGE_FIXES.md
 LAUNCH_READINESS_REPORT.md
 LIVE_CAMPAIGN_TEST_FINAL_REPORT.md
 LUMA_AI_INTEGRATION_COMPLETE.md
+NETLIFY_DEPLOY.md
+NETLIFY_READY.md
 NEXUSONE_COMPLETE_DOCUMENTATION.md
 NEXUSONE_COMPLETE_FUNCTIONS_REPORT.md
 NEXUSONE_RELATORIO_COMPLETO.md
@@ -101,6 +103,7 @@ deploy-edge-functions.sh
 deploy-express.sh
 deploy-frontend-quick.sh
 deploy-manual-commands.sh
+deploy-netlify.sh
 deploy-nexusone-complete.sh
 deploy-nexusone.sh
 deploy-now.sh
