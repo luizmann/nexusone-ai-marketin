@@ -3,6 +3,7 @@
 .devcontainer/postStartCommand.sh
 .devcontainer/refreshTools.sh
 .devcontainer/spark.conf
+.env.example
 .file-manifest
 .github/workflows/deploy-production.yml
 .github/workflows/deploy.yml
@@ -33,6 +34,7 @@ CRITICAL_API_STATUS_REPORT.md
 CRITICAL_FIXES_REPORT.md
 CRITICAL_SYSTEM_STATUS_REPORT.md
 DEPLOYMENT.md
+DEPLOYMENT_FINAL_READY.md
 DEPLOYMENT_GUIDE.md
 DEPLOYMENT_PIPELINE_GUIDE.md
 DEPLOYMENT_PIPELINE_STATUS.md
@@ -72,6 +74,7 @@ PRD.md
 PRODUCTION_BACKEND_DEPLOYMENT_COMPLETE.md
 PRODUCTION_DEPLOYMENT_COMPLETE.md
 PRODUCTION_DEPLOYMENT_COMPLETE_FINAL.md
+PRODUCTION_DEPLOYMENT_FINAL.md
 PRODUCTION_DEPLOYMENT_GUIDE.md
 PRODUCTION_DEPLOYMENT_STATUS.md
 PRODUCTION_DEPLOY_GUIDE.md
@@ -100,6 +103,7 @@ deploy-frontend-quick.sh
 deploy-manual-commands.sh
 deploy-nexusone-complete.sh
 deploy-nexusone.sh
+deploy-now.sh
 deploy-production-complete.sh
 deploy-production-final.sh
 deploy-production-ready.sh
@@ -112,6 +116,7 @@ deploy-supabase.sh
 deploy-ultimate.sh
 deploy.sh
 deployment-config.json
+deployment-info.json
 docker-compose.yml
 docker/nginx.conf
 health-check.js
@@ -250,6 +255,7 @@ src/contexts/CreditContext.tsx
 src/contexts/LanguageContext.tsx
 src/hooks/useCampaignAssets.ts
 src/hooks/useInventoryFulfillment.ts
+src/hooks/useKV.ts
 src/index.css
 src/lib/campaignTemplates.ts
 src/lib/monitoring.ts
