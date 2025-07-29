@@ -3,7 +3,6 @@
 .devcontainer/postStartCommand.sh
 .devcontainer/refreshTools.sh
 .devcontainer/spark.conf
-.env.example
 .file-manifest
 .github/workflows/deploy-production.yml
 .github/workflows/deploy.yml
@@ -184,6 +183,7 @@ src/backend/utils/helpers.ts
 src/business-report.md
 src/components/AIAdsCampaignGenerator.tsx
 src/components/AISystemStatus.tsx
+src/components/AITestSuite.tsx
 src/components/AffiliateProgram.tsx
 src/components/Analytics.tsx
 src/components/AppointmentManager.tsx
