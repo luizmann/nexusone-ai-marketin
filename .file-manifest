@@ -94,6 +94,7 @@ SUPABASE_DEPLOYMENT_GUIDE.md
 SUPABASE_DEPLOYMENT_READY.md
 SUPABASE_EDGE_FUNCTIONS_DEPLOYMENT_COMPLETE.md
 SUPABASE_EDGE_FUNCTIONS_DEPLOYMENT_GUIDE.md
+TESTING_REPORT.md
 VERCEL_DEPLOY_GUIDE.md
 VERCEL_DEPLOY_READY.md
 api-test-comprehensive.js
@@ -198,6 +199,7 @@ src/components/ComprehensiveDocumentation.tsx
 src/components/ComprehensivePrivacyPolicy.tsx
 src/components/ContentGenerator.tsx
 src/components/Credits.tsx
+src/components/DeploymentValidator.tsx
 src/components/Documentation.tsx
 src/components/DragDropPageEditor.tsx
 src/components/ErrorBoundary.tsx
@@ -339,6 +341,7 @@ supabase/migrations/20250101000006_api_configuration_system.sql
 supabase/migrations/20250101_api_management.sql
 supabase/migrations/20250128_luma_ai_integration.sql
 test-ai-features.js
+test-ai-features.sh
 test-campaign-generation.js
 test-imports.js
 test-pipeline.js
