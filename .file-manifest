@@ -94,6 +94,8 @@ SUPABASE_DEPLOYMENT_GUIDE.md
 SUPABASE_DEPLOYMENT_READY.md
 SUPABASE_EDGE_FUNCTIONS_DEPLOYMENT_COMPLETE.md
 SUPABASE_EDGE_FUNCTIONS_DEPLOYMENT_GUIDE.md
+VERCEL_DEPLOY_GUIDE.md
+VERCEL_DEPLOY_READY.md
 api-test-comprehensive.js
 check-deploy-readiness.js
 deploy-backend-complete.sh
@@ -118,6 +120,7 @@ deploy-simple.sh
 deploy-supabase-complete.sh
 deploy-supabase.sh
 deploy-ultimate.sh
+deploy-vercel-complete.sh
 deploy.sh
 deployment-config.json
 deployment-info.json
@@ -128,6 +131,7 @@ index.html
 migrate-to-git.sh
 netlify.toml
 package-lock.json
+package-simple.json
 package.json
 packages/spark-tools/package.json
 quick-git-setup.sh

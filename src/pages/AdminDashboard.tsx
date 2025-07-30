@@ -14,6 +14,7 @@ import { apiService, APIKeys } from '../services/apiService'
 import { NexBrainTester } from '../components/NexBrainTester'
 import { OpenAIKeyHelper } from '../components/OpenAIKeyHelper'
 import { NexBrainCapabilities } from '../components/NexBrainCapabilities'
+import { DeploymentValidator } from '../components/DeploymentValidator'
 import { 
   Users, 
   DollarSign, 
@@ -354,14 +355,19 @@ export function AdminDashboard() {
         </Card>
       </div>
 
-      <Tabs defaultValue="apis" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
+      <Tabs defaultValue="deployment" className="w-full">
+        <TabsList className="grid w-full grid-cols-6">
+          <TabsTrigger value="deployment">Deployment</TabsTrigger>
           <TabsTrigger value="apis">API Configuration</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
           <TabsTrigger value="database">Database</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="deployment" className="space-y-4">
+          <DeploymentValidator />
+        </TabsContent>
 
         <TabsContent value="apis" className="space-y-4">
           {/* NexBrain AI Assistant Section */}
