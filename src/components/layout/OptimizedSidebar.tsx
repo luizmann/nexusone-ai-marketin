@@ -13,7 +13,8 @@ import {
   Settings,
   Shield,
   Plug,
-  TestTube
+  TestTube,
+  Zap
 } from 'lucide-react'
 
 interface OptimizedSidebarProps {
@@ -106,6 +107,13 @@ export function OptimizedSidebar({ activeModule, onModuleChange }: OptimizedSide
       label: 'AI Test Suite',
       icon: TestTube,
       description: 'Test AI Integrations',
+      category: 'system'
+    },
+    {
+      id: 'ai-integration-test',
+      label: 'Backend Tests',
+      icon: Zap,
+      description: 'Test Supabase Functions',
       category: 'system'
     },
     {
