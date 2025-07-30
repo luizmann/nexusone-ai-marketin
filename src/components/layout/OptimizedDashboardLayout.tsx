@@ -11,6 +11,7 @@ import { SmartAppointments } from '../features/SmartAppointments'
 import { NexBrain } from '../features/NexBrain'
 import { AIFeaturesTester } from '../features/AIFeaturesTester'
 import { AITestSuite } from '../AITestSuite'
+import { ComprehensiveAITestSuite } from '../ComprehensiveAITestSuite'
 import { AIIntegrationTester } from '../testing/AIIntegrationTester'
 import { Credits } from '../../pages/Credits'
 import { Settings } from '../../pages/Settings'
@@ -52,6 +53,8 @@ export function OptimizedDashboardLayout() {
         return <NexBrain />
       case 'ai-tester':
         return <AITestSuite />
+      case 'comprehensive-ai-test':
+        return <ComprehensiveAITestSuite />
       case 'ai-integration-test':
         return <AIIntegrationTester />
       case 'credits':

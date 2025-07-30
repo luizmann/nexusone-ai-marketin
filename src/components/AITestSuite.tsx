@@ -162,6 +162,17 @@ export function AITestSuite() {
     ))
   }
 
+  const getAPIKeyForEndpoint = (endpoint: string, apiConfigs: any) => {
+    if (endpoint.includes('openai')) return apiConfigs.openai?.key
+    if (endpoint.includes('replicate')) return apiConfigs.replicate?.key
+    if (endpoint.includes('luma')) return apiConfigs.luma?.key
+    if (endpoint.includes('elevenlabs')) return apiConfigs.elevenlabs?.key
+    if (endpoint.includes('cj-dropshipping')) return apiConfigs['cj-dropshipping']?.key
+    if (endpoint.includes('facebook')) return apiConfigs.facebook?.key
+    if (endpoint.includes('whatsapp')) return apiConfigs.gupshup?.key
+    return null
+  }
+
   const runSingleTest = async (test: AITest) => {
     const startTime = Date.now()
     
@@ -171,8 +182,17 @@ export function AITestSuite() {
     })
 
     try {
-      // Get Supabase URL from environment or use default
-      const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || 'https://your-project.supabase.co'
+      // Use direct Supabase Edge Functions URL
+      const supabaseUrl = 'https://your-project.supabase.co'
+      
+      // Get API keys from localStorage
+      const apiConfigs = JSON.parse(localStorage.getItem('nexusone-api-configs') || '{}')
+      
+      // Add API keys to test data based on endpoint
+      const enhancedTestData = { 
+        ...test.testData,
+        apiKey: getAPIKeyForEndpoint(test.endpoint, apiConfigs)
+      }
       
       const response = await fetch(`${supabaseUrl}${test.endpoint}`, {
         method: 'POST',
@@ -180,7 +200,7 @@ export function AITestSuite() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('sb-access-token') || 'test-token'}`
         },
-        body: JSON.stringify(test.testData)
+        body: JSON.stringify(enhancedTestData)
       })
 
       const duration = Date.now() - startTime

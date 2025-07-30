@@ -103,8 +103,15 @@ export function OptimizedSidebar({ activeModule, onModuleChange }: OptimizedSide
 
   const systemModules = [
     {
+      id: 'comprehensive-ai-test',
+      label: 'Comprehensive AI Tests',
+      icon: TestTube,
+      description: 'Full AI System Validation',
+      category: 'system'
+    },
+    {
       id: 'ai-tester',
-      label: 'AI Test Suite',
+      label: 'Basic AI Tests',
       icon: TestTube,
       description: 'Test AI Integrations',
       category: 'system'

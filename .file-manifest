@@ -3,6 +3,7 @@
 .devcontainer/postStartCommand.sh
 .devcontainer/refreshTools.sh
 .devcontainer/spark.conf
+.env.production
 .file-manifest
 .github/workflows/deploy-production.yml
 .github/workflows/deploy.yml
@@ -17,6 +18,7 @@ API_CONFIGURATION_DEPLOYMENT_COMPLETE.md
 API_IMPLEMENTATION_PRIORITY.md
 API_INTEGRATION_FINAL_REPORT.md
 API_MANAGEMENT_REPORT.md
+BACKEND_DEPLOYMENT_READY.md
 BACKEND_IMPLEMENTATION_COMPLETE.md
 BACKEND_INTEGRATION_GUIDE.md
 CJ_DROPSHIPPING_INTEGRATION_REPORT.md
@@ -77,6 +79,7 @@ PRD.md
 PRODUCTION_BACKEND_DEPLOYMENT_COMPLETE.md
 PRODUCTION_DEPLOYMENT_COMPLETE.md
 PRODUCTION_DEPLOYMENT_COMPLETE_FINAL.md
+PRODUCTION_DEPLOYMENT_COMPLETE_GUIDE.md
 PRODUCTION_DEPLOYMENT_FINAL.md
 PRODUCTION_DEPLOYMENT_GUIDE.md
 PRODUCTION_DEPLOYMENT_STATUS.md
@@ -119,6 +122,7 @@ deploy-production.sh
 deploy-quick.sh
 deploy-simple.sh
 deploy-supabase-complete.sh
+deploy-supabase-production.sh
 deploy-supabase.sh
 deploy-ultimate.sh
 deploy-vercel-complete.sh
@@ -254,6 +258,7 @@ src/components/modules/NexBrainAssistant.tsx
 src/components/modules/WinnerProductsHub.tsx
 src/components/monitoring/APIHealthDashboard.tsx
 src/components/reports/ComprehensiveSystemReport.md
+src/components/testing/AIIntegrationTester.tsx
 src/components/ui/sonner.tsx
 src/components/widgets/ApiStatusWidget.tsx
 src/config/api-keys.ts
@@ -300,6 +305,7 @@ src/services/fixedCampaignService.ts
 src/services/launchCampaignService.ts
 src/services/luma-ai.ts
 src/services/nexBrainService.ts
+src/services/supabaseAI.ts
 src/translations/ar.json
 src/translations/clean-pt.json
 src/translations/en.json
@@ -342,6 +348,7 @@ supabase/migrations/20250101_api_management.sql
 supabase/migrations/20250128_luma_ai_integration.sql
 test-ai-features.js
 test-ai-features.sh
+test-ai-integrations.sh
 test-campaign-generation.js
 test-imports.js
 test-pipeline.js
