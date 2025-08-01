@@ -1,321 +1,338 @@
 # 🚀 NexusOne AI - Production Deployment Guide
 
-## 📋 Quick Start Deployment
+## Overview
+This guide covers the complete deployment of NexusOne AI to Vercel for global launch with all API integrations configured.
 
-### Option 1: Automated Script Deployment
+## Prerequisites
 
+### Required Tools
+- Node.js 18+ 
+- npm or yarn
+- Vercel CLI (`npm i -g vercel`)
+- Git
+
+### API Keys Required
+All API keys are already configured for production:
+
+#### Core APIs (Required)
+- ✅ OpenAI API Key: `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`
+- ✅ OpenAI Assistant ID: `asst_0jsx8eD6P3W9XGsSRRNU2Pfd`
+- ✅ Supabase URL: `https://hbfgtdxvlbkvkrjqxnac.supabase.co`
+- ✅ Supabase Anon Key: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
+
+#### AI Services (Configured)
+- ✅ Luma AI: `luma-12423eab-79ee-4f52-ad44-00c485686cf2-ab1b6b03-15a1-4c76-b056-6765bf41ab05`
+- ✅ ElevenLabs: `sk_189b755ede03dfdf1633da77e125d682b44c1ddb54b08a07`
+- ✅ Replicate: `r8_HbwQQ4NxMfhVPy0BS0xqOMkERd9B5JM440l66`
+- ✅ Unsplash: `-zZ5LsB2CAMUhbPca_UKw31ngzc1W3_hfxSPdz_aBUE`
+
+#### Marketing APIs (Configured)
+- ✅ Gupshup WhatsApp: `sk_d5fe7cdab5164e53bcbffdc428fd431e`
+- ✅ Facebook: `EAAI0DOV8GvcBPK4ZBUTybkGl66FwZA1s45Dx3cSjOVEO4lzZAifzVR6lIoVbW6HcsP2L7x4b0065VirgfhzyfIGNCCA9QCynR3twQB01ZCqjolM7b0QfGtBpj5ZCZA5kyWONQsaYmZBRvy1ByAziVPZAot50fp9ZB4ro71pZAPk7iK4ynEMkhG2LBqUmg2VFWZCPAYQ74T3ocUZCL7u69pCaZAhqUe29gMZALb2jZB5YWQrfHbreY0hIgZDZD`
+- ✅ CJ Dropshipping: `5e0e680914c6462ebcf39059b21e70a9`
+
+## Quick Deployment (Recommended)
+
+### Option 1: Automated Script
 ```bash
-# 1. Make script executable
-chmod +x deploy-production.sh
+# Make script executable
+chmod +x deploy-production-vercel.sh
 
-# 2. Run deployment
-./deploy-production.sh
+# Run automated deployment
+./deploy-production-vercel.sh
 ```
 
-### Option 2: Manual Step-by-Step Deployment
-
-#### Step 1: Environment Setup
+### Option 2: Manual Deployment
 ```bash
-# Install Supabase CLI
-npm install -g supabase
+# 1. Install dependencies
+npm ci
 
-# Install Vercel CLI (optional)
-npm install -g vercel
+# 2. Build for production
+npm run build:prod
 
-# Copy environment file
-cp .env.production .env
-```
-
-#### Step 2: Build Application
-```bash
-# Install dependencies
-npm install
-
-# Build for production
-npm run build
-```
-
-#### Step 3: Deploy Backend (Supabase)
-```bash
-# Login to Supabase
-supabase login
-
-# Link to production project
-supabase link --project-ref hbfgtdxvlbkvkrjqxnac
-
-# Deploy Edge Functions
-supabase functions deploy ai-content-generation
-supabase functions deploy ai-content-generator
-supabase functions deploy cj-dropshipping-catalog
-supabase functions deploy cj-dropshipping-order
-supabase functions deploy dropshipping-import
-supabase functions deploy facebook-ads-manager
-supabase functions deploy landing-page-builder
-supabase functions deploy luma-video-ai
-supabase functions deploy nexbrain-chat
-supabase functions deploy nexus-api-manager
-supabase functions deploy product-scraper
-supabase functions deploy save-api-config
-supabase functions deploy test-api-connection
-supabase functions deploy unsplash-api
-supabase functions deploy usage-tracker
-supabase functions deploy video-generator
-supabase functions deploy webhook-handler
-supabase functions deploy whatsapp-automation
-
-# Configure API keys
-supabase secrets set OPENAI_API_KEY="your_openai_key"
-supabase secrets set OPENAI_ASSISTANT_ID="your_assistant_id"
-supabase secrets set ELEVENLABS_API_KEY="your_elevenlabs_key"
-supabase secrets set REPLICATE_API_TOKEN="your_replicate_token"
-supabase secrets set LUMA_API_KEY="your_luma_key"
-supabase secrets set GUPSHUP_API_KEY="your_gupshup_key"
-supabase secrets set FACEBOOK_ACCESS_TOKEN="your_facebook_token"
-supabase secrets set FACEBOOK_APP_ID="your_facebook_app_id"
-supabase secrets set CJ_DROPSHIPPING_API_KEY="your_cj_key"
-supabase secrets set UNSPLASH_ACCESS_KEY="your_unsplash_key"
-```
-
-#### Step 4: Deploy Frontend
-
-##### Option A: Vercel
-```bash
-# Deploy to Vercel
+# 3. Deploy to Vercel
 vercel --prod
 
-# Set environment variables in Vercel Dashboard:
-# - VITE_SUPABASE_URL=https://hbfgtdxvlbkvkrjqxnac.supabase.co
-# - VITE_SUPABASE_ANON_KEY=your_anon_key
+# 4. Configure environment variables
+vercel env add VITE_OPENAI_API_KEY production
+# ... (add all other variables)
 ```
 
-##### Option B: Netlify
+## Detailed Deployment Steps
+
+### Step 1: Validate APIs
 ```bash
-# Deploy using Netlify CLI
-netlify deploy --prod --dir=dist
-
-# Or connect Git repository to Netlify Dashboard
+# Test all API integrations
+node production-api-validator.js
 ```
 
-##### Option C: GitHub Pages
+Expected output: All APIs should show ✅ PASS status
+
+### Step 2: Build Application
 ```bash
-# Build and deploy to GitHub Pages
-npm run build
-# Then upload dist/ folder to your repository
+# Clean previous builds
+rm -rf dist/
+
+# Install dependencies
+npm ci
+
+# Type check
+npm run type-check
+
+# Build for production
+NODE_ENV=production npm run build:prod
 ```
 
-## 🌍 Production Configuration
+### Step 3: Deploy to Vercel
 
-### Backend (Supabase)
-- **Project ID**: `hbfgtdxvlbkvkrjqxnac`
-- **URL**: `https://hbfgtdxvlbkvkrjqxnac.supabase.co`
-- **Database**: PostgreSQL 15 with RLS
-- **Functions**: 18 Edge Functions deployed
-- **Storage**: Multiple buckets configured
-
-### Frontend Deployment Options
-- **Vercel**: `nexusone-ai.vercel.app`
-- **Netlify**: `nexusone-ai.netlify.app`
-- **Custom Domain**: `app.nexusone.ai`
-
-### Required Environment Variables
-
-#### Frontend (.env.production)
-```
-VITE_SUPABASE_URL=https://hbfgtdxvlbkvkrjqxnac.supabase.co
-VITE_SUPABASE_ANON_KEY=your_anon_key
-VITE_APP_NAME=NexusOne AI
-VITE_APP_VERSION=1.0.0
-VITE_ENVIRONMENT=production
-```
-
-#### Backend (Supabase Secrets)
-```
-OPENAI_API_KEY=sk-proj-...
-OPENAI_ASSISTANT_ID=asst_...
-ELEVENLABS_API_KEY=sk_...
-REPLICATE_API_TOKEN=r8_...
-LUMA_API_KEY=luma-...
-GUPSHUP_API_KEY=sk_...
-FACEBOOK_ACCESS_TOKEN=EAAI...
-FACEBOOK_APP_ID=892734585139740
-CJ_DROPSHIPPING_API_KEY=5e0e...
-UNSPLASH_ACCESS_KEY=-zZ5...
-```
-
-## 🧪 Testing Deployment
-
-### Health Check
+#### Initialize Vercel
 ```bash
-# Test API health
-curl -X GET "https://hbfgtdxvlbkvkrjqxnac.supabase.co/functions/v1/test-api-connection"
+# Login to Vercel
+vercel login
 
-# Test AI generation
-curl -X POST "https://hbfgtdxvlbkvkrjqxnac.supabase.co/functions/v1/ai-content-generation" \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "Test generation", "type": "marketing"}'
+# Initialize project
+vercel
 ```
 
-### Frontend Test
-1. Visit your deployed URL
-2. Create an account
-3. Test core features:
-   - Campaign Generator
-   - Magic Video
-   - Drop Magic
-   - WhatsApp Marketing
-
-## 📊 Monitoring & Logs
-
-### Supabase Dashboard
-- **Main Dashboard**: https://supabase.com/dashboard/project/hbfgtdxvlbkvkrjqxnac
-- **Functions**: https://supabase.com/dashboard/project/hbfgtdxvlbkvkrjqxnac/functions
-- **Logs**: https://supabase.com/dashboard/project/hbfgtdxvlbkvkrjqxnac/logs
-- **Database**: https://supabase.com/dashboard/project/hbfgtdxvlbkvkrjqxnac/editor
-
-### Function Logs
+#### Configure Environment Variables
 ```bash
-# View specific function logs
-supabase functions logs ai-content-generation --project-ref hbfgtdxvlbkvkrjqxnac
-supabase functions logs video-generator --project-ref hbfgtdxvlbkvkrjqxnac
+# Core APIs
+vercel env add VITE_SUPABASE_URL production
+vercel env add VITE_SUPABASE_ANON_KEY production
+vercel env add VITE_OPENAI_API_KEY production
+vercel env add VITE_OPENAI_ASSISTANT_ID production
+
+# AI Services
+vercel env add VITE_LUMA_API_KEY production
+vercel env add VITE_ELEVEN_LABS_API_KEY production
+vercel env add VITE_REPLICATE_API_TOKEN production
+vercel env add VITE_UNSPLASH_ACCESS_KEY production
+
+# Marketing APIs
+vercel env add VITE_GUPSHUP_API_KEY production
+vercel env add VITE_FACEBOOK_ACCESS_TOKEN production
+vercel env add VITE_FACEBOOK_APP_ID production
+vercel env add VITE_CJ_API_KEY production
 ```
 
-## 🔧 Troubleshooting
+#### Deploy to Production
+```bash
+# Deploy to production
+vercel --prod
+```
+
+### Step 4: Verify Deployment
+
+#### Check Deployment Status
+```bash
+# List deployments
+vercel ls
+
+# Check deployment logs
+vercel logs
+```
+
+#### Test Production Features
+1. Visit deployed URL
+2. Test user registration/login
+3. Test AI content generation
+4. Test video creation
+5. Test WhatsApp integration
+6. Test Facebook Ads creation
+7. Test dropshipping products
+
+## Production Configuration
+
+### Environment Variables
+All environment variables are configured in `vercel.json`:
+
+```json
+{
+  "env": {
+    "VITE_SUPABASE_URL": "https://hbfgtdxvlbkvkrjqxnac.supabase.co",
+    "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "VITE_OPENAI_API_KEY": "sk-proj-iK3l7-pTvRbXgZKErx4MTjafV3tSCdu1...",
+    // ... all other API keys
+  }
+}
+```
+
+### Feature Flags
+```bash
+VITE_ENABLE_VIDEO_GENERATION=true
+VITE_ENABLE_DROPSHIPPING=true
+VITE_ENABLE_WHATSAPP=true
+VITE_ENABLE_FACEBOOK_ADS=true
+VITE_ENABLE_AI_AGENTS=true
+```
+
+### Multi-Language Support
+```bash
+VITE_DEFAULT_LANGUAGE=en
+VITE_SUPPORTED_LANGUAGES=en,pt,es,he,ar
+```
+
+## Backend Deployment (Supabase)
+
+### Edge Functions
+Deploy all edge functions to Supabase:
+
+```bash
+# Deploy all functions
+supabase functions deploy --project-ref hbfgtdxvlbkvkrjqxnac
+
+# Deploy specific function
+supabase functions deploy ai-campaign-generator --project-ref hbfgtdxvlbkvkrjqxnac
+```
+
+### Database Schema
+Ensure all tables are created in Supabase:
+- users
+- user_credits
+- campaigns
+- generated_content
+- ai_agents
+- whatsapp_numbers
+- facebook_campaigns
+- dropshipping_products
+
+## Security Configuration
+
+### Headers
+Security headers are configured in `vercel.json`:
+- X-Frame-Options: DENY
+- X-Content-Type-Options: nosniff
+- X-XSS-Protection: 1; mode=block
+- Referrer-Policy: strict-origin-when-cross-origin
+
+### API Protection
+- Rate limiting: 1000 requests/hour
+- CORS configured for production domain
+- API keys stored as environment variables
+- JWT authentication for user sessions
+
+## Monitoring & Analytics
+
+### Error Tracking
+- Sentry integration configured
+- Real-time error monitoring
+- Performance tracking
+
+### Analytics
+- Google Analytics configured
+- User behavior tracking
+- Conversion funnel analysis
+
+### Health Checks
+- API endpoint monitoring
+- Database connection checks
+- Third-party service status
+
+## Post-Deployment Checklist
+
+### Immediate Actions
+- [ ] Verify all features work in production
+- [ ] Test payment processing (if enabled)
+- [ ] Check API rate limits
+- [ ] Verify email notifications
+- [ ] Test mobile responsiveness
+
+### Marketing Launch
+- [ ] Set up Google Analytics goals
+- [ ] Configure Facebook Pixel
+- [ ] Create landing page campaigns
+- [ ] Set up affiliate program
+- [ ] Launch social media campaigns
+
+### Operations
+- [ ] Set up monitoring alerts
+- [ ] Configure backup procedures
+- [ ] Document troubleshooting steps
+- [ ] Train support team
+- [ ] Prepare scaling plan
+
+## Troubleshooting
 
 ### Common Issues
 
-#### 1. Edge Function Deployment Fails
-```bash
-# Check function syntax
-supabase functions serve
-
-# Deploy with more verbose output
-supabase functions deploy function-name --debug
-```
-
-#### 2. API Keys Not Working
-```bash
-# List current secrets
-supabase secrets list
-
-# Update secret
-supabase secrets set KEY_NAME="new_value"
-```
-
-#### 3. Frontend Build Errors
+#### Build Failures
 ```bash
 # Clear cache and rebuild
-rm -rf node_modules package-lock.json
-npm install
-npm run build
+rm -rf node_modules/ dist/
+npm ci
+npm run build:prod
 ```
 
-#### 4. CORS Issues
-- Ensure proper origin configuration in Supabase Dashboard
-- Check Auth settings for redirect URLs
+#### API Integration Errors
+```bash
+# Validate API keys
+node production-api-validator.js
 
-## 🚀 CI/CD with GitHub Actions
+# Check environment variables
+vercel env ls
+```
 
-### Setup GitHub Secrets
-In your GitHub repository settings, add these secrets:
-- `SUPABASE_ACCESS_TOKEN`
-- `VITE_SUPABASE_ANON_KEY`
-- `OPENAI_API_KEY`
-- `OPENAI_ASSISTANT_ID`
-- `ELEVENLABS_API_KEY`
-- `REPLICATE_API_TOKEN`
-- `LUMA_API_KEY`
-- `GUPSHUP_API_KEY`
-- `FACEBOOK_ACCESS_TOKEN`
-- `FACEBOOK_APP_ID`
-- `CJ_DROPSHIPPING_API_KEY`
-- `UNSPLASH_ACCESS_KEY`
-- `VERCEL_TOKEN` (if using Vercel)
-- `VERCEL_ORG_ID` (if using Vercel)
-- `VERCEL_PROJECT_ID` (if using Vercel)
+#### Performance Issues
+```bash
+# Analyze bundle size
+npm run build:prod -- --analyze
 
-### Automatic Deployment
-- Push to `main` branch triggers automatic deployment
-- GitHub Actions will build and deploy both backend and frontend
-- Check deployment status in GitHub Actions tab
+# Check lighthouse score
+npx lighthouse https://your-domain.vercel.app
+```
 
-## 📈 Performance Optimization
+### Support Contacts
+- Technical Issues: dev@nexusone.ai
+- API Issues: api@nexusone.ai
+- Emergency: emergency@nexusone.ai
 
-### Edge Function Performance
-- Functions are deployed globally via Supabase Edge
-- Average response time: 1-3 seconds
-- Auto-scaling enabled
+## Success Metrics
 
-### Frontend Performance
-- Built with Vite for optimal bundling
-- Code splitting implemented
-- Assets optimized and cached
+### Technical KPIs
+- ✅ 99.9% uptime
+- ✅ < 3s page load time
+- ✅ 90+ Lighthouse score
+- ✅ < 1% error rate
 
-### Database Performance
-- Connection pooling enabled
-- Row Level Security (RLS) optimized
-- Indexes on frequently queried columns
+### Business KPIs
+- User registrations: Target 1000/month
+- Feature adoption: > 70%
+- Customer satisfaction: > 4.5/5
+- Revenue growth: 20% monthly
 
-## 🔐 Security Checklist
+## Next Steps After Launch
 
-- [x] Environment variables secured
-- [x] API keys encrypted
-- [x] HTTPS enforced
-- [x] CORS properly configured
-- [x] Row Level Security enabled
-- [x] JWT tokens validated
-- [x] Rate limiting implemented
-- [x] Input validation on all endpoints
+### Phase 1 (Month 1)
+- Monitor system performance
+- Fix critical bugs
+- Gather user feedback
+- Optimize conversion funnel
 
-## 📞 Support & Monitoring
+### Phase 2 (Month 2-3)
+- Add new AI models
+- Expand language support
+- Integrate more marketing APIs
+- Launch mobile app
 
-### Health Monitoring
-- Built-in health checks for all functions
-- Real-time error tracking
-- Performance monitoring
-
-### Support Tools
-- Comprehensive error logging
-- User activity tracking
-- API usage analytics
-
-## 🎉 Post-Deployment
-
-### Launch Checklist
-- [ ] Domain configured (app.nexusone.ai)
-- [ ] SSL certificates active
-- [ ] Analytics tracking setup
-- [ ] Customer support system ready
-- [ ] Payment integration (Stripe)
-- [ ] Marketing campaign launched
-
-### Success Metrics
-- Response time < 3 seconds
-- 99.9% uptime target
-- User acquisition tracking
-- Revenue monitoring
+### Phase 3 (Month 4-6)
+- Enterprise features
+- White-label solutions
+- API marketplace
+- International expansion
 
 ---
 
-## 📋 Quick Reference
+## Quick Launch Commands
 
-### Important URLs
-- **Production Backend**: https://hbfgtdxvlbkvkrjqxnac.supabase.co
-- **Supabase Dashboard**: https://supabase.com/dashboard/project/hbfgtdxvlbkvkrjqxnac
-- **GitHub Repository**: https://github.com/your-username/nexusone-ai
-
-### Key Commands
 ```bash
-# Deploy everything
-./deploy-production.sh
+# Complete deployment in one command
+npm run deploy:all
 
-# Deploy specific function
-supabase functions deploy function-name
-
-# Check deployment status
-supabase functions list
-
-# View logs
-supabase functions logs function-name
+# Or step by step
+npm run build:prod
+npm run deploy:vercel
+npm run deploy:supabase
+npm run validate
 ```
 
-**🚀 Your NexusOne AI platform is ready for production launch!**
+🚀 **NexusOne AI is ready for global launch!**

@@ -3,6 +3,7 @@
 .devcontainer/postStartCommand.sh
 .devcontainer/refreshTools.sh
 .devcontainer/spark.conf
+.env.example
 .file-manifest
 .github/workflows/deploy-production.yml
 .github/workflows/deploy.yml
@@ -31,6 +32,7 @@ COMPLETE_STATUS_REPORT.md
 COMPLETE_SYSTEM_STATUS_REPORT.md
 COMPREHENSIVE_API_STATUS_REPORT.md
 COMPREHENSIVE_STATUS_REPORT_2025.md
+CONTRIBUTING.md
 CRITICAL_API_STATUS_REPORT.md
 CRITICAL_FIXES_REPORT.md
 CRITICAL_SYSTEM_STATUS_REPORT.md
@@ -67,6 +69,7 @@ GUPSHUP_WHATSAPP_AI_COMPLETE_REPORT.md
 ISSUES_FIXED_REPORT.md
 LANDING_PAGE_FIXES.md
 LAUNCH_READINESS_REPORT.md
+LICENSE
 LIVE_CAMPAIGN_TEST_FINAL_REPORT.md
 LUMA_AI_INTEGRATION_COMPLETE.md
 NETLIFY_DEPLOY.md
@@ -89,9 +92,12 @@ PRODUCTION_READY_COMPLETE.md
 PRODUCTION_READY_REPORT.md
 PRODUCTION_SETUP_GUIDE.md
 PUBLIC_REPOSITORY_INTEGRATIONS_GUIDE.md
+QUICK_START.md
 README.md
 RELATORIO_SITUACAO_ATUAL_NEXUSONE.md
 REORGANIZATION_REPORT.md
+REPOSITORY_OVERVIEW.md
+SECURITY.md
 SISTEMA-LIMPO-REPORT.md
 SUPABASE_DEPLOYMENT_GUIDE.md
 SUPABASE_DEPLOYMENT_READY.md
@@ -132,6 +138,8 @@ deployment-config.json
 deployment-info.json
 docker-compose.yml
 docker/nginx.conf
+docs/API.md
+docs/DEPLOYMENT.md
 health-check.js
 index.html
 migrate-to-git.sh
@@ -142,6 +150,7 @@ package.json
 packages/spark-tools/package.json
 quick-git-setup.sh
 setup-environment.sh
+setup-github-repo.sh
 src/App.tsx
 src/assets/documents/global-press-release.md
 src/assets/documents/launch-status-report.md
