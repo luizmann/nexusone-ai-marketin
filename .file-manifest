@@ -3,7 +3,6 @@
 .devcontainer/postStartCommand.sh
 .devcontainer/refreshTools.sh
 .devcontainer/spark.conf
-.env.production
 .file-manifest
 .github/workflows/deploy-production.yml
 .github/workflows/deploy.yml
@@ -102,6 +101,7 @@ VERCEL_DEPLOY_GUIDE.md
 VERCEL_DEPLOY_READY.md
 api-test-comprehensive.js
 check-deploy-readiness.js
+comprehensive-ai-test-report.md
 deploy-backend-complete.sh
 deploy-backend-quick.sh
 deploy-commands.sh
@@ -199,6 +199,7 @@ src/components/AppointmentManager.tsx
 src/components/AppointmentScheduler.tsx
 src/components/AppointmentWebhook.tsx
 src/components/CampaignBuilder.tsx
+src/components/ComprehensiveAITestSuite.tsx
 src/components/ComprehensiveDocumentation.tsx
 src/components/ComprehensivePrivacyPolicy.tsx
 src/components/ContentGenerator.tsx
