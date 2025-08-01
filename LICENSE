@@ -1,6 +1,6 @@
-MIT License
+# MIT License
 
-Copyright GitHub, Inc.
+Copyright (c) 2025 NexusOne AI
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,31 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Third-Party Licenses
+
+This project uses various third-party packages with their own licenses:
+
+### React (MIT License)
+- Copyright (c) Facebook, Inc. and its affiliates
+- License: https://github.com/facebook/react/blob/main/LICENSE
+
+### Supabase (Apache 2.0)
+- Copyright (c) 2020-present Supabase
+- License: https://github.com/supabase/supabase/blob/master/LICENSE
+
+### Tailwind CSS (MIT License)
+- Copyright (c) Tailwind Labs, Inc.
+- License: https://github.com/tailwindlabs/tailwindcss/blob/master/LICENSE
+
+### Shadcn/ui (MIT License)
+- Copyright (c) 2023 shadcn
+- License: https://github.com/shadcn-ui/ui/blob/main/LICENSE.md
+
+### OpenAI (Custom License)
+- Usage subject to OpenAI's Terms of Service
+- License: https://openai.com/policies/terms-of-use
+
+For a complete list of dependencies and their licenses, see:
+- package.json for package information
+- node_modules/*/LICENSE for individual package licenses

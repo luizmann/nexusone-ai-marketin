@@ -238,6 +238,7 @@ src/components/WhatsAppBookingSystem.tsx
 src/components/admin/APIConfigPanel.tsx
 src/components/admin/ApiConfigurationDashboard.tsx
 src/components/admin/FeatureAvailabilityDashboard.tsx
+src/components/demos/URLSalesPageDemo.tsx
 src/components/dropshipping/AICampaignBuilder.tsx
 src/components/dropshipping/CJDropshippingBrowser.tsx
 src/components/dropshipping/CheckoutSystem.tsx
@@ -361,6 +362,7 @@ test-ai-features.js
 test-ai-features.sh
 test-ai-integrations.sh
 test-campaign-generation.js
+test-copy-paste.js
 test-imports.js
 test-pipeline.js
 validate-api-config.js
