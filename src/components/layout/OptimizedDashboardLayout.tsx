@@ -13,6 +13,7 @@ import { AIFeaturesTester } from '../features/AIFeaturesTester'
 import { AITestSuite } from '../AITestSuite'
 import { ComprehensiveAITestSuite } from '../ComprehensiveAITestSuite'
 import { AIIntegrationTester } from '../testing/AIIntegrationTester'
+import { PublicRepositoryExplorer } from '../PublicRepositoryExplorer'
 import { Credits } from '../../pages/Credits'
 import { Settings } from '../../pages/Settings'
 import { AdminDashboard } from '../../pages/AdminDashboard'
@@ -51,6 +52,8 @@ export function OptimizedDashboardLayout() {
         return <SmartAppointments />
       case 'nexbrain':
         return <NexBrain />
+      case 'public-repos':
+        return <PublicRepositoryExplorer />
       case 'ai-tester':
         return <AITestSuite />
       case 'comprehensive-ai-test':

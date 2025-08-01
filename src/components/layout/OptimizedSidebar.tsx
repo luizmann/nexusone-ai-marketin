@@ -14,7 +14,9 @@ import {
   Shield,
   Plug,
   TestTube,
-  Zap
+  Zap,
+  GitBranch,
+  Code
 } from 'lucide-react'
 
 interface OptimizedSidebarProps {
@@ -102,6 +104,13 @@ export function OptimizedSidebar({ activeModule, onModuleChange }: OptimizedSide
   ]
 
   const systemModules = [
+    {
+      id: 'public-repos',
+      label: 'Public Resources',
+      icon: GitBranch,
+      description: 'Open Source Tools & APIs',
+      category: 'system'
+    },
     {
       id: 'comprehensive-ai-test',
       label: 'Comprehensive AI Tests',
