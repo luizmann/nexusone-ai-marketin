@@ -88,6 +88,7 @@ PRODUCTION_PACKAGE_STRUCTURE.md
 PRODUCTION_READY_COMPLETE.md
 PRODUCTION_READY_REPORT.md
 PRODUCTION_SETUP_GUIDE.md
+PUBLIC_REPOSITORY_INTEGRATIONS_GUIDE.md
 README.md
 RELATORIO_SITUACAO_ATUAL_NEXUSONE.md
 REORGANIZATION_REPORT.md
@@ -207,6 +208,7 @@ src/components/Credits.tsx
 src/components/DeploymentValidator.tsx
 src/components/Documentation.tsx
 src/components/DragDropPageEditor.tsx
+src/components/EnhancedMagicPages.tsx
 src/components/ErrorBoundary.tsx
 src/components/FacebookTokenAnalyzer.tsx
 src/components/LanguageSelector.tsx
@@ -219,6 +221,8 @@ src/components/OpenAIKeyHelper.tsx
 src/components/PageTemplates.ts
 src/components/PartnerIntegrations.tsx
 src/components/PrivacyPolicy.tsx
+src/components/PublicAPIShowcase.tsx
+src/components/PublicRepositoryExplorer.tsx
 src/components/RealTimeVideoPreview.tsx
 src/components/SalesPage.tsx
 src/components/SocialMediaGenerator.tsx
@@ -303,9 +307,12 @@ src/services/apiService.ts
 src/services/campaignValidator.ts
 src/services/cj-api.ts
 src/services/fixedCampaignService.ts
+src/services/freePublicAPIs.ts
 src/services/launchCampaignService.ts
 src/services/luma-ai.ts
 src/services/nexBrainService.ts
+src/services/openSourceMarketingTools.ts
+src/services/publicRepositoryIntegrations.ts
 src/services/supabaseAI.ts
 src/translations/ar.json
 src/translations/clean-pt.json
