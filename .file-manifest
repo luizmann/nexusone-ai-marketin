@@ -204,11 +204,13 @@ src/components/ComprehensiveAITestSuite.tsx
 src/components/ComprehensiveDocumentation.tsx
 src/components/ComprehensivePrivacyPolicy.tsx
 src/components/ContentGenerator.tsx
+src/components/CopyPasteExamples.tsx
 src/components/Credits.tsx
 src/components/DeploymentValidator.tsx
 src/components/Documentation.tsx
 src/components/DragDropPageEditor.tsx
 src/components/EnhancedMagicPages.tsx
+src/components/EnhancedMagicPagesWithCopyPaste.tsx
 src/components/ErrorBoundary.tsx
 src/components/FacebookTokenAnalyzer.tsx
 src/components/LanguageSelector.tsx
@@ -306,6 +308,7 @@ src/services/apiRouter.ts
 src/services/apiService.ts
 src/services/campaignValidator.ts
 src/services/cj-api.ts
+src/services/copyPasteIntegration.ts
 src/services/fixedCampaignService.ts
 src/services/freePublicAPIs.ts
 src/services/launchCampaignService.ts

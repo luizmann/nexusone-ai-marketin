@@ -20,11 +20,13 @@ import {
   RefreshCw,
   ImageIcon,
   Video,
-  Globe
+  Globe,
+  Play
 } from '@phosphor-icons/react';
 import { useLanguage } from '@/contexts/CleanLanguageContext';
 import { toast } from 'sonner';
 import { copyPasteService, ExtractedContent } from '@/services/copyPasteIntegration';
+import { URLSalesPageDemo } from '@/components/demos/URLSalesPageDemo';
 
 interface PageSection {
   id: string;
@@ -203,168 +205,281 @@ const SalesPageBuilder = () => {
     <div className="container mx-auto px-6 py-8">
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg">
+          <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg">
             <Wand className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold">{t('AI Sales Page Builder')}</h1>
+            <h1 className="text-3xl font-bold">{t('URL to Sales Page Generator')}</h1>
             <p className="text-muted-foreground">
-              {t('Create high-converting sales pages with artificial intelligence')}
+              {t('Copy any product URL and instantly generate a professional sales page with AI')}
             </p>
+          </div>
+        </div>
+        
+        {/* Quick Demo Examples */}
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-6">
+          <h3 className="font-semibold mb-2 flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-purple-500" />
+            Try These Example URLs:
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+            <button 
+              onClick={() => setCopyPasteInput('https://www.amazon.com/dp/B08N5WRWNW')}
+              className="text-left p-2 rounded bg-white hover:bg-gray-50 border"
+            >
+              📱 Amazon Product URL
+            </button>
+            <button 
+              onClick={() => setCopyPasteInput('https://shopify.com/example-product')}
+              className="text-left p-2 rounded bg-white hover:bg-gray-50 border"
+            >
+              🛍️ Shopify Store URL
+            </button>
+            <button 
+              onClick={() => setCopyPasteInput('https://youtube.com/watch?v=example')}
+              className="text-left p-2 rounded bg-white hover:bg-gray-50 border"
+            >
+              🎥 YouTube Video URL
+            </button>
+            <button 
+              onClick={() => setCopyPasteInput('Premium Wireless Headphones\n\nHigh-quality sound with noise cancellation\nPrice: $199.99')}
+              className="text-left p-2 rounded bg-white hover:bg-gray-50 border"
+            >
+              📝 Product Description Text
+            </button>
           </div>
         </div>
       </div>
 
       {generatedPage.length === 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Original Configuration Panel */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5" />
-                {t('Page Configuration')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="pageTitle">{t('Page Title')} *</Label>
-                <Input
-                  id="pageTitle"
-                  placeholder={t('Enter your product or service name')}
-                  value={pageTitle}
-                  onChange={(e) => setPageTitle(e.target.value)}
-                />
-              </div>
+        <Tabs defaultValue="generator" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="generator" className="gap-2">
+              <Wand className="h-4 w-4" />
+              {t('URL Generator')}
+            </TabsTrigger>
+            <TabsTrigger value="demo" className="gap-2">
+              <Play className="h-4 w-4" />
+              {t('Live Demo')}
+            </TabsTrigger>
+          </TabsList>
 
-              <div className="space-y-2">
-                <Label htmlFor="productDescription">{t('Product Description')} *</Label>
-                <Textarea
-                  id="productDescription"
-                  placeholder={t('Describe your product or service in detail')}
-                  value={productDescription}
-                  onChange={(e) => setProductDescription(e.target.value)}
-                  rows={4}
-                />
-              </div>
+          <TabsContent value="generator" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Copy-Paste Integration Panel - Now Primary */}
+              <Card className="lg:col-span-2">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Paste className="h-5 w-5" />
+                    {t('🚀 Instant Sales Page Generator')}
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    {t('Copy any product URL, social media post, or content and watch AI create a professional sales page instantly!')}
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="copyPasteInput" className="text-base font-semibold">
+                      {t('Paste Your Content Here')} ⬇️
+                    </Label>
+                    <Textarea
+                      id="copyPasteInput"
+                      placeholder={t('✅ Product URLs (Amazon, Shopify, eBay, AliExpress)\n✅ Social media posts (Instagram, Facebook, TikTok)\n✅ YouTube video links\n✅ Product descriptions or any text content\n✅ Image URLs from Unsplash, Pexels\n\nExample:\nhttps://www.amazon.com/dp/B08N5WRWNW\n\nJust paste and click "Generate Sales Page"!')}
+                      value={copyPasteInput}
+                      onChange={(e) => setCopyPasteInput(e.target.value)}
+                      rows={8}
+                      className="font-mono text-sm"
+                    />
+                  </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="targetAudience">{t('Target Audience')}</Label>
-                <Input
-                  id="targetAudience"
-                  placeholder={t('Who is your ideal customer?')}
-                  value={targetAudience}
-                  onChange={(e) => setTargetAudience(e.target.value)}
-                />
-              </div>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={extractContentFromPaste}
+                      disabled={!copyPasteInput.trim() || isExtracting}
+                      className="flex-1 gap-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                      size="lg"
+                    >
+                      {isExtracting ? (
+                        <RefreshCw className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Wand className="h-4 w-4" />
+                      )}
+                      {isExtracting ? t('Analyzing Content...') : t('🪄 Generate Sales Page')}
+                    </Button>
+                    
+                    {copyPasteInput && (
+                      <Button
+                        variant="outline"
+                        onClick={() => setCopyPasteInput('')}
+                        size="lg"
+                      >
+                        Clear
+                      </Button>
+                    )}
+                  </div>
 
-              <Button 
-                onClick={generateSalesPage}
-                disabled={isGenerating || !pageTitle || !productDescription}
-                className="w-full gap-2"
-                size="lg"
-              >
-                {isGenerating ? (
-                  <Brain className="h-4 w-4 animate-pulse" />
-                ) : (
-                  <Sparkles className="h-4 w-4" />
-                )}
-                {isGenerating ? t('Generating Page...') : t('Generate Sales Page')}
-              </Button>
-            </CardContent>
-          </Card>
+                  {extractedContent && (
+                    <div className="space-y-3">
+                      <Alert className="border-green-200 bg-green-50">
+                        <Sparkles className="h-4 w-4" />
+                        <AlertContent>
+                          <AlertDescription>
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2">
+                                <Badge variant="secondary" className="bg-green-100 text-green-800">
+                                  {extractedContent.type}
+                                </Badge>
+                                <span className="text-sm font-medium">
+                                  {extractedContent.metadata.title || 'Content Extracted Successfully!'}
+                                </span>
+                              </div>
+                              
+                              {extractedContent.metadata.description && (
+                                <p className="text-sm text-muted-foreground">
+                                  {extractedContent.metadata.description.slice(0, 150)}...
+                                </p>
+                              )}
+                              
+                              <div className="flex flex-wrap gap-1">
+                                {extractedContent.metadata.tags.map((tag, index) => (
+                                  <Badge key={index} variant="outline" className="text-xs">
+                                    {tag}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          </AlertDescription>
+                        </AlertContent>
+                      </Alert>
 
-          {/* Copy-Paste Integration Panel */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Paste className="h-5 w-5" />
-                {t('Copy-Paste Integration')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="copyPasteInput">{t('Paste Content Here')}</Label>
-                <Textarea
-                  id="copyPasteInput"
-                  placeholder={t('Paste any URL, product link, text content, or social media post...\n\nSupported:\n• Product URLs (Amazon, Shopify, etc.)\n• Social media posts\n• Video links (YouTube, Vimeo)\n• Image URLs\n• Text content')}
-                  value={copyPasteInput}
-                  onChange={(e) => setCopyPasteInput(e.target.value)}
-                  rows={6}
-                />
-              </div>
-
-              <Button
-                onClick={extractContentFromPaste}
-                disabled={!copyPasteInput.trim() || isExtracting}
-                className="w-full gap-2"
-              >
-                {isExtracting ? (
-                  <RefreshCw className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Wand className="h-4 w-4" />
-                )}
-                {isExtracting ? t('Extracting Content...') : t('Extract & Enhance')}
-              </Button>
-
-              {extractedContent && (
-                <div className="space-y-3">
-                  <Alert>
-                    <Sparkles className="h-4 w-4" />
-                    <AlertContent>
-                      <AlertDescription>
-                        <div className="space-y-2">
-                          <div className="flex items-center gap-2">
-                            <Badge variant="secondary">{extractedContent.type}</Badge>
-                            <span className="text-sm font-medium">
-                              {extractedContent.metadata.title || 'Content Extracted'}
-                            </span>
-                          </div>
-                          
-                          {extractedContent.metadata.description && (
-                            <p className="text-sm text-muted-foreground">
-                              {extractedContent.metadata.description.slice(0, 100)}...
+                      {extractedContent.type === 'product' && extractedContent.metadata.image && (
+                        <div className="text-center bg-white p-4 rounded-lg border">
+                          <img 
+                            src={extractedContent.metadata.image} 
+                            alt="Product preview"
+                            className="w-32 h-32 object-cover rounded-lg mx-auto mb-2"
+                          />
+                          {extractedContent.metadata.price && (
+                            <p className="text-xl font-bold text-green-600">
+                              {extractedContent.metadata.price}
                             </p>
                           )}
-                          
-                          <div className="flex flex-wrap gap-1">
-                            {extractedContent.metadata.tags.map((tag, index) => (
-                              <Badge key={index} variant="outline" className="text-xs">
-                                {tag}
-                              </Badge>
-                            ))}
-                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            {extractedContent.metadata.brand}
+                          </p>
                         </div>
-                      </AlertDescription>
-                    </AlertContent>
-                  </Alert>
-
-                  {extractedContent.type === 'product' && extractedContent.metadata.image && (
-                    <div className="text-center">
-                      <img 
-                        src={extractedContent.metadata.image} 
-                        alt="Product preview"
-                        className="w-24 h-24 object-cover rounded-lg mx-auto"
-                      />
-                      {extractedContent.metadata.price && (
-                        <p className="text-lg font-bold text-green-600 mt-2">
-                          {extractedContent.metadata.price}
-                        </p>
                       )}
+
+                      <Button
+                        onClick={addExtractedContentToPage}
+                        className="w-full gap-2 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
+                        size="lg"
+                      >
+                        <Copy className="h-4 w-4" />
+                        {t('✨ Create Sales Page Now')}
+                      </Button>
                     </div>
                   )}
+                </CardContent>
+              </Card>
 
-                  <Button
-                    onClick={addExtractedContentToPage}
+              {/* Manual Configuration Panel - Secondary */}
+              <Card className="lg:col-span-1">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Brain className="h-5 w-5" />
+                    {t('Manual Configuration')}
+                  </CardTitle>
+                  <p className="text-xs text-muted-foreground">
+                    {t('Or create a custom sales page from scratch')}
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="pageTitle">{t('Page Title')} *</Label>
+                    <Input
+                      id="pageTitle"
+                      placeholder={t('Enter your product or service name')}
+                      value={pageTitle}
+                      onChange={(e) => setPageTitle(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="productDescription">{t('Product Description')} *</Label>
+                    <Textarea
+                      id="productDescription"
+                      placeholder={t('Describe your product or service in detail')}
+                      value={productDescription}
+                      onChange={(e) => setProductDescription(e.target.value)}
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="targetAudience">{t('Target Audience')}</Label>
+                    <Input
+                      id="targetAudience"
+                      placeholder={t('Who is your ideal customer?')}
+                      value={targetAudience}
+                      onChange={(e) => setTargetAudience(e.target.value)}
+                    />
+                  </div>
+
+                  <Button 
+                    onClick={generateSalesPage}
+                    disabled={isGenerating || !pageTitle || !productDescription}
                     className="w-full gap-2"
+                    variant="outline"
                   >
-                    <Copy className="h-4 w-4" />
-                    {t('Add to Page')}
+                    {isGenerating ? (
+                      <Brain className="h-4 w-4 animate-pulse" />
+                    ) : (
+                      <Sparkles className="h-4 w-4" />
+                    )}
+                    {isGenerating ? t('Generating Page...') : t('Generate Sales Page')}
                   </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+                </CardContent>
+              </Card>
+
+              {/* Tips Panel */}
+              <Card className="lg:col-span-1">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Globe className="h-5 w-5" />
+                    {t('💡 Pro Tips')}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-sm">
+                  <div className="flex items-start gap-2">
+                    <span>🎯</span>
+                    <span>Works with any e-commerce URL (Amazon, Shopify, eBay)</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span>📱</span>
+                    <span>Copy social media posts for viral sales pages</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span>🎥</span>
+                    <span>YouTube videos become video sales letters</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span>🖼️</span>
+                    <span>Image URLs get converted to visual sales pages</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span>⚡</span>
+                    <span>AI optimizes copy for maximum conversions</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="demo" className="space-y-6">
+            <URLSalesPageDemo />
+          </TabsContent>
+        </Tabs>
       ) : (
         <div className="space-y-6">
           <Tabs defaultValue="preview" className="w-full">

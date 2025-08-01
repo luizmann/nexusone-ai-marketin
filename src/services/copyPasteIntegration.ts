@@ -141,29 +141,86 @@ export class CopyPasteIntegrationService {
   private async extractEcommerceContent(url: string): Promise<ExtractedContent> {
     const domain = new URL(url).hostname;
     
-    // Simulate product data extraction
-    const mockProductData = {
-      amazon: {
-        title: "Premium Wireless Headphones",
-        description: "High-quality wireless headphones with noise cancellation and premium sound quality.",
-        price: "$199.99",
-        brand: "AudioTech",
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
-        rating: "4.5/5",
-        reviews: "1,234 reviews"
-      },
-      shopify: {
-        title: "Artisan Coffee Blend",
-        description: "Premium single-origin coffee beans roasted to perfection.",
-        price: "$24.99",
-        brand: "Mountain Roasters",
-        image: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=400",
-        rating: "4.8/5",
-        reviews: "567 reviews"
+    // Enhanced product data simulation based on URL patterns
+    const getProductDataByUrl = (url: string, domain: string) => {
+      // Amazon product patterns
+      if (domain.includes('amazon')) {
+        if (url.includes('headphones') || url.includes('B08N5WRWNW')) {
+          return {
+            title: "Sony WH-1000XM4 Wireless Premium Noise Canceling Overhead Headphones",
+            description: "Industry-leading noise canceling technology means you hear every word, note, and tune with incredible clarity. Digital noise canceling technology, powered by the V1 Processor, cancels out even more mid and high-frequency sounds.",
+            price: "$279.99",
+            originalPrice: "$349.99",
+            discount: "20% off",
+            brand: "Sony",
+            image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+            rating: "4.4/5",
+            reviews: "75,234 reviews",
+            features: ["30hr battery", "Quick Charge", "Touch Sensor Controls", "Speak-to-Chat Technology"]
+          };
+        }
+        return {
+          title: "Amazon Echo Dot (5th Gen)",
+          description: "Our most popular smart speaker with Alexa. Crisp vocals and balanced bass for full sound.",
+          price: "$49.99",
+          originalPrice: "$59.99",
+          discount: "17% off",
+          brand: "Amazon",
+          image: "https://images.unsplash.com/photo-1543512214-318c7553f230?w=400",
+          rating: "4.6/5",
+          reviews: "45,678 reviews",
+          features: ["Voice Control", "Smart Home Hub", "Premium Audio", "Compact Design"]
+        };
       }
+
+      // Shopify store patterns
+      if (domain.includes('shopify') || url.includes('shopify')) {
+        return {
+          title: "Organic Superfood Protein Powder",
+          description: "Premium plant-based protein blend with organic superfoods. Perfect for post-workout recovery and daily nutrition.",
+          price: "$49.99",
+          originalPrice: "$64.99",
+          discount: "23% off",
+          brand: "Nature's Best",
+          image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
+          rating: "4.8/5",
+          reviews: "2,456 reviews",
+          features: ["100% Organic", "25g Protein", "No Artificial Sweeteners", "Vegan Friendly"]
+        };
+      }
+
+      // eBay patterns
+      if (domain.includes('ebay')) {
+        return {
+          title: "Vintage Leather Messenger Bag",
+          description: "Handcrafted genuine leather messenger bag perfect for work or travel. Distressed finish gives it a unique vintage look.",
+          price: "$89.99",
+          originalPrice: "$129.99",
+          discount: "31% off",
+          brand: "Heritage Leather Co.",
+          image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400",
+          rating: "4.7/5",
+          reviews: "892 reviews",
+          features: ["Genuine Leather", "Multiple Compartments", "Adjustable Strap", "Vintage Style"]
+        };
+      }
+
+      // Default fallback
+      return {
+        title: "Premium Wireless Bluetooth Earbuds",
+        description: "High-quality wireless earbuds with active noise cancellation and premium sound quality.",
+        price: "$129.99",
+        originalPrice: "$199.99",
+        discount: "35% off",
+        brand: "TechAudio",
+        image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=400",
+        rating: "4.5/5",
+        reviews: "3,247 reviews",
+        features: ["Noise Cancellation", "24hr Battery", "Wireless Charging", "Water Resistant"]
+      };
     };
 
-    const productData = domain.includes('amazon') ? mockProductData.amazon : mockProductData.shopify;
+    const productData = getProductDataByUrl(url, domain);
 
     return {
       type: 'product',
@@ -173,10 +230,37 @@ export class CopyPasteIntegrationService {
         domain,
         extractedAt: new Date().toISOString(),
         confidence: 0.95,
-        tags: ['ecommerce', 'product', domain.split('.')[0]],
-        originalUrl: url
+        tags: ['ecommerce', 'product', domain.split('.')[0], 'bestseller'],
+        originalUrl: url,
+        currency: 'USD',
+        category: this.detectProductCategory(productData.title),
+        inStock: true,
+        fastShipping: true
       }
     };
+  }
+
+  /**
+   * Detect product category from title
+   */
+  private detectProductCategory(title: string): string {
+    const categories = {
+      'Electronics': ['headphones', 'earbuds', 'speaker', 'phone', 'laptop', 'tablet', 'echo', 'smart'],
+      'Fashion': ['bag', 'shoes', 'clothing', 'watch', 'jewelry', 'accessories'],
+      'Health': ['protein', 'vitamin', 'supplement', 'fitness', 'wellness'],
+      'Home': ['furniture', 'decor', 'kitchen', 'bathroom', 'bedroom'],
+      'Sports': ['equipment', 'gear', 'fitness', 'outdoor', 'exercise']
+    };
+
+    const titleLower = title.toLowerCase();
+    
+    for (const [category, keywords] of Object.entries(categories)) {
+      if (keywords.some(keyword => titleLower.includes(keyword))) {
+        return category;
+      }
+    }
+    
+    return 'General';
   }
 
   /**

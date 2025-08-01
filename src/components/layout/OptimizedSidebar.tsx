@@ -54,6 +54,13 @@ export function OptimizedSidebar({ activeModule, onModuleChange }: OptimizedSide
       category: 'ai'
     },
     {
+      id: 'sales-page-builder',
+      label: 'URL to Sales Page',
+      icon: Code,
+      description: 'Copy-Paste URLs to Auto-Generate Sales Pages',
+      category: 'ai'
+    },
+    {
       id: 'enhanced-magic-pages',
       label: 'Enhanced Magic Pages',
       icon: Wand2,
