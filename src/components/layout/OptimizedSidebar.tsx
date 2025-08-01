@@ -54,6 +54,13 @@ export function OptimizedSidebar({ activeModule, onModuleChange }: OptimizedSide
       category: 'ai'
     },
     {
+      id: 'enhanced-magic-pages',
+      label: 'Enhanced Magic Pages',
+      icon: Wand2,
+      description: 'Copy-Paste Integration & Dynamic Content',
+      category: 'ai'
+    },
+    {
       id: 'video-generator',
       label: 'Video Magic',
       icon: Video,

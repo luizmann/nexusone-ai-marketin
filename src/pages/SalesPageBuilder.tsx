@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { Alert, AlertContent, AlertDescription } from '@/components/ui/alert';
 import { 
   Wand, 
   Eye, 
@@ -13,16 +14,30 @@ import {
   Download, 
   ChartBar,
   Sparkles,
-  Brain
+  Brain,
+  Paste,
+  Copy,
+  RefreshCw,
+  ImageIcon,
+  Video,
+  Globe
 } from '@phosphor-icons/react';
 import { useLanguage } from '@/contexts/CleanLanguageContext';
 import { toast } from 'sonner';
+import { copyPasteService, ExtractedContent } from '@/services/copyPasteIntegration';
 
 interface PageSection {
   id: string;
-  type: 'hero' | 'features' | 'testimonials' | 'pricing' | 'cta';
+  type: 'hero' | 'features' | 'testimonials' | 'pricing' | 'cta' | 'product' | 'image' | 'video';
   title: string;
   content: string;
+  metadata?: {
+    source?: string;
+    author?: string;
+    price?: string;
+    image?: string;
+    [key: string]: any;
+  };
   style: {
     backgroundColor: string;
     textColor: string;
@@ -38,6 +53,63 @@ const SalesPageBuilder = () => {
   const [targetAudience, setTargetAudience] = useState('');
   const [generatedPage, setGeneratedPage] = useState<PageSection[]>([]);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
+  
+  // Copy-paste integration state
+  const [copyPasteInput, setCopyPasteInput] = useState('');
+  const [extractedContent, setExtractedContent] = useState<ExtractedContent | null>(null);
+  const [isExtracting, setIsExtracting] = useState(false);
+
+  // Enhanced content extraction from copy-paste
+  const extractContentFromPaste = async () => {
+    if (!copyPasteInput.trim()) {
+      toast.error(t('Please paste some content to extract'));
+      return;
+    }
+
+    setIsExtracting(true);
+    try {
+      const extracted = await copyPasteService.extractContent(copyPasteInput);
+      setExtractedContent(extracted);
+      toast.success(t('Content extracted successfully!'));
+      
+      // Show suggestions
+      const suggestions = copyPasteService.generateContentSuggestions(extracted);
+      if (suggestions.length > 0) {
+        toast.info(`${t('Suggestions')}: ${suggestions[0]}`);
+      }
+    } catch (error) {
+      toast.error(t('Failed to extract content'));
+      console.error('Content extraction error:', error);
+    } finally {
+      setIsExtracting(false);
+    }
+  };
+
+  // Add extracted content to page
+  const addExtractedContentToPage = () => {
+    if (!extractedContent) return;
+
+    const elements = copyPasteService.convertToPageElements(extractedContent);
+    const newSections: PageSection[] = elements.map((element, index) => ({
+      id: `extracted-${Date.now()}-${index}`,
+      type: element.type === 'image' ? 'image' : 
+            element.type === 'video' ? 'video' :
+            extractedContent.type === 'product' ? 'product' : 'features',
+      title: element.title || extractedContent.metadata.title || 'Extracted Content',
+      content: element.content,
+      metadata: extractedContent.metadata,
+      style: {
+        backgroundColor: index % 2 === 0 ? '#ffffff' : '#f8f9fa',
+        textColor: '#1a1a1a',
+        padding: '2rem'
+      }
+    }));
+
+    setGeneratedPage(prev => [...prev, ...newSections]);
+    toast.success(t('Content added to page successfully!'));
+    setExtractedContent(null);
+    setCopyPasteInput('');
+  };
 
   const generateSalesPage = async () => {
     if (!pageTitle || !productDescription) {
@@ -48,7 +120,7 @@ const SalesPageBuilder = () => {
     setIsGenerating(true);
     
     try {
-      // Simulate AI generation
+      // Simulate AI generation with enhanced content
       await new Promise(resolve => setTimeout(resolve, 3000));
       
       const mockSections: PageSection[] = [
@@ -144,60 +216,155 @@ const SalesPageBuilder = () => {
       </div>
 
       {generatedPage.length === 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Brain className="h-5 w-5" />
-              {t('Page Configuration')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="pageTitle">{t('Page Title')} *</Label>
-              <Input
-                id="pageTitle"
-                placeholder={t('Enter your product or service name')}
-                value={pageTitle}
-                onChange={(e) => setPageTitle(e.target.value)}
-              />
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Original Configuration Panel */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="h-5 w-5" />
+                {t('Page Configuration')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="pageTitle">{t('Page Title')} *</Label>
+                <Input
+                  id="pageTitle"
+                  placeholder={t('Enter your product or service name')}
+                  value={pageTitle}
+                  onChange={(e) => setPageTitle(e.target.value)}
+                />
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="productDescription">{t('Product Description')} *</Label>
-              <Textarea
-                id="productDescription"
-                placeholder={t('Describe your product or service in detail')}
-                value={productDescription}
-                onChange={(e) => setProductDescription(e.target.value)}
-                rows={4}
-              />
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="productDescription">{t('Product Description')} *</Label>
+                <Textarea
+                  id="productDescription"
+                  placeholder={t('Describe your product or service in detail')}
+                  value={productDescription}
+                  onChange={(e) => setProductDescription(e.target.value)}
+                  rows={4}
+                />
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="targetAudience">{t('Target Audience')}</Label>
-              <Input
-                id="targetAudience"
-                placeholder={t('Who is your ideal customer?')}
-                value={targetAudience}
-                onChange={(e) => setTargetAudience(e.target.value)}
-              />
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="targetAudience">{t('Target Audience')}</Label>
+                <Input
+                  id="targetAudience"
+                  placeholder={t('Who is your ideal customer?')}
+                  value={targetAudience}
+                  onChange={(e) => setTargetAudience(e.target.value)}
+                />
+              </div>
 
-            <Button 
-              onClick={generateSalesPage}
-              disabled={isGenerating || !pageTitle || !productDescription}
-              className="w-full gap-2"
-              size="lg"
-            >
-              {isGenerating ? (
-                <Brain className="h-4 w-4 animate-pulse" />
-              ) : (
-                <Sparkles className="h-4 w-4" />
+              <Button 
+                onClick={generateSalesPage}
+                disabled={isGenerating || !pageTitle || !productDescription}
+                className="w-full gap-2"
+                size="lg"
+              >
+                {isGenerating ? (
+                  <Brain className="h-4 w-4 animate-pulse" />
+                ) : (
+                  <Sparkles className="h-4 w-4" />
+                )}
+                {isGenerating ? t('Generating Page...') : t('Generate Sales Page')}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Copy-Paste Integration Panel */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Paste className="h-5 w-5" />
+                {t('Copy-Paste Integration')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="copyPasteInput">{t('Paste Content Here')}</Label>
+                <Textarea
+                  id="copyPasteInput"
+                  placeholder={t('Paste any URL, product link, text content, or social media post...\n\nSupported:\n• Product URLs (Amazon, Shopify, etc.)\n• Social media posts\n• Video links (YouTube, Vimeo)\n• Image URLs\n• Text content')}
+                  value={copyPasteInput}
+                  onChange={(e) => setCopyPasteInput(e.target.value)}
+                  rows={6}
+                />
+              </div>
+
+              <Button
+                onClick={extractContentFromPaste}
+                disabled={!copyPasteInput.trim() || isExtracting}
+                className="w-full gap-2"
+              >
+                {isExtracting ? (
+                  <RefreshCw className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Wand className="h-4 w-4" />
+                )}
+                {isExtracting ? t('Extracting Content...') : t('Extract & Enhance')}
+              </Button>
+
+              {extractedContent && (
+                <div className="space-y-3">
+                  <Alert>
+                    <Sparkles className="h-4 w-4" />
+                    <AlertContent>
+                      <AlertDescription>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="secondary">{extractedContent.type}</Badge>
+                            <span className="text-sm font-medium">
+                              {extractedContent.metadata.title || 'Content Extracted'}
+                            </span>
+                          </div>
+                          
+                          {extractedContent.metadata.description && (
+                            <p className="text-sm text-muted-foreground">
+                              {extractedContent.metadata.description.slice(0, 100)}...
+                            </p>
+                          )}
+                          
+                          <div className="flex flex-wrap gap-1">
+                            {extractedContent.metadata.tags.map((tag, index) => (
+                              <Badge key={index} variant="outline" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </AlertDescription>
+                    </AlertContent>
+                  </Alert>
+
+                  {extractedContent.type === 'product' && extractedContent.metadata.image && (
+                    <div className="text-center">
+                      <img 
+                        src={extractedContent.metadata.image} 
+                        alt="Product preview"
+                        className="w-24 h-24 object-cover rounded-lg mx-auto"
+                      />
+                      {extractedContent.metadata.price && (
+                        <p className="text-lg font-bold text-green-600 mt-2">
+                          {extractedContent.metadata.price}
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  <Button
+                    onClick={addExtractedContentToPage}
+                    className="w-full gap-2"
+                  >
+                    <Copy className="h-4 w-4" />
+                    {t('Add to Page')}
+                  </Button>
+                </div>
               )}
-              {isGenerating ? t('Generating Page...') : t('Generate Sales Page')}
-            </Button>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       ) : (
         <div className="space-y-6">
           <Tabs defaultValue="preview" className="w-full">
@@ -231,11 +398,49 @@ const SalesPageBuilder = () => {
                         className="border-b last:border-b-0"
                       >
                         <div className="max-w-4xl mx-auto text-center">
+                          {section.type === 'image' && section.metadata?.image ? (
+                            <div className="mb-4">
+                              <img 
+                                src={section.metadata.image} 
+                                alt={section.title}
+                                className="w-full max-w-md h-48 object-cover rounded-lg mx-auto"
+                              />
+                            </div>
+                          ) : null}
+                          
+                          {section.type === 'product' && section.metadata?.image ? (
+                            <div className="mb-4">
+                              <img 
+                                src={section.metadata.image} 
+                                alt={section.title}
+                                className="w-full max-w-sm h-64 object-cover rounded-lg mx-auto"
+                              />
+                              {section.metadata.price && (
+                                <div className="mt-2">
+                                  <span className="text-2xl font-bold text-green-600">
+                                    {section.metadata.price}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          ) : null}
+                          
                           <h2 className="text-3xl font-bold mb-4">{section.title}</h2>
                           <p className="text-lg opacity-90">{section.content}</p>
+                          
+                          {section.metadata?.author && (
+                            <p className="text-sm opacity-75 mt-2">— {section.metadata.author}</p>
+                          )}
+                          
                           {section.type === 'hero' && (
                             <Button className="mt-6" size="lg">
                               {t('Get Started Now')}
+                            </Button>
+                          )}
+                          
+                          {section.type === 'product' && (
+                            <Button className="mt-6 bg-green-600 hover:bg-green-700" size="lg">
+                              {t('Buy Now')}
                             </Button>
                           )}
                         </div>

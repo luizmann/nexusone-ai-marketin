@@ -14,6 +14,7 @@ import { AITestSuite } from '../AITestSuite'
 import { ComprehensiveAITestSuite } from '../ComprehensiveAITestSuite'
 import { AIIntegrationTester } from '../testing/AIIntegrationTester'
 import { PublicRepositoryExplorer } from '../PublicRepositoryExplorer'
+import { EnhancedMagicPagesWithCopyPaste } from '../EnhancedMagicPagesWithCopyPaste'
 import { Credits } from '../../pages/Credits'
 import { Settings } from '../../pages/Settings'
 import { AdminDashboard } from '../../pages/AdminDashboard'
@@ -40,6 +41,8 @@ export function OptimizedDashboardLayout() {
         return <Dashboard onModuleChange={setActiveModule} />
       case 'magic-pages':
         return <MagicPages />
+      case 'enhanced-magic-pages':
+        return <EnhancedMagicPagesWithCopyPaste />
       case 'smart-campaigns':
         return <SmartCampaigns />
       case 'video-generator':
