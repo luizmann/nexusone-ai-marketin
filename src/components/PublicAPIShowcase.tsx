@@ -6,15 +6,220 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertCircle, Download, Mail, Share, Sparkles, Code } from '@phosphor-icons/react';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { 
+  AlertCircle, 
+  Download, 
+  Mail, 
+  Share, 
+  Sparkles, 
+  Code, 
+  ExternalLink,
+  Copy,
+  Check,
+  Play,
+  Database,
+  CloudLightning,
+  Globe,
+  Heart,
+  Lightbulb
+} from '@phosphor-icons/react';
 import { freePublicAPIs } from '../services/freePublicAPIs';
 import { emailTemplates, socialMediaGenerator } from '../services/openSourceMarketingTools';
 import { useLanguage } from '../contexts/CleanLanguageContext';
+
+// Comprehensive list of 15+ free APIs for marketing and content creation
+const FREE_APIS = [
+  {
+    name: "JSONPlaceholder",
+    category: "Testing",
+    description: "Free fake API for testing and prototyping",
+    url: "https://jsonplaceholder.typicode.com",
+    endpoint: "/posts",
+    method: "GET",
+    features: ["No API key required", "RESTful endpoints", "JSON responses"],
+    useCase: "Perfect for testing API integrations before connecting real data sources",
+    icon: Database,
+    color: "bg-blue-500"
+  },
+  {
+    name: "Lorem Picsum",
+    category: "Images",
+    description: "Lorem Ipsum for photos - random placeholder images",
+    url: "https://picsum.photos",
+    endpoint: "/200/300",
+    method: "GET",
+    features: ["Random images", "Custom dimensions", "Grayscale/blur filters"],
+    useCase: "Generate placeholder images for landing pages and campaigns",
+    icon: Globe,
+    color: "bg-green-500"
+  },
+  {
+    name: "Quotable",
+    category: "Content",
+    description: "Free API for inspirational quotes",
+    url: "https://api.quotable.io",
+    endpoint: "/random",
+    method: "GET",
+    features: ["Random quotes", "Filter by author/tags", "No rate limits"],
+    useCase: "Add inspirational content to social media posts and emails",
+    icon: Lightbulb,
+    color: "bg-yellow-500"
+  },
+  {
+    name: "JokeAPI",
+    category: "Content",
+    description: "Free API for jokes and humor content",
+    url: "https://v2.jokeapi.dev",
+    endpoint: "/joke/Any",
+    method: "GET",
+    features: ["Multiple categories", "Safe mode", "Custom formats"],
+    useCase: "Create engaging social media content with humor",
+    icon: Heart,
+    color: "bg-pink-500"
+  },
+  {
+    name: "Cat Facts API",
+    category: "Fun",
+    description: "Random cat facts for engaging content",
+    url: "https://catfact.ninja",
+    endpoint: "/fact",
+    method: "GET",
+    features: ["Random facts", "JSON format", "No authentication"],
+    useCase: "Add fun facts to break ice in marketing content",
+    icon: Heart,
+    color: "bg-purple-500"
+  },
+  {
+    name: "QR Code API",
+    category: "Utilities",
+    description: "Generate QR codes for marketing campaigns",
+    url: "https://api.qrserver.com",
+    endpoint: "/v1/create-qr-code/",
+    method: "GET",
+    features: ["Custom size", "Multiple formats", "Color customization"],
+    useCase: "Create QR codes for campaigns, contact info, and URLs",
+    icon: Code,
+    color: "bg-gray-600"
+  },
+  {
+    name: "Unsplash API",
+    category: "Images",
+    description: "High-quality free photos (requires API key)",
+    url: "https://api.unsplash.com",
+    endpoint: "/photos/random",
+    method: "GET",
+    features: ["HD photos", "Search by topic", "Attribution info"],
+    useCase: "Professional photos for landing pages and social media",
+    icon: Globe,
+    color: "bg-orange-500"
+  },
+  {
+    name: "OpenWeatherMap",
+    category: "Data",
+    description: "Weather data for location-based marketing",
+    url: "https://api.openweathermap.org",
+    endpoint: "/data/2.5/weather",
+    method: "GET",
+    features: ["Current weather", "Forecasts", "Historical data"],
+    useCase: "Weather-based marketing campaigns and content personalization",
+    icon: CloudLightning,
+    color: "bg-blue-400"
+  },
+  {
+    name: "REST Countries",
+    category: "Data",
+    description: "Get information about countries",
+    url: "https://restcountries.com",
+    endpoint: "/v3.1/all",
+    method: "GET",
+    features: ["Country data", "Flags", "Currency info"],
+    useCase: "International marketing and localization features",
+    icon: Globe,
+    color: "bg-green-600"
+  },
+  {
+    name: "Advice Slip",
+    category: "Content",
+    description: "Random advice for motivational content",
+    url: "https://api.adviceslip.com",
+    endpoint: "/advice",
+    method: "GET",
+    features: ["Random advice", "Search advice", "JSON format"],
+    useCase: "Daily motivation content for social media and emails",
+    icon: Lightbulb,
+    color: "bg-indigo-500"
+  },
+  {
+    name: "Dog API",
+    category: "Fun",
+    description: "Random dog images for engaging content",
+    url: "https://dog.ceo",
+    endpoint: "/api/breeds/image/random",
+    method: "GET",
+    features: ["Random dog images", "Breed specific", "No rate limits"],
+    useCase: "Add cute content to marketing materials",
+    icon: Heart,
+    color: "bg-rose-500"
+  },
+  {
+    name: "Numbers API",
+    category: "Content",
+    description: "Interesting facts about numbers",
+    url: "http://numbersapi.com",
+    endpoint: "/random",
+    method: "GET",
+    features: ["Math facts", "Date facts", "Trivia facts"],
+    useCase: "Educational content and interesting statistics",
+    icon: Database,
+    color: "bg-teal-500"
+  },
+  {
+    name: "Lorem Ipsum API",
+    category: "Content",
+    description: "Generate placeholder text",
+    url: "https://loripsum.net",
+    endpoint: "/api",
+    method: "GET",
+    features: ["Custom length", "HTML formatting", "Multiple formats"],
+    useCase: "Fill content areas during design and development",
+    icon: Code,
+    color: "bg-slate-600"
+  },
+  {
+    name: "Kanye REST",
+    category: "Fun",
+    description: "Random Kanye West quotes",
+    url: "https://api.kanye.rest",
+    endpoint: "/",
+    method: "GET",
+    features: ["Random quotes", "No authentication", "JSON format"],
+    useCase: "Pop culture content for social media engagement",
+    icon: Heart,
+    color: "bg-violet-500"
+  },
+  {
+    name: "JSONStorage",
+    category: "Storage",
+    description: "Free JSON data storage",
+    url: "https://jsonstorage.net",
+    endpoint: "/api/items",
+    method: "POST",
+    features: ["Free storage", "REST API", "No registration"],
+    useCase: "Store user preferences and campaign data temporarily",
+    icon: Database,
+    color: "bg-emerald-600"
+  }
+];
 
 export function PublicAPIShowcase() {
   const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<any>({});
+  const [selectedAPI, setSelectedAPI] = useState<any>(null);
+  const [copiedStates, setCopiedStates] = useState<{[key: string]: boolean}>({});
+  const [activeCategory, setActiveCategory] = useState('all');
   
   // Form states
   const [emailData, setEmailData] = useState({
@@ -32,6 +237,55 @@ export function PublicAPIShowcase() {
   });
   
   const [contentQuery, setContentQuery] = useState('business motivation');
+  const [testEndpoint, setTestEndpoint] = useState('');
+  const [testResults, setTestResults] = useState<any>(null);
+
+  // Get unique categories
+  const categories = ['all', ...Array.from(new Set(FREE_APIS.map(api => api.category)))];
+
+  // Filter APIs by category
+  const filteredAPIs = activeCategory === 'all' 
+    ? FREE_APIS 
+    : FREE_APIS.filter(api => api.category === activeCategory);
+
+  // Copy to clipboard function
+  const copyToClipboard = async (text: string, key: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedStates(prev => ({ ...prev, [key]: true }));
+      setTimeout(() => {
+        setCopiedStates(prev => ({ ...prev, [key]: false }));
+      }, 2000);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
+  };
+
+  // Test API endpoint
+  const testAPIEndpoint = async (api: any) => {
+    setLoading(true);
+    setTestResults(null);
+    
+    try {
+      const fullUrl = api.url + api.endpoint;
+      const response = await fetch(fullUrl);
+      const data = await response.json();
+      
+      setTestResults({
+        status: response.status,
+        data: data,
+        url: fullUrl
+      });
+    } catch (error) {
+      setTestResults({
+        status: 'Error',
+        data: { error: error.message },
+        url: api.url + api.endpoint
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Generate email template
   const generateEmailTemplate = () => {
@@ -144,15 +398,19 @@ export function PublicAPIShowcase() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Public API Showcase</h2>
+          <h2 className="text-2xl font-bold tracking-tight">15+ Free APIs & Public Resources</h2>
           <p className="text-muted-foreground">
-            Practical examples of using public repositories and APIs
+            Discover powerful free APIs to enhance your marketing automation and content creation
           </p>
         </div>
       </div>
 
-      <Tabs defaultValue="email" className="w-full">
-        <TabsList className="grid grid-cols-4 w-full">
+      <Tabs defaultValue="directory" className="w-full">
+        <TabsList className="grid grid-cols-5 w-full">
+          <TabsTrigger value="directory" className="flex items-center gap-2">
+            <Database size={16} />
+            API Directory
+          </TabsTrigger>
           <TabsTrigger value="email" className="flex items-center gap-2">
             <Mail size={16} />
             Email Templates
@@ -165,11 +423,261 @@ export function PublicAPIShowcase() {
             <Sparkles size={16} />
             Content APIs
           </TabsTrigger>
-          <TabsTrigger value="campaign" className="flex items-center gap-2">
+          <TabsTrigger value="testing" className="flex items-center gap-2">
             <Code size={16} />
-            Campaign Assets
+            API Testing
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="directory" className="space-y-6">
+          {/* Category Filter */}
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category) => (
+              <Button
+                key={category}
+                variant={activeCategory === category ? "default" : "outline"}
+                size="sm"
+                onClick={() => setActiveCategory(category)}
+                className="capitalize"
+              >
+                {category === 'all' ? 'All Categories' : category}
+              </Button>
+            ))}
+          </div>
+
+          {/* API Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredAPIs.map((api, index) => {
+              const Icon = api.icon;
+              return (
+                <Card key={index} className="h-full hover:shadow-lg transition-shadow duration-200">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className={`p-2 rounded-lg ${api.color} text-white`}>
+                          <Icon size={16} />
+                        </div>
+                        <div>
+                          <CardTitle className="text-lg">{api.name}</CardTitle>
+                          <Badge variant="secondary" className="text-xs">
+                            {api.category}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      {api.description}
+                    </p>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-medium">Endpoint:</span>
+                        <Badge variant="outline">{api.method}</Badge>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <code className="text-xs bg-muted px-2 py-1 rounded flex-1 truncate">
+                          {api.url}{api.endpoint}
+                        </code>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => copyToClipboard(api.url + api.endpoint, `url-${index}`)}
+                          className="h-8 w-8 p-0"
+                        >
+                          {copiedStates[`url-${index}`] ? <Check size={14} /> : <Copy size={14} />}
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <span className="text-xs font-medium">Features:</span>
+                      <div className="flex flex-wrap gap-1">
+                        {api.features.map((feature, idx) => (
+                          <Badge key={idx} variant="outline" className="text-xs">
+                            {feature}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <span className="text-xs font-medium">Use Case:</span>
+                      <p className="text-xs text-muted-foreground">
+                        {api.useCase}
+                      </p>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => testAPIEndpoint(api)}
+                        disabled={loading}
+                        className="flex-1"
+                      >
+                        <Play size={14} className="mr-1" />
+                        Test API
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => window.open(api.url, '_blank')}
+                        className="h-8 w-8 p-0"
+                      >
+                        <ExternalLink size={14} />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* API Integration Guide */}
+          <Card className="border-blue-200 bg-blue-50">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Code className="h-5 w-5 text-blue-600" />
+                Quick Integration Guide
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-medium text-blue-800 mb-2">Basic Fetch Example:</h4>
+                  <ScrollArea className="h-32">
+                    <pre className="text-xs bg-white p-3 rounded border overflow-x-auto">
+                      <code>{`fetch('https://api.quotable.io/random')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error(error));`}</code>
+                    </pre>
+                  </ScrollArea>
+                </div>
+                <div>
+                  <h4 className="font-medium text-blue-800 mb-2">With Error Handling:</h4>
+                  <ScrollArea className="h-32">
+                    <pre className="text-xs bg-white p-3 rounded border overflow-x-auto">
+                      <code>{`async function getQuote() {
+  try {
+    const response = await fetch('https://api.quotable.io/random');
+    if (!response.ok) throw new Error('API Error');
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to fetch:', error);
+  }
+}`}</code>
+                    </pre>
+                  </ScrollArea>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3 p-4 bg-white rounded border">
+                <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                <div>
+                  <h4 className="font-medium text-blue-800">Pro Tips:</h4>
+                  <ul className="text-sm text-blue-700 mt-1 space-y-1">
+                    <li>• Always handle errors gracefully in production</li>
+                    <li>• Respect API rate limits and terms of service</li>
+                    <li>• Cache responses when possible to improve performance</li>
+                    <li>• Use environment variables for API keys</li>
+                    <li>• Test APIs in development before deploying</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="testing" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Live API Testing</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Enter API endpoint (e.g., https://api.quotable.io/random)"
+                  value={testEndpoint}
+                  onChange={(e) => setTestEndpoint(e.target.value)}
+                />
+                <Button 
+                  onClick={() => testAPIEndpoint({ url: '', endpoint: testEndpoint })} 
+                  disabled={loading || !testEndpoint}
+                >
+                  {loading ? 'Testing...' : 'Test'}
+                </Button>
+              </div>
+
+              {testResults && (
+                <Card className="mt-4">
+                  <CardHeader>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <span className={`inline-block w-3 h-3 rounded-full ${
+                        testResults.status === 200 ? 'bg-green-500' : 'bg-red-500'
+                      }`}></span>
+                      Response (Status: {testResults.status})
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">URL:</span>
+                        <code className="text-xs bg-muted px-2 py-1 rounded">
+                          {testResults.url}
+                        </code>
+                      </div>
+                      
+                      <div>
+                        <span className="text-sm font-medium">Response Data:</span>
+                        <ScrollArea className="h-40 mt-2">
+                          <pre className="text-xs bg-muted p-3 rounded overflow-x-auto">
+                            <code>{JSON.stringify(testResults.data, null, 2)}</code>
+                          </pre>
+                        </ScrollArea>
+                      </div>
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => copyToClipboard(JSON.stringify(testResults.data, null, 2), 'test-response')}
+                      >
+                        {copiedStates['test-response'] ? <Check size={14} className="mr-1" /> : <Copy size={14} className="mr-1" />}
+                        Copy Response
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Quick Test Buttons */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick API Tests</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                {FREE_APIS.slice(0, 8).map((api, index) => (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => testAPIEndpoint(api)}
+                    disabled={loading}
+                    className="text-xs"
+                  >
+                    {api.name}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="email" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -452,100 +960,51 @@ export function PublicAPIShowcase() {
             </CardContent>
           </Card>
         </TabsContent>
-
-        <TabsContent value="campaign" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Campaign Asset Generator</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Campaign theme (e.g., fitness, technology)"
-                  value={contentQuery}
-                  onChange={(e) => setContentQuery(e.target.value)}
-                />
-                <Button onClick={generateCampaignAssets} disabled={loading}>
-                  {loading ? 'Generating...' : 'Generate Assets'}
-                </Button>
-              </div>
-
-              {results.campaign && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {results.campaign.qrCode && (
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">QR Code</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <img 
-                          src={results.campaign.qrCode} 
-                          alt="Campaign QR Code" 
-                          className="w-32 h-32 mx-auto"
-                        />
-                        <p className="text-xs text-center text-muted-foreground mt-2">
-                          Campaign: {contentQuery}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                  {results.campaign.inspirationalQuote && (
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">Campaign Quote</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <blockquote className="text-sm italic">
-                          "{results.campaign.inspirationalQuote.results?.[0]?.content}"
-                        </blockquote>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                  {results.campaign.heroImage && (
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">Hero Image</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <img 
-                          src={results.campaign.heroImage} 
-                          alt="Campaign hero" 
-                          className="w-full h-32 object-cover rounded"
-                        />
-                      </CardContent>
-                    </Card>
-                  )}
-
-                  {results.campaign.engagementContent && (
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">Engagement Content</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm">{results.campaign.engagementContent.setup}</p>
-                        <p className="text-sm font-medium mt-1">{results.campaign.engagementContent.punchline}</p>
-                      </CardContent>
-                    </Card>
-                  )}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
       </Tabs>
 
-      <Card className="border-amber-200 bg-amber-50">
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-amber-800">Integration Guide</h4>
-              <p className="text-sm text-amber-700 mt-1">
-                These examples demonstrate how to integrate public repositories and free APIs into your NexusOne AI workflows. 
-                All generated content can be used in your Magic Pages, Smart Campaigns, and other automation features.
+      <Card className="border-emerald-200 bg-emerald-50">
+        <CardContent className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="p-2 rounded-lg bg-emerald-500 text-white">
+              <Sparkles size={20} />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-emerald-800 mb-2">Ready to Integrate?</h4>
+              <p className="text-sm text-emerald-700 mb-4">
+                These 15+ free APIs can be integrated directly into your NexusOne AI workflows. Use them to:
               </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-emerald-700">
+                <div className="flex items-center gap-2">
+                  <Check size={16} className="text-emerald-600" />
+                  <span>Enhance your Magic Pages with dynamic content</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check size={16} className="text-emerald-600" />
+                  <span>Generate engaging social media campaigns</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check size={16} className="text-emerald-600" />
+                  <span>Create personalized email marketing</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check size={16} className="text-emerald-600" />
+                  <span>Add QR codes and visual elements</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check size={16} className="text-emerald-600" />
+                  <span>Gather inspiration for AI content generation</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check size={16} className="text-emerald-600" />
+                  <span>Test and prototype new features</span>
+                </div>
+              </div>
+              <div className="mt-4 p-3 bg-white rounded border border-emerald-200">
+                <p className="text-xs text-emerald-600 font-medium">
+                  💡 Pro Tip: These APIs are perfect for reducing costs while maintaining quality. 
+                  Use them as fallbacks for premium APIs or for specific use cases in your marketing automation.
+                </p>
+              </div>
             </div>
           </div>
         </CardContent>
