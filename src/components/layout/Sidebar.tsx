@@ -66,6 +66,12 @@ const navigationItems = [
     category: 'business'
   },
   {
+    name: 'Cultural Marketing',
+    href: '/cultural-marketing',
+    icon: Globe,
+    category: 'marketing'
+  },
+  {
     name: 'nav.analytics',
     href: '/analytics',
     icon: BarChart3,

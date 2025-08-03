@@ -26,6 +26,7 @@ import Settings from '@/pages/Settings';
 import NexBrainChat from '@/pages/NexBrainChat';
 import AdminDashboard from '@/pages/AdminDashboard';
 import InternationalMarkets from '@/pages/InternationalMarkets';
+import CulturalMarketing from '@/pages/CulturalMarketing';
 
 // Protected Route Component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -180,6 +181,16 @@ function AppContent() {
             <ProtectedRoute>
               <AppLayout>
                 <InternationalMarkets />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cultural-marketing"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <CulturalMarketing />
               </AppLayout>
             </ProtectedRoute>
           }
