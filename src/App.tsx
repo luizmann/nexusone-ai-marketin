@@ -25,6 +25,7 @@ import Analytics from '@/pages/Analytics';
 import Settings from '@/pages/Settings';
 import NexBrainChat from '@/pages/NexBrainChat';
 import AdminDashboard from '@/pages/AdminDashboard';
+import InternationalMarkets from '@/pages/InternationalMarkets';
 
 // Protected Route Component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -169,6 +170,16 @@ function AppContent() {
             <ProtectedRoute>
               <AppLayout>
                 <AdminDashboard />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/international"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <InternationalMarkets />
               </AppLayout>
             </ProtectedRoute>
           }

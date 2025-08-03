@@ -3,6 +3,7 @@
 .devcontainer/postStartCommand.sh
 .devcontainer/refreshTools.sh
 .devcontainer/spark.conf
+.env.example
 .file-manifest
 .github/workflows/deploy-production.yml
 .github/workflows/deploy.yml
@@ -110,6 +111,7 @@ VERCEL_DEPLOY_READY.md
 api-test-comprehensive.js
 check-deploy-readiness.js
 comprehensive-ai-test-report.md
+database-schema.sql
 deploy-backend-complete.sh
 deploy-backend-quick.sh
 deploy-commands.sh
@@ -303,12 +305,15 @@ src/pages/AdminDashboard.tsx
 src/pages/ApiConfiguration.tsx
 src/pages/CleanDashboard.tsx
 src/pages/Credits.tsx
+src/pages/Dashboard.tsx
 src/pages/DragDropEditor.tsx
 src/pages/LumaVideoPage.tsx
+src/pages/MagicPages.tsx
 src/pages/MagicVideo.tsx
 src/pages/SalesPageBuilder.tsx
 src/pages/Settings.tsx
 src/pages/SmartAppointments.tsx
+src/pages/VideoCreator.tsx
 src/pages/WhatsAppMarketing.tsx
 src/pages/WinnerProducts.tsx
 src/pages/index.ts
@@ -351,6 +356,8 @@ supabase/functions/cj-dropshipping-catalog/index.ts
 supabase/functions/cj-dropshipping-order/index.ts
 supabase/functions/dropshipping-import/index.ts
 supabase/functions/facebook-ads-manager/index.ts
+supabase/functions/generate-magic-page/index.ts
+supabase/functions/generate-video/index.ts
 supabase/functions/landing-page-builder/index.ts
 supabase/functions/luma-video-ai/index.ts
 supabase/functions/nexbrain-chat/index.ts
@@ -371,6 +378,7 @@ supabase/migrations/005_production_optimizations.sql
 supabase/migrations/20250101000006_api_configuration_system.sql
 supabase/migrations/20250101_api_management.sql
 supabase/migrations/20250128_luma_ai_integration.sql
+tailwind.config.js
 test-ai-features.js
 test-ai-features.sh
 test-ai-integrations.sh
