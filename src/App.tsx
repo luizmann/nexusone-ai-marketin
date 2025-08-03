@@ -1,75 +1,211 @@
-import { OptimizedDashboardLayout } from './components/layout/OptimizedDashboardLayout'
-import { WelcomeScreen } from './components/WelcomeScreen'
-import { ErrorBoundary } from './components/ErrorBoundary'
-import { Toaster } from '@/components/ui/sonner'
-import { LanguageProvider } from './contexts/CleanLanguageContext'
-import { AuthProvider } from './contexts/AuthContext'
-import { CreditProvider } from './contexts/CreditContext'
-import { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'sonner';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { LanguageProvider } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 
-function App() {
-  const [user, setUser] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
-  
-  // Get user from localStorage
-  useEffect(() => {
-    const savedUser = localStorage.getItem('user-profile')
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser))
-      } catch (e) {
-        console.error('Error parsing saved user:', e)
-      }
-    }
-    setIsLoading(false)
-  }, [])
-  
-  // Initialize the application
-  useEffect(() => {
-    // Check if the application is properly initialized
-    const initializeApp = async () => {
-      try {
-        // Initialize API keys
-        const { apiKeyManager } = await import('./services/apiKeyManager')
-        apiKeyManager.setDefaultKeys()
-        await apiKeyManager.loadAPIKeys()
-        
-        console.log('✅ NexusOne AI Platform initialized with API keys')
-        
-        // Wait a moment for initialization
-        await new Promise(resolve => setTimeout(resolve, 100))
-      } catch (error) {
-        console.error('App initialization error:', error)
-      }
-    }
-    
-    initializeApp()
-  }, [])
+// Layout Components
+import Navbar from '@/components/layout/Navbar';
+import Sidebar from '@/components/layout/Sidebar';
+import LoadingScreen from '@/components/ui/LoadingScreen';
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading NexusOne AI Platform...</p>
-          <p className="text-xs text-muted-foreground mt-2">Initializing AI systems...</p>
-        </div>
-      </div>
-    )
+// Auth Components
+import LoginPage from '@/components/auth/LoginPage';
+import SignUpPage from '@/components/auth/SignUpPage';
+
+// Main Pages
+import Dashboard from '@/pages/Dashboard';
+import MagicPages from '@/pages/MagicPages';
+import VideoCreator from '@/pages/VideoCreator';
+import WhatsAppMarketing from '@/pages/WhatsAppMarketing';
+import FacebookAds from '@/pages/FacebookAds';
+import DropshippingHub from '@/pages/DropshippingHub';
+import Analytics from '@/pages/Analytics';
+import Settings from '@/pages/Settings';
+import NexBrainChat from '@/pages/NexBrainChat';
+import AdminDashboard from '@/pages/AdminDashboard';
+
+// Protected Route Component
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingScreen />;
   }
-  
-  return (
-    <ErrorBoundary>
-      <AuthProvider>
-        <CreditProvider>
-          <LanguageProvider>
-            {!user ? <WelcomeScreen /> : <OptimizedDashboardLayout />}
-            <Toaster />
-          </LanguageProvider>
-        </CreditProvider>
-      </AuthProvider>
-    </ErrorBoundary>
-  )
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
 }
 
-export default App
+// Main App Layout
+function AppLayout({ children }: { children: React.ReactNode }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+      <div className="flex">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <main className="flex-1 lg:ml-64">
+          <div className="p-4 lg:p-8">
+            {children}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+// App Content (inside providers)
+function AppContent() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  return (
+    <Router>
+      <Routes>
+        {/* Public Routes */}
+        <Route 
+          path="/login" 
+          element={user ? <Navigate to="/dashboard" replace /> : <LoginPage />} 
+        />
+        <Route 
+          path="/signup" 
+          element={user ? <Navigate to="/dashboard" replace /> : <SignUpPage />} 
+        />
+
+        {/* Protected Routes */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Dashboard />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/magic-pages"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <MagicPages />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/video-creator"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <VideoCreator />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/whatsapp"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <WhatsAppMarketing />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/facebook-ads"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <FacebookAds />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dropshipping"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <DropshippingHub />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Analytics />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/nexbrain"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <NexBrainChat />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <AdminDashboard />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Settings />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Catch all route */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+    </Router>
+  );
+}
+
+// Main App Component with Providers
+function App() {
+  return (
+    <LanguageProvider>
+      <AuthProvider>
+        <AppContent />
+        <Toaster 
+          position="top-right"
+          richColors
+          closeButton
+          className="toaster"
+        />
+      </AuthProvider>
+    </LanguageProvider>
+  );
+}
+
+export default App;

@@ -3,7 +3,6 @@
 .devcontainer/postStartCommand.sh
 .devcontainer/refreshTools.sh
 .devcontainer/spark.conf
-.env.example
 .file-manifest
 .github/workflows/deploy-production.yml
 .github/workflows/deploy.yml
@@ -43,6 +42,7 @@ DEPLOYMENT_PIPELINE_GUIDE.md
 DEPLOYMENT_PIPELINE_STATUS.md
 DEPLOYMENT_QUICK_START.md
 DEPLOYMENT_STATUS.md
+DEPLOYMENT_SUCCESS_GUIDE.md
 DEPLOY_CHECKLIST.md
 DEPLOY_MANUAL.md
 DEPLOY_MANUAL_GUIDE.md
@@ -60,6 +60,7 @@ FINAL_AI_VALIDATION_REPORT.md
 FINAL_DEPLOYMENT_STATUS.md
 FINAL_DEPLOYMENT_STATUS_COMPLETE.md
 FINAL_LAUNCH_VALIDATION_REPORT.md
+FINAL_PRODUCTION_DEPLOYMENT_READY.md
 FINAL_PRODUCTION_DEPLOYMENT_STATUS.md
 FINAL_PRODUCTION_LAUNCH_REPORT.md
 FINAL_STATUS_REPORT.md
@@ -125,12 +126,14 @@ deploy-production-complete.sh
 deploy-production-final.sh
 deploy-production-ready.sh
 deploy-production-validated.sh
+deploy-production-vercel.sh
 deploy-production.sh
 deploy-quick.sh
 deploy-simple.sh
 deploy-supabase-complete.sh
 deploy-supabase-production.sh
 deploy-supabase.sh
+deploy-to-vercel.js
 deploy-ultimate.sh
 deploy-vercel-complete.sh
 deploy.sh
@@ -148,6 +151,7 @@ package-lock.json
 package-simple.json
 package.json
 packages/spark-tools/package.json
+production-api-validator.js
 quick-git-setup.sh
 setup-environment.sh
 setup-github-repo.sh

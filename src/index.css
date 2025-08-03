@@ -5,58 +5,72 @@
   * {
     @apply border-border;
   }
-  
-  body {
-    font-family: 'Inter', sans-serif;
-  }
-  
-  /* RTL Support */
-  [dir="rtl"] {
-    direction: rtl;
-  }
-  
-  [dir="rtl"] .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
-    --tw-space-x-reverse: 1;
-  }
-  
-  [dir="rtl"] .flex-row-reverse {
-    flex-direction: row-reverse;
-  }
-  
-  /* Arabic and Hebrew font optimization */
-  [lang="ar"], [lang="he"] {
-    font-family: 'Inter', 'Noto Sans Arabic', 'Noto Sans Hebrew', sans-serif;
-  }
 }
 
 :root {
-  /* NexusOne Global Marketing Platform Theme */
-  --background: oklch(0.97 0.02 250);
-  --foreground: oklch(0.25 0.08 250);
-  
+  /* Core brand colors optimized for global SaaS platform */
+  --background: oklch(0.98 0.01 197);
+  --foreground: oklch(0.15 0.02 197);
+
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.25 0.08 250);
+  --card-foreground: oklch(0.15 0.02 197);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.25 0.08 250);
+  --popover-foreground: oklch(0.15 0.02 197);
+
+  /* Primary: Deep Blue - Trust, Intelligence, Global Appeal */
+  --primary: oklch(0.45 0.15 258);
+  --primary-foreground: oklch(0.98 0.01 197);
   
-  --primary: oklch(0.25 0.08 250);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.95 0.02 250);
-  --secondary-foreground: oklch(0.25 0.08 250);
-  --accent: oklch(0.70 0.15 50);
-  --accent-foreground: oklch(1 0 0);
+  /* Secondary: Clean Gray - Professional, Balanced */
+  --secondary: oklch(0.96 0.01 197);
+  --secondary-foreground: oklch(0.15 0.02 197);
   
-  --muted: oklch(0.95 0.02 250);
-  --muted-foreground: oklch(0.70 0.04 250);
+  /* Accent: Success Green - Growth, Conversion, Profit */
+  --accent: oklch(0.65 0.15 162);
+  --accent-foreground: oklch(0.98 0.01 197);
   
-  --destructive: oklch(0.65 0.20 25);
-  --destructive-foreground: oklch(1 0 0);
-  
-  --border: oklch(0.88 0.02 250);
-  --input: oklch(0.88 0.02 250);
-  --ring: oklch(0.70 0.15 50);
-  
-  --radius: 0.5rem;
+  /* Destructive: Warning Orange - Attention, Urgency */
+  --destructive: oklch(0.62 0.18 27);
+  --destructive-foreground: oklch(0.98 0.01 197);
+
+  /* Supporting colors for UI depth */
+  --muted: oklch(0.96 0.01 197);
+  --muted-foreground: oklch(0.45 0.02 197);
+  --border: oklch(0.90 0.01 197);
+  --input: oklch(0.90 0.01 197);
+  --ring: oklch(0.45 0.15 258);
+
+  /* Modern rounded corners for SaaS feel */
+  --radius: 0.75rem;
+}
+
+/* Dark mode for global accessibility */
+.dark {
+  --background: oklch(0.09 0.01 197);
+  --foreground: oklch(0.95 0.01 197);
+
+  --card: oklch(0.12 0.01 197);
+  --card-foreground: oklch(0.95 0.01 197);
+  --popover: oklch(0.12 0.01 197);
+  --popover-foreground: oklch(0.95 0.01 197);
+
+  --primary: oklch(0.65 0.15 258);
+  --primary-foreground: oklch(0.09 0.01 197);
+
+  --secondary: oklch(0.15 0.01 197);
+  --secondary-foreground: oklch(0.95 0.01 197);
+
+  --accent: oklch(0.65 0.15 162);
+  --accent-foreground: oklch(0.09 0.01 197);
+
+  --destructive: oklch(0.62 0.18 27);
+  --destructive-foreground: oklch(0.95 0.01 197);
+
+  --muted: oklch(0.15 0.01 197);
+  --muted-foreground: oklch(0.65 0.02 197);
+  --border: oklch(0.20 0.01 197);
+  --input: oklch(0.20 0.01 197);
+  --ring: oklch(0.65 0.15 258);
 }
 
 @theme {
@@ -86,4 +100,132 @@
   --radius-xl: calc(var(--radius) * 2);
   --radius-2xl: calc(var(--radius) * 3);
   --radius-full: 9999px;
+}
+
+/* Global styles for SaaS platform */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  line-height: 1.6;
+}
+
+/* Smooth animations for better UX */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Custom scrollbar for modern feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Focus states for accessibility */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Loading animations */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8,0,1,1);
+  }
+  50% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+/* Custom glassmorphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Gradient text effect for CTAs */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Success/conversion animations */
+@keyframes success-bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.success-animation {
+  animation: success-bounce 0.6s ease-in-out;
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 640px) {
+  .mobile-hidden {
+    display: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border: oklch(0.5 0 0);
+    --ring: oklch(0.3 0 0);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

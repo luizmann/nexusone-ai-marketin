@@ -1,16 +1,30 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+/**
+ * NexusOneAI Edge Function: NexBrain AI Assistant
+ * Handles all AI-powered content generation and marketing strategy
+ */
+
+import { serve } from 'https://deno.land/std@0.208.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }
 
 interface NexBrainRequest {
-  message: string
-  context?: any
-  userId?: string
+  prompt: string
+  context?: {
+    type?: 'campaign' | 'magic_page' | 'video' | 'ads' | 'general'
+    productUrl?: string
+    targetAudience?: string
+    budget?: number
+    goals?: string[]
+  }
+  options?: {
+    model?: 'gpt-4' | 'gpt-3.5-turbo'
+    maxTokens?: number
+    temperature?: number
+  }
 }
 
 serve(async (req) => {
@@ -21,160 +35,133 @@ serve(async (req) => {
   try {
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
     )
 
-    // Get user from auth header
-    const authHeader = req.headers.get('authorization')
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: 'No authorization header' }),
-        { headers: corsHeaders, status: 401 }
-      )
-    }
-
+    // Get user from JWT
+    const authHeader = req.headers.get('Authorization')!
     const token = authHeader.replace('Bearer ', '')
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-    
-    if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid token' }),
-        { headers: corsHeaders, status: 401 }
-      )
+    const { data: { user } } = await supabase.auth.getUser(token)
+
+    if (!user) {
+      throw new Error('Unauthorized')
     }
 
-    const { message, context }: NexBrainRequest = await req.json()
+    const body: NexBrainRequest = await req.json()
+    const { prompt, context, options } = body
 
-    // Get OpenAI API key for user
-    const { data: openaiConfig, error: configError } = await supabase
-      .from('api_configurations')
-      .select('*')
+    // Check user credits
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('credits, plan')
       .eq('user_id', user.id)
-      .eq('api_name', 'OpenAI')
       .single()
 
-    if (configError || !openaiConfig || !openaiConfig.enabled) {
-      return new Response(
-        JSON.stringify({ error: 'OpenAI not configured' }),
-        { headers: corsHeaders, status: 400 }
-      )
+    if (!profile || profile.credits < 5) {
+      throw new Error('Insufficient credits')
     }
 
-    // Create thread with OpenAI Assistants API
-    const threadResponse = await fetch('https://api.openai.com/v1/threads', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openaiConfig.api_key}`,
-        'Content-Type': 'application/json',
-        'OpenAI-Beta': 'assistants=v2'
-      },
-      body: JSON.stringify({})
-    })
+    // Build context-aware system prompt
+    let systemPrompt = `You are NexBrain, the AI marketing strategist for NexusOneAI platform. You help users create profitable marketing campaigns, sales pages, videos, and automated sales funnels.
 
-    if (!threadResponse.ok) {
-      throw new Error('Failed to create thread')
+Key capabilities:
+- Generate complete marketing campaigns
+- Create high-converting sales copy
+- Develop video scripts and concepts
+- Optimize Facebook/Instagram ads
+- Design WhatsApp sales conversations
+- Analyze market trends and opportunities
+
+Always provide actionable, specific advice that drives real business results.`
+
+    if (context?.type) {
+      switch (context.type) {
+        case 'campaign':
+          systemPrompt += `\n\nFocus: Complete marketing campaign creation including strategy, content, and automation setup.`
+          break
+        case 'magic_page':
+          systemPrompt += `\n\nFocus: High-converting sales page creation with persuasive copy, structure, and call-to-actions.`
+          break
+        case 'video':
+          systemPrompt += `\n\nFocus: Engaging video content creation including scripts, concepts, and production guidance.`
+          break
+        case 'ads':
+          systemPrompt += `\n\nFocus: Facebook/Instagram ad campaign optimization including targeting, copy, and creative suggestions.`
+          break
+      }
     }
 
-    const thread = await threadResponse.json()
+    // Add context information
+    let userPrompt = prompt
+    if (context?.productUrl) {
+      userPrompt += `\n\nProduct URL: ${context.productUrl}`
+    }
+    if (context?.targetAudience) {
+      userPrompt += `\n\nTarget Audience: ${context.targetAudience}`
+    }
+    if (context?.budget) {
+      userPrompt += `\n\nBudget: $${context.budget}`
+    }
 
-    // Add message to thread
-    const messageResponse = await fetch(`https://api.openai.com/v1/threads/${thread.id}/messages`, {
+    // Call OpenAI API
+    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiConfig.api_key}`,
+        'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
         'Content-Type': 'application/json',
-        'OpenAI-Beta': 'assistants=v2'
       },
       body: JSON.stringify({
-        role: 'user',
-        content: message
-      })
+        model: options?.model || 'gpt-4',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        max_tokens: options?.maxTokens || 1500,
+        temperature: options?.temperature || 0.7,
+      }),
     })
 
-    if (!messageResponse.ok) {
-      throw new Error('Failed to add message to thread')
+    if (!openaiResponse.ok) {
+      const error = await openaiResponse.text()
+      console.error('OpenAI API Error:', error)
+      throw new Error('Failed to generate AI response')
     }
 
-    // Create run with NexBrain assistant
-    const runResponse = await fetch(`https://api.openai.com/v1/threads/${thread.id}/runs`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openaiConfig.api_key}`,
-        'Content-Type': 'application/json',
-        'OpenAI-Beta': 'assistants=v2'
-      },
-      body: JSON.stringify({
-        assistant_id: 'asst_0jsx8eD6P3W9XGsSRRNU2Pfd', // NexBrain Assistant ID
-        additional_instructions: context ? `Context: ${JSON.stringify(context)}` : undefined
-      })
-    })
+    const aiData = await openaiResponse.json()
+    const aiResponse = aiData.choices[0]?.message?.content
 
-    if (!runResponse.ok) {
-      throw new Error('Failed to create run')
+    if (!aiResponse) {
+      throw new Error('No response from AI')
     }
 
-    const run = await runResponse.json()
+    // Deduct credits
+    const creditsUsed = Math.ceil(aiData.usage?.total_tokens / 100) || 5
+    await supabase
+      .from('user_profiles')
+      .update({ credits: profile.credits - creditsUsed })
+      .eq('user_id', user.id)
 
-    // Poll for completion
-    let status = 'queued'
-    let attempts = 0
-    const maxAttempts = 30 // 30 seconds timeout
-
-    while (status !== 'completed' && status !== 'failed' && attempts < maxAttempts) {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      const statusResponse = await fetch(`https://api.openai.com/v1/threads/${thread.id}/runs/${run.id}`, {
-        headers: {
-          'Authorization': `Bearer ${openaiConfig.api_key}`,
-          'OpenAI-Beta': 'assistants=v2'
+    // Log usage
+    await supabase
+      .from('usage_logs')
+      .insert({
+        user_id: user.id,
+        action: 'nexbrain_chat',
+        credits_used: creditsUsed,
+        api_service: 'openai',
+        metadata: {
+          model: options?.model || 'gpt-4',
+          tokens_used: aiData.usage?.total_tokens,
+          context_type: context?.type
         }
       })
-      
-      const statusData = await statusResponse.json()
-      status = statusData.status
-      attempts++
-    }
-
-    if (status !== 'completed') {
-      throw new Error('Assistant run did not complete in time')
-    }
-
-    // Get messages
-    const messagesResponse = await fetch(`https://api.openai.com/v1/threads/${thread.id}/messages`, {
-      headers: {
-        'Authorization': `Bearer ${openaiConfig.api_key}`,
-        'OpenAI-Beta': 'assistants=v2'
-      }
-    })
-
-    const messages = await messagesResponse.json()
-    const assistantMessage = messages.data.find((msg: any) => msg.role === 'assistant')
-
-    if (!assistantMessage) {
-      throw new Error('No assistant response found')
-    }
-
-    const responseText = assistantMessage.content[0].text.value
-
-    // Log the interaction
-    await supabase.from('api_usage').insert({
-      user_id: user.id,
-      api_name: 'NexBrain',
-      endpoint: '/chat',
-      method: 'POST',
-      request_data: { message, context },
-      response_status: 200,
-      response_data: { response: responseText },
-      credits_used: 10,
-      execution_time: Date.now()
-    })
 
     return new Response(
       JSON.stringify({
-        success: true,
-        response: responseText,
-        thread_id: thread.id,
-        credits_used: 10
+        response: aiResponse,
+        credits_used: creditsUsed,
+        remaining_credits: profile.credits - creditsUsed,
+        tokens_used: aiData.usage?.total_tokens
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -183,12 +170,12 @@ serve(async (req) => {
     )
 
   } catch (error) {
-    console.error('Error with NexBrain:', error)
+    console.error('NexBrain Error:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500,
+        status: 400,
       }
     )
   }

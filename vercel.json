@@ -1,132 +1,61 @@
-{
-  "version": 2,
-  "name": "nexusone-ai",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production",
-    "VITE_APP_ENV": "production",
-    "VITE_SUPABASE_URL": "https://hbfgtdxvlbkvkrjqxnac.supabase.co",
-    "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhiZmd0ZHh2bGJrdmtyanlxeG5hYyIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNjk5MjcwNDI0LCJleHAiOjIwMTQ4NDY0MjR9.qZxYwjW5xOqH1J7BkLhZRWS3FQsA9QQfO8fY6NvBgaI",
-    "VITE_OPENAI_API_KEY": "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",
-    "VITE_OPENAI_ASSISTANT_ID": "asst_0jsx8eD6P3W9XGsSRRNU2Pfd",
-    "VITE_ELEVEN_LABS_API_KEY": "sk_189b755ede03dfdf1633da77e125d682b44c1ddb54b08a07",
-    "VITE_REPLICATE_API_TOKEN": "r8_HbwQQ4NxMfhVPy0BS0xqOMkERd9B5JM440l66",
-    "VITE_LUMA_API_KEY": "luma-12423eab-79ee-4f52-ad44-00c485686cf2-ab1b6b03-15a1-4c76-b056-6765bf41ab05",
-    "VITE_GUPSHUP_API_KEY": "sk_d5fe7cdab5164e53bcbffdc428fd431e",
-    "VITE_CJ_API_KEY": "5e0e680914c6462ebcf39059b21e70a9",
-    "VITE_CJ_DROPSHIPPING_API_KEY": "5e0e680914c6462ebcf39059b21e70a9",
-    "VITE_FACEBOOK_ACCESS_TOKEN": "EAAI0DOV8GvcBPK4ZBUTybkGl66FwZA1s45Dx3cSjOVEO4lzZAifzVR6lIoVbW6HcsP2L7x4b0065VirgfhzyfIGNCCA9QCynR3twQB01ZCqjolM7b0QfGtBpj5ZCZA5kyWONQsaYmZBRvy1ByAziVPZAot50fp9ZB4ro71pZAPk7iK4ynEMkhG2LBqUmg2VFWZCPAYQ74T3ocUZCL7u69pCaZAhqUe29gMZALb2jZB5YWQrfHbreY0hIgZDZD",
-    "VITE_UNSPLASH_ACCESS_KEY": "-zZ5LsB2CAMUhbPca_UKw31ngzc1W3_hfxSPdz_aBUE",
-    "VITE_FACEBOOK_APP_ID": "847521093029581",
-    "VITE_ENABLE_VIDEO_GENERATION": "true",
-    "VITE_ENABLE_DROPSHIPPING": "true",
-    "VITE_ENABLE_WHATSAPP": "true",
-    "VITE_ENABLE_FACEBOOK_ADS": "true",
-    "VITE_ENABLE_AI_AGENTS": "true",
-    "VITE_DEFAULT_LANGUAGE": "en",
-    "VITE_SUPPORTED_LANGUAGES": "en,pt,es,he,ar",
-    "VITE_APP_URL": "https://nexusone-ai.vercel.app",
-    "VITE_API_URL": "https://hbfgtdxvlbkvkrjqxnac.supabase.co/functions/v1",
-    "VITE_CREDIT_COST_MAGIC_PAGE": "10",
-    "VITE_CREDIT_COST_VIDEO": "25",
-    "VITE_CREDIT_COST_CAMPAIGN": "50",
-    "VITE_CREDIT_COST_AI_AGENT": "20",
-    "VITE_FREE_PLAN_CREDITS": "50",
-    "VITE_PRO_PLAN_CREDITS": "500",
-    "VITE_PREMIUM_PLAN_CREDITS": "2000"
-  },
-  "functions": {
-    "app/api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=()"
-        },
-        {
-          "key": "Strict-Transport-Security",
-          "value": "max-age=31536000; includeSubDomains"
-        }
-      ]
-    },
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "https://nexusone-ai.vercel.app"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, PUT, DELETE, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization"
-        }
-      ]
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/admin",
-      "destination": "/dashboard",
-      "permanent": true
-    },
-    {
-      "source": "/login",
-      "destination": "/",
-      "permanent": false
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "https://hbfgtdxvlbkvkrjqxnac.supabase.co/functions/v1/:path*"
-    }
-  ],
-  "crons": [
-    {
-      "path": "/api/cleanup",
-      "schedule": "0 2 * * *"
-    }
-  ]
-}
+# Vercel Production Deployment Configuration
+
+# Project Configuration
+name = "nexusoneai"
+version = 2
+
+# Build Configuration
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Environment Variables (Set these in Vercel Dashboard)
+[env]
+  VITE_SUPABASE_URL = "@supabase-url"
+  VITE_SUPABASE_ANON_KEY = "@supabase-anon-key"
+  VITE_OPENAI_API_KEY = "@openai-api-key"
+  VITE_LUMA_API_KEY = "@luma-api-key"
+  VITE_RUNWAY_API_KEY = "@runway-api-key"
+  VITE_REPLICATE_API_KEY = "@replicate-api-key"
+  VITE_ELEVENLABS_API_KEY = "@elevenlabs-api-key"
+  VITE_DID_API_KEY = "@did-api-key"
+  VITE_GUPSHUP_API_KEY = "@gupshup-api-key"
+  VITE_FACEBOOK_ACCESS_TOKEN = "@facebook-access-token"
+  VITE_CJ_API_KEY = "@cj-api-key"
+
+# Redirects and Rewrites
+[[redirects]]
+  from = "/api/*"
+  to = "https://your-project.supabase.co/functions/v1/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for Security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Static Asset Caching
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Service Worker
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+# Functions Configuration
+[functions]
+  "api/**" = { runtime = "nodejs18.x" }
