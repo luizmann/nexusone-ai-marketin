@@ -14,6 +14,7 @@ import {
   Brain,
   Settings,
   Shield,
+  TestTube,
   X
 } from '@phosphor-icons/react';
 
@@ -93,6 +94,12 @@ const navigationItems = [
     name: 'Admin',
     href: '/admin',
     icon: Shield,
+    category: 'system'
+  },
+  {
+    name: 'Form Tests',
+    href: '/form-tests',
+    icon: TestTube,
     category: 'system'
   }
 ];

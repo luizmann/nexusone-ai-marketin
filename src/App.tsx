@@ -27,6 +27,7 @@ import NexBrainChat from '@/pages/NexBrainChat';
 import AdminDashboard from '@/pages/AdminDashboard';
 import InternationalMarkets from '@/pages/InternationalMarkets';
 import CulturalMarketing from '@/pages/CulturalMarketing';
+import FormTests from '@/pages/FormTests';
 
 // Protected Route Component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -201,6 +202,16 @@ function AppContent() {
             <ProtectedRoute>
               <AppLayout>
                 <Settings />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/form-tests"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <FormTests />
               </AppLayout>
             </ProtectedRoute>
           }

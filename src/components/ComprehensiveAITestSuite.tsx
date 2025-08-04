@@ -10,6 +10,7 @@ import { AlertCircle, CheckCircle, Loader2, Play, RefreshCw, Download, Upload } 
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { toast } from 'sonner'
 import { useLanguage } from '../contexts/CleanLanguageContext'
+import { TextareaTest } from './testing/TextareaTest'
 
 interface TestResult {
   status: 'pending' | 'running' | 'success' | 'error' | 'warning'
