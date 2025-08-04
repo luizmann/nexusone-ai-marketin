@@ -253,6 +253,8 @@ src/components/WhatsAppBookingSystem.tsx
 src/components/admin/APIConfigPanel.tsx
 src/components/admin/ApiConfigurationDashboard.tsx
 src/components/admin/FeatureAvailabilityDashboard.tsx
+src/components/cultural/CulturalMarketingGenerator.tsx
+src/components/cultural/MarketInsightCard.tsx
 src/components/demos/URLSalesPageDemo.tsx
 src/components/dropshipping/AICampaignBuilder.tsx
 src/components/dropshipping/CJDropshippingBrowser.tsx
@@ -295,6 +297,7 @@ src/contexts/AuthContext.tsx
 src/contexts/CleanLanguageContext.tsx
 src/contexts/CreditContext.tsx
 src/contexts/LanguageContext.tsx
+src/docs/cultural-marketing.md
 src/hooks/useCampaignAssets.ts
 src/hooks/useInventoryFulfillment.ts
 src/hooks/useKV.ts
@@ -307,6 +310,7 @@ src/pages/AdminDashboard.tsx
 src/pages/ApiConfiguration.tsx
 src/pages/CleanDashboard.tsx
 src/pages/Credits.tsx
+src/pages/CulturalMarketing.tsx
 src/pages/Dashboard.tsx
 src/pages/DragDropEditor.tsx
 src/pages/InternationalMarkets.tsx
@@ -332,6 +336,7 @@ src/services/apiService.ts
 src/services/campaignValidator.ts
 src/services/cj-api.ts
 src/services/copyPasteIntegration.ts
+src/services/culturalMarketingService.ts
 src/services/fixedCampaignService.ts
 src/services/freePublicAPIs.ts
 src/services/launchCampaignService.ts
